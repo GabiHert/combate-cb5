@@ -20,14 +20,16 @@ RequestHandler requestHandler;
 
 void setup()
 {
-  loggerInfo("Setup", "Process started");
-  cb.display.setupDisplay();
   Serial.begin(CONFIG().SERIAL_BOUD_RATE);
+
+  loggerInfo("Setup", "Process started");
+
   app.start();
+  cb.setup();
 
   cb.display.setCursor(0, 0);
   cb.display.print("Nome Bluetooth: ");
-  cb.display.setCursor(1, 0);
+  cb.display.setCursor(0, 1);
   cb.display.print(cb.getId());
 
   loggerInfo("Setup", "Process finished");
@@ -41,7 +43,7 @@ void loop()
     String request = app.readString();
 
     // todo: should be         (request, cs     )
-    bool isCsValid = checkSumValidation.validate(request, request[request.length()]);
+    bool isCsValid = checkSumValidation.validate(request, request);
 
     if (isCsValid)
     {

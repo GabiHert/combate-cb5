@@ -5,18 +5,17 @@ class Cb
 {
 private:
     String id;
-    byte location;
 
 public:
-    ILcd display;
+    IDisplay display;
+    IGps gps;
     char alarmSiren;
     char poisonShots;
     char whellBoltsCounter;
 
     Cb(String id);
     ~Cb();
-
+    void setup();
     String getId();
-    boolean dose(int amount);
-    byte getLocation();
+    void dose(int amount);
 };

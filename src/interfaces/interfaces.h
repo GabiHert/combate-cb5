@@ -1,14 +1,23 @@
 #include <Arduino.h>
 #include "infra/implementation/implementation.h"
-class ILcd
+class IDisplay
 {
 private:
-    Lcd lcd;
+    Lcd display;
 
 public:
-    ILcd(){};
     void print(String message);
     void setupDisplay();
-    void setCursor(unsigned char line, int column);
-    void clearDisplay(unsigned char line, int column);
+    void setCursor(uint8_t column, uint8_t line);
+    void clearDisplay();
+};
+
+class IGps
+{
+private:
+    GpsNeo6M gps;
+
+public:
+    String getLocation();
+    void setupGps();
 };

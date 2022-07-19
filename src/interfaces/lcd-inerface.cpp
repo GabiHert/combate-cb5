@@ -1,21 +1,21 @@
 #include "interfaces/interfaces.h"
 
-void ILcd::print(String message)
+void IDisplay::print(String message)
 {
-    this->lcd.print(message);
+    this->display.print(message);
 }
 
-void ILcd::clearDisplay()
+void IDisplay::clearDisplay()
 {
-    this->lcd.clearDisplay();
+    this->display.clearDisplay();
 }
 
-void ILcd::setCursor(unsigned char line, int column)
+void IDisplay::setCursor(uint8_t column, uint8_t line)
 {
-    this->lcd.setCursor(unsigned char line, int column);
+    this->display.setCursor(column, line);
 }
 
-void ILcd::setupDisplay()
+void IDisplay::setupDisplay()
 {
-    this->lcd.setupDisplay();
+    this->display.setupDisplay();
 }
