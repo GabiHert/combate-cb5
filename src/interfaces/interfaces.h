@@ -1,10 +1,14 @@
 #include <Arduino.h>
-
+#include "infra/implementation/implementation.h"
 class ILcd
 {
+private:
+    Lcd lcd;
+
 public:
-    virtual void display(String message) = 0;
-    virtual void setupDisplay() = 0;
-    virtual void setCursor(unsigned char line, int column) = 0;
-    virtual void clearDisplay(unsigned char line, int column) = 0;
+    ILcd(){};
+    void print(String message);
+    void setupDisplay();
+    void setCursor(unsigned char line, int column);
+    void clearDisplay(unsigned char line, int column);
 };

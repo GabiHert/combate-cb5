@@ -8,6 +8,7 @@ private:
     byte location;
 
 public:
+    ILcd display;
     char alarmSiren;
     char poisonShots;
     char whellBoltsCounter;
@@ -18,5 +19,4 @@ public:
     String getId();
     boolean dose(int amount);
     byte getLocation();
-    ILcd display(); // odo: ta dando ruim aqui
 };
