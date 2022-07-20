@@ -1,5 +1,8 @@
 #include "BluetoothSerial.h"
 
+#ifndef APP_H
+#define APP_H
+
 class App
 {
 private:
@@ -17,3 +20,5 @@ public:
 
     int avaliable();
 };
+
+#endif // APP_H

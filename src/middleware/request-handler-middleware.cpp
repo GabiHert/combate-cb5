@@ -1,8 +1,8 @@
-#include "utils/utils.h"
+#include "middleware/request-handler-middleware.h"
 #include <Arduino.h>
-#include "middleware.h"
+#include "utils/utils.h"
 
-int RequestHandler::handle(String request)
+int RequestHandlerMiddleware::handle(String request)
 {
     loggerInfo("RequestHandler.handle", "Process started", "request: " + String(request));
 

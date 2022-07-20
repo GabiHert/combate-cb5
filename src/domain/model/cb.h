@@ -1,5 +1,10 @@
-#include <Arduino.h>
-#include "interfaces/interfaces.h"
+
+
+#include "interfaces/gps-interface.h"
+#include "interfaces/lcd-interface.h"
+
+#ifndef CB_H
+#define CB_H
 
 class Cb
 {
@@ -14,8 +19,8 @@ public:
     char whellBoltsCounter;
 
     Cb(String id);
-    ~Cb();
     void setup();
     String getId();
     void dose(int amount);
 };
+#endif // CB_H

@@ -1,4 +1,7 @@
+
 #include <Arduino.h>
+#ifndef LCD_H
+#define LCD_H
 
 class Lcd
 {
@@ -9,11 +12,4 @@ public:
     void setupDisplay();
     void clearDisplay();
 };
-
-class GpsNeo6M
-{
-public:
-    GpsNeo6M();
-    String getLocation();
-    void setupGps();
-};
+#endif // LCD_H

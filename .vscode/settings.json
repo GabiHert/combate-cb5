@@ -4,6 +4,7 @@
         "*.tcc": "cpp",
         "system_error": "cpp",
         "istream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iostream": "cpp"
     }
 }

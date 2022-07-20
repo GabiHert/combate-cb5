@@ -1,12 +1,20 @@
-#include <Arduino.h>
-#include "config/config.h"
-#include "BluetoothSerial.h"
-#include "domain/model/model.h"
-#include "server/app.h"
-#include "utils/utils.h"
-#include "middleware/middleware.h"
-#include <iostream>
 
+#include <Arduino.h>
+#include "BluetoothSerial.h"
+
+#include "config/config.h"
+#include "utils/utils.h"
+
+#include "server/app.h"
+
+#include "domain/model/cb.h"
+
+#include "middleware/check-sum-validation-middleware.h"
+
+#include "middleware/request-handler-middleware.h"
+
+#include "controller/default-execution-gps-controller.h"
+#include <iostream>
 using namespace std;
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
@@ -15,8 +23,9 @@ using namespace std;
 
 Cb cb("CB5 DEV");
 App app(cb.getId());
-CheckSumValidation checkSumValidation;
-RequestHandler requestHandler;
+CheckSumValidationMiddleware checkSumValidationMiddleware;
+RequestHandlerMiddleware requestHandlerMiddleware;
+DefaultExecutionGpsController defaultExecutionGpsController;
 
 void setup()
 {
@@ -43,11 +52,11 @@ void loop()
     String request = app.readString();
 
     // todo: should be         (request, cs     )
-    bool isCsValid = checkSumValidation.validate(request, request);
+    bool isCsValid = checkSumValidationMiddleware.validate(request, request);
 
     if (isCsValid)
     {
-      requestHandler.handle(request);
+      requestHandlerMiddleware.handle(request);
     }
     else
     {
@@ -57,6 +66,6 @@ void loop()
   }
   else
   {
-    // todo: call controller to def routine
+    defaultExecutionGpsController.execute(cb);
   }
 }

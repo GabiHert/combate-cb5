@@ -1,4 +1,4 @@
-#include "interfaces/interfaces.h"
+#include "interfaces/gps-interface.h"
 
 String IGps::getLocation()
 {

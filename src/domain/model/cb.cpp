@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "domain/model/model.h"
+#include "domain/model/cb.h"
 #include "utils/utils.h"
 #include "config/config.h"
 
@@ -19,9 +19,6 @@ String Cb::getId()
 Cb::Cb(String id)
 {
     this->id = id;
-};
-Cb::~Cb(){
-
 };
 
 void Cb::setup()

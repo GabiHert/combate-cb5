@@ -1,4 +1,4 @@
-#include "interfaces/interfaces.h"
+#include "interfaces/lcd-interface.h"
 
 void IDisplay::print(String message)
 {
@@ -19,3 +19,4 @@ void IDisplay::setupDisplay()
 {
     this->display.setupDisplay();
 }
+IDisplay::IDisplay() {}
