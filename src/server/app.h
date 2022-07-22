@@ -16,6 +16,7 @@ public:
     };
     void start();
     int read();
+    void write(String response);
     String readString();
 
     int avaliable();

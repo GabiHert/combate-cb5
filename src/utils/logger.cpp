@@ -4,59 +4,20 @@
 void loggerInfo(String event, String details, String message)
 {
 
-    Serial.print("INFO - :: - ");
-
-    Serial.print("  event: ");
-    Serial.print(event);
-    Serial.print(" | ");
-    Serial.print("  details: ");
-    Serial.print(details);
-    Serial.print(" | ");
-
-    Serial.print(" message: ");
-    Serial.print(message);
-    Serial.print(" | ");
-
+    Serial.println("INFO - :: -  event: " + event + " |  details: " + details + " | message:" + message);
     Serial.println();
 };
 
 void loggerError(String event, String details, String error)
 {
 
-    Serial.print("ERROR - :: - ");
-    Serial.print(" | ");
-
-    Serial.print("  event: ");
-    Serial.print(event);
-    Serial.print(" | ");
-
-    Serial.print("  details: ");
-    Serial.print(details);
-    Serial.print(" | ");
-
-    Serial.print("  error: ");
-    Serial.print(error);
-    Serial.print(" | ");
-
+    Serial.println("ERROR - :: -  event: " + event + " |  details: " + details + " | error:" + error);
     Serial.println();
 };
 
-void loggerwarn(String event, String details, String warn)
+void loggerWarn(String event, String details, String warn)
 {
-
-    Serial.print("WARN - :: - ");
-
-    Serial.print("  event: ");
-    Serial.print(event);
-    Serial.print(" | ");
-
-    Serial.print("  details: ");
-    Serial.print(details);
-    Serial.print(" | ");
-
-    Serial.print("  warn: ");
-    Serial.print(warn);
-    Serial.print(" | ");
+    Serial.println("WARN - :: -  event: " + event + " |  details: " + details + " | warn:" + warn);
 
     Serial.println();
 };

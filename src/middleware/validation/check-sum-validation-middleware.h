@@ -6,7 +6,7 @@
 class CheckSumValidationMiddleware
 {
 public:
-    bool validate(String target, String received);
+    bool validate(String request);
 };
 
 #endif // CHECKSUM_VALIDATION_MIDDLEWARE_H

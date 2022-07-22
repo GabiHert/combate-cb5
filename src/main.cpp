@@ -9,9 +9,10 @@
 
 #include "domain/model/cb.h"
 
-#include "middleware/check-sum-validation-middleware.h"
+#include "middleware/validation/check-sum-validation-middleware.h"
+#include "middleware/validation/protocol-validation-middleware.h"
 
-#include "middleware/request-handler-middleware.h"
+#include "controller/request-controller.h"
 
 #include "controller/default-execution-gps-controller.h"
 #include <iostream>
@@ -24,7 +25,8 @@ using namespace std;
 Cb cb("CB5 DEV");
 App app(cb.getId());
 CheckSumValidationMiddleware checkSumValidationMiddleware;
-RequestHandlerMiddleware requestHandlerMiddleware;
+ProtocolValidationMiddleware protocolValidationMiddleware;
+RequestController requestController(&cb, &app);
 DefaultExecutionGpsController defaultExecutionGpsController;
 
 void setup()
@@ -51,21 +53,21 @@ void loop()
     loggerInfo("main", "Process started", "Serial info. available");
     String request = app.readString();
 
-    // todo: should be         (request, cs     )
-    bool isCsValid = checkSumValidationMiddleware.validate(request, request);
+    bool isProtocolValid = protocolValidationMiddleware.validate(request);
+    bool isCsValid = checkSumValidationMiddleware.validate(request);
 
-    if (isCsValid)
+    if (isProtocolValid && isCsValid)
     {
-      requestHandlerMiddleware.handle(request);
+      requestController.execute(request);
     }
     else
     {
-      // todo:handle
+      // TODO:handle
     }
     loggerInfo("main", "Process finished");
   }
   else
   {
-    defaultExecutionGpsController.execute(cb);
+    // defaultExecutionGpsController.execute(cb);
   }
 }

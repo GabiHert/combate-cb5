@@ -7,8 +7,8 @@ void DefaultExecutionGpsController::execute(Cb cb)
 {
     loggerInfo("DefaultExecutionController", "Process started");
     String location = cb.gps.getLocation();
-    //  todo: encode location with the other cb info
-    //  todo: repond
-    //  todo: wait
+    //  TODO: encode location with the other cb info
+    //  TODO: repond
+    //  TODO: wait
     loggerInfo("DefaultExecutionController", "Process finished");
 };

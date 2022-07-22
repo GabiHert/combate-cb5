@@ -6,7 +6,7 @@
 void Cb::dose(int amount)
 {
     loggerInfo("Cb.dose", "Process started");
-    // todo: dose process
+    // TODO: dose process
     loggerInfo("Cb.dose", "Process finished");
 };
 String Cb::getId()

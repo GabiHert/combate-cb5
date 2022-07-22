@@ -32,3 +32,15 @@ int App::avaliable()
     int avaliable = this->SerialBT.available();
     return avaliable;
 };
+
+void App::write(String response)
+{
+    loggerInfo("App.start", "Process started");
+    unsigned char responseLength = response.length();
+    for (int i = 0; i <= responseLength; i++)
+    {
+        this->SerialBT.write(response[i]);
+    };
+
+    loggerInfo("App.start", "Process finished", "Bluetooth now available");
+};
