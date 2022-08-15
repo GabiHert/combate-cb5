@@ -2,6 +2,11 @@
 #include "utils/utils.h"
 #include "server/app.h"
 
+App::App(String deviceName)
+{
+    this->deviceName = deviceName;
+};
+
 void App::start()
 {
     loggerInfo("App.start", "Process started");

@@ -10,10 +10,7 @@ private:
     BluetoothSerial SerialBT;
 
 public:
-    App(String deviceName)
-    {
-        this->deviceName = deviceName;
-    };
+    App(String deviceName);
     void start();
     int read();
     void write(String response);

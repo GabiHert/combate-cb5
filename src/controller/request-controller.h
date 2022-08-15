@@ -7,11 +7,12 @@
 class RequestController
 {
 private:
-    Cb *cb;
-    App *app;
+    Cb cb;
 
 public:
-    RequestController(Cb *cb, App *app);
-    void execute(String request);
+    RequestController(Cb cb);
+    RequestController();
+
+    String execute(String request);
 };
 #endif // REQUEST_CONTROLLER_H

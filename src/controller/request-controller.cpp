@@ -4,13 +4,12 @@
 #include "config/config.h"
 #include "domain/model/cb.h"
 
-RequestController::RequestController(Cb *cb, App *app)
+RequestController::RequestController(Cb cb)
 {
     this->cb = cb;
-    this->app = app;
 }
 
-void RequestController::execute(String request)
+String RequestController::execute(String request)
 {
     loggerInfo("RequestController.execute", "Process started");
 
@@ -43,7 +42,6 @@ void RequestController::execute(String request)
     // TODO: responseBuilder.build(&this.cb);
 
     String response = "&....";
-    app->write(response);
-
     loggerInfo("RequestController.execute", "Process finished");
+    return response;
 };

@@ -9,7 +9,7 @@
 class Cb
 {
 private:
-    String id;
+    String _id;
 
 public:
     IDisplay display;
@@ -19,8 +19,9 @@ public:
     char whellBoltsCounter;
 
     Cb(String id);
+    Cb();
     void setup();
-    String getId();
+    String id();
     void dose(int amount);
 };
 #endif // CB_H

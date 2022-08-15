@@ -9,16 +9,14 @@ void Cb::dose(int amount)
     // TODO: dose process
     loggerInfo("Cb.dose", "Process finished");
 };
-String Cb::getId()
+String Cb::id()
 {
-    loggerInfo("Cb.getId", "Process started");
-    loggerInfo("Cb.getId", "Process finished");
-    return this->id;
+    return this->_id;
 };
 
 Cb::Cb(String id)
 {
-    this->id = id;
+    this->_id = id;
 };
 
 void Cb::setup()

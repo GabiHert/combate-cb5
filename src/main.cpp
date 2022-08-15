@@ -9,11 +9,7 @@
 
 #include "domain/model/cb.h"
 
-#include "middleware/validation/check-sum-validation-middleware.h"
-#include "middleware/validation/protocol-validation-middleware.h"
-
-#include "controller/request-controller.h"
-
+#include "middleware/request-middleware.h"
 #include "controller/default-execution-gps-controller.h"
 #include <iostream>
 using namespace std;
@@ -23,10 +19,8 @@ using namespace std;
 #endif
 
 Cb cb("CB5 DEV");
-App app(cb.getId());
-CheckSumValidationMiddleware checkSumValidationMiddleware;
-ProtocolValidationMiddleware protocolValidationMiddleware;
-RequestController requestController(&cb, &app);
+App app(cb.id());
+RequestMiddleware requestMiddleware(cb);
 DefaultExecutionGpsController defaultExecutionGpsController;
 
 void setup()
@@ -41,7 +35,7 @@ void setup()
   cb.display.setCursor(0, 0);
   cb.display.print("Nome Bluetooth: ");
   cb.display.setCursor(0, 1);
-  cb.display.print(cb.getId());
+  cb.display.print(cb.id());
 
   loggerInfo("Setup", "Process finished");
 }
@@ -51,20 +45,14 @@ void loop()
   if (app.avaliable())
   {
     loggerInfo("main", "Process started", "Serial info. available");
+    
     String request = app.readString();
 
-    bool isProtocolValid = protocolValidationMiddleware.validate(request);
-    bool isCsValid = checkSumValidationMiddleware.validate(request);
+    String response = requestMiddleware.execute(request);
 
-    if (isProtocolValid && isCsValid)
-    {
-      requestController.execute(request);
-    }
-    else
-    {
-      // TODO:handle
-    }
     loggerInfo("main", "Process finished");
+
+    app.write(response);
   }
   else
   {

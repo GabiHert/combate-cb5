@@ -1,0 +1,4 @@
+class ResponseBuilder
+{
+    // TODO: Implement
+};
