@@ -8,6 +8,9 @@ RequestController::RequestController(Cb cb)
 {
     this->cb = cb;
 }
+RequestController::RequestController()
+{
+}
 
 String RequestController::execute(String request)
 {
@@ -39,9 +42,7 @@ String RequestController::execute(String request)
 
     // TODO: getLocationUseCase.execute(&this.cb);
 
-    // TODO: responseBuilder.build(&this.cb);
-
-    String response = "&....";
-    loggerInfo("RequestController.execute", "Process finished");
+    String response = responseBuilder.buildSuccess(cb);
+    loggerInfo("RequestController.execute", "Process finished", "response: " + response);
     return response;
 };

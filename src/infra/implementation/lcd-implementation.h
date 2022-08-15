@@ -1,7 +1,7 @@
 
-#include <Arduino.h>
 #ifndef LCD_H
 #define LCD_H
+#include <Arduino.h>
 
 class Lcd
 {

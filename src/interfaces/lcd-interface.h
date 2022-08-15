@@ -1,8 +1,9 @@
-#include "infra/implementation/lcd-implementation.h"
-#include <Arduino.h>
+
 
 #ifndef IDisplay_H
 #define IDisplay_H
+#include "infra/implementation/lcd-implementation.h"
+#include <Arduino.h>
 
 class IDisplay
 {

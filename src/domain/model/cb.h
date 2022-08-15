@@ -1,10 +1,10 @@
 
 
-#include "interfaces/gps-interface.h"
-#include "interfaces/lcd-interface.h"
-
 #ifndef CB_H
 #define CB_H
+
+#include "interfaces/gps-interface.h"
+#include "interfaces/lcd-interface.h"
 
 class Cb
 {
@@ -16,7 +16,7 @@ public:
     IGps gps;
     char alarmSiren;
     char poisonShots;
-    char whellBoltsCounter;
+    char whellBoltsCounter[2];
 
     Cb(String id);
     Cb();

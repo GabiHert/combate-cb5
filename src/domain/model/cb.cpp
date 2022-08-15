@@ -18,7 +18,7 @@ Cb::Cb(String id)
 {
     this->_id = id;
 };
-
+Cb::Cb() {}
 void Cb::setup()
 {
     this->display.setupDisplay();

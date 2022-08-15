@@ -1,6 +1,6 @@
 
-#ifndef REQUEST_VALIDATION_MIDDLEWARE
-#define APP_H
+#ifndef REQUEST_VALIDATION_MIDDLEWARE_H
+#define REQUEST_VALIDATION_MIDDLEWARE_H
 #include <Arduino.h>
 #include "middleware/builder/check-sum-builder.h"
 
