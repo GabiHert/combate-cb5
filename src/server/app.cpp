@@ -10,14 +10,14 @@ App::App(String deviceName)
 void App::start()
 {
     loggerInfo("App.start", "Process started");
-    this->SerialBT.begin(this->deviceName);
+    this->serialBT.begin(this->deviceName);
     loggerInfo("App.start", "Process finished", "Bluetooth now available");
 };
 
 int App::read()
 {
     loggerInfo("App.read", "Process started");
-    int serial = this->SerialBT.read();
+    int serial = this->serialBT.read();
 
     loggerInfo("App.read", "Process finished", serial != 0 ? "Serial: " + String(serial) : "");
     return serial;
@@ -26,7 +26,7 @@ int App::read()
 String App::readString()
 {
     loggerInfo("App.readString", "Process started");
-    String serial = this->SerialBT.readString();
+    String serial = this->serialBT.readString();
 
     loggerInfo("App.readString", "Process finished", serial != 0 ? "Serial: " + serial : "");
     return serial;
@@ -34,7 +34,7 @@ String App::readString()
 
 int App::avaliable()
 {
-    int avaliable = this->SerialBT.available();
+    int avaliable = this->serialBT.available();
     return avaliable;
 };
 
@@ -44,7 +44,7 @@ void App::write(String response)
     unsigned char responseLength = response.length();
     for (int i = 0; i <= responseLength; i++)
     {
-        this->SerialBT.write(response[i]);
+        this->serialBT.write(response[i]);
     };
 
     loggerInfo("App.start", "Process finished", "Bluetooth now available");

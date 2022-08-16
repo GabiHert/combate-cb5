@@ -1,13 +1,13 @@
-#include "BluetoothSerial.h"
 
 #ifndef APP_H
 #define APP_H
+#include "BluetoothSerial.h"
 
 class App
 {
 private:
     String deviceName;
-    BluetoothSerial SerialBT;
+    BluetoothSerial serialBT;
 
 public:
     App(String deviceName);
