@@ -14,12 +14,13 @@ String RequestMiddleware::execute(String request)
   loggerInfo("main", "Process started", "Serial info. available");
 
   bool isRequestValid = requestValidationMiddleware.validate(request);
+  RequestDto requestDto(request);
 
   String response;
 
   if (isRequestValid)
   {
-    response = requestController.execute(request);
+    response = requestController.execute(requestDto);
   }
 
   loggerInfo("main", "Process finished");

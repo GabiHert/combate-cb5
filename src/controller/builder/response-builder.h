@@ -2,7 +2,7 @@
 #define RESPONSE_BUILDER_H
 
 #include <Arduino.h>
-#include "domain/model/cb.h"
+#include "domain/cb/cb.h"
 #include "middleware/builder/check-sum-builder.h"
 
 class ResponseBuilder
@@ -14,4 +14,4 @@ public:
     String buildSuccess(Cb cb);
 };
 
-#endif
+#endifss

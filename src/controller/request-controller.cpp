@@ -1,37 +1,38 @@
-#include "controller/request-controller.h"
 #include "utils/utils.h"
 #include "domain/dto/request-dto.h"
 #include "config/config.h"
-#include "domain/model/cb.h"
+#include "domain/cb/cb.h"
+#include "controller/request-controller.h"
 
 RequestController::RequestController(Cb cb)
 {
     this->cb = cb;
-}
-RequestController::RequestController()
-{
-}
+    DoseUseCase doseUseCase(&cb);
+    this->doseUseCase = doseUseCase;
+};
+RequestController::RequestController(){};
 
-String RequestController::execute(String request)
+String RequestController::execute(RequestDto requestDto)
 {
     loggerInfo("RequestController.execute", "Process started");
 
-    RequestDto requestDto(request);
+    RequestModel requestModel(requestDto);
+    this->cb.setRequestModel(requestModel);
 
-    bool turnAlarmSirenOnRequest = requestDto.alarmSiren() != CONFIG().ALARM_SIREN_OFF;
-    bool doseRequest = requestDto.dose() != CONFIG().PROTOCOL_DO_NOT_DOSE;
-    bool clearWhellBoltsCounterRequest = requestDto.whellBoltsCounter() != CONFIG().PROTOCOL_DO_NOT_CLEAR_WHELL_BOLT_COUNTS;
+    bool turnAlarmSirenOnRequest = requestModel.getAlarmSiren() != CONFIG().ALARM_SIREN_OFF;
+    bool doseRequest = requestModel.getDose() != CONFIG().PROTOCOL_DO_NOT_DOSE;
+    bool clearWhellBoltsCounterRequest = requestModel.getWhellBoltsCounter() != CONFIG().PROTOCOL_DO_NOT_CLEAR_WHELL_BOLT_COUNTS;
 
     if (turnAlarmSirenOnRequest)
     {
         loggerInfo("RequestController.execute", "Turn alarm siren on Request detected");
-        // TODO: turnAlarmSirenOnUseCase.execute(&this.cb);
+        this->turnAlarmSirenOnUseCase.execute(&this->cb);
     };
 
     if (doseRequest)
     {
         loggerInfo("RequestController.execute", "Dose request detected");
-        // TODO: doseUseCase.execute(&this.cb);
+        this->doseUseCase.execute(requestModel.getDose());
     };
 
     if (clearWhellBoltsCounterRequest)

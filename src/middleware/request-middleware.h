@@ -1,6 +1,6 @@
 #ifndef REQUEST_MIDDLEWARE_H
 #define REQUEST_MIDDLEWARE_H
-#include "domain/model/cb.h"
+#include "domain/cb/cb.h"
 #include "server/app.h"
 #include "middleware/validation/request-validation-middleware.h"
 #include "controller/request-controller.h"

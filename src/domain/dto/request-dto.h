@@ -6,16 +6,17 @@
 class RequestDto
 {
 private:
-    char alarmSiren_;
-    char dose_;
-    char whellBoltsCounter_;
+    char _alarmSiren;
+    char _dose;
+    char _whellBoltsCounter;
+    bool validate(String request);
 
 public:
     RequestDto(String request);
 
-    char alarmSiren();
-    char dose();
-    char whellBoltsCounter();
+    char getAlarmSiren();
+    char getDose();
+    char* getWhellBoltsCounter();
 };
 
 #endif // REQUEST_DTO_H

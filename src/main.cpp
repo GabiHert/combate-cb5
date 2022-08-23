@@ -45,7 +45,7 @@ void loop()
   if (app.avaliable())
   {
     loggerInfo("main", "Process started", "Serial info. available");
-    
+
     String request = app.readString();
 
     String response = requestMiddleware.execute(request);

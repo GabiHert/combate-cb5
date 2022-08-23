@@ -1,24 +1,25 @@
 #include <Arduino.h>
 #include "domain/dto/request-dto.h"
+#include "utils/utils.h"
+#include "config/config.h"
 
 RequestDto::RequestDto(String request)
 {
-    this->alarmSiren_ = request[3];
-    this->dose_ = request[4];
-    this->whellBoltsCounter_ = request[5];
+    this->_alarmSiren = request[3];
+    this->_dose = request[4];
+    this->_whellBoltsCounter = request[5];
 };
 
-char RequestDto::alarmSiren()
+char RequestDto::getAlarmSiren()
 {
-    return this->alarmSiren_;
+    return this->_alarmSiren;
 };
 
-char RequestDto::dose()
+char RequestDto::getDose()
 {
-    return this->dose_;
+    return this->_dose;
 };
 
-char RequestDto::whellBoltsCounter()
+char RequestDto::getWhellBoltsCounter()
 {
-    return this->whellBoltsCounter_;
-};
+    return this->_whellBoltsCounter;
