@@ -4,7 +4,9 @@
 #include "server/app.h"
 #include "middleware/validation/request-validation-middleware.h"
 #include "controller/request-controller.h"
+#include "domain/dto/response-dto.h"
 #include <Arduino.h>
+#include "domain/model/response-model.h"
 
 class RequestMiddleware
 {
@@ -15,7 +17,7 @@ private:
 
 public:
     RequestMiddleware(Cb cb);
-    String execute(String request);
+    ResponseModel execute(String request);
 };
 
 #endif // REQUEST_MIDDLEWARE

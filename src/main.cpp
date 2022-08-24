@@ -7,10 +7,8 @@
 
 #include "server/app.h"
 
-#include "domain/model/cb.h"
-
+#include "domain/cb/cb.h"
 #include "middleware/request-middleware.h"
-#include "controller/default-execution-gps-controller.h"
 #include <iostream>
 using namespace std;
 
@@ -19,9 +17,8 @@ using namespace std;
 #endif
 
 Cb cb("CB5 DEV");
-App app(cb.id());
+App app(cb.getId());
 RequestMiddleware requestMiddleware(cb);
-DefaultExecutionGpsController defaultExecutionGpsController;
 
 void setup()
 {
@@ -35,7 +32,7 @@ void setup()
   cb.display.setCursor(0, 0);
   cb.display.print("Nome Bluetooth: ");
   cb.display.setCursor(0, 1);
-  cb.display.print(cb.id());
+  cb.display.print(cb.getId());
 
   loggerInfo("Setup", "Process finished");
 }
@@ -48,14 +45,10 @@ void loop()
 
     String request = app.readString();
 
-    String response = requestMiddleware.execute(request);
+    ResponseModel responseModel = requestMiddleware.execute(request);
 
     loggerInfo("main", "Process finished");
 
-    app.write(response);
-  }
-  else
-  {
-    // defaultExecutionGpsController.execute(cb);
+    app.write(responseModel.toString());
   }
 }

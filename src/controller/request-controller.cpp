@@ -3,16 +3,25 @@
 #include "config/config.h"
 #include "domain/cb/cb.h"
 #include "controller/request-controller.h"
+#include "useCase/clear-whell-bolts-counter-use-case.h"
 
 RequestController::RequestController(Cb cb)
 {
     this->cb = cb;
+
     DoseUseCase doseUseCase(&cb);
     this->doseUseCase = doseUseCase;
+
+    TurnAlarmSirenOnUseCase turnAlarmSirenOnUseCase(&cb);
+    this->turnAlarmSirenOnUseCase = turnAlarmSirenOnUseCase;
+
+    ClearWhellBoltsCounterUseCase clearWhellBoltsCounterUseCase(&cb);
+    this->clearWhellBoltsCounterUseCase = clearWhellBoltsCounterUseCase;
 };
+
 RequestController::RequestController(){};
 
-String RequestController::execute(RequestDto requestDto)
+ResponseDto RequestController::execute(RequestDto requestDto)
 {
     loggerInfo("RequestController.execute", "Process started");
 
@@ -26,7 +35,7 @@ String RequestController::execute(RequestDto requestDto)
     if (turnAlarmSirenOnRequest)
     {
         loggerInfo("RequestController.execute", "Turn alarm siren on Request detected");
-        this->turnAlarmSirenOnUseCase.execute(&this->cb);
+        this->turnAlarmSirenOnUseCase.execute();
     };
 
     if (doseRequest)
@@ -38,12 +47,12 @@ String RequestController::execute(RequestDto requestDto)
     if (clearWhellBoltsCounterRequest)
     {
         loggerInfo("RequestController.execute", "Clear whell bolts counter request detected");
-        // TODO: clearWhellBoltsCounterUseCase.execute(&this.cb);
+        this->clearWhellBoltsCounterUseCase.execute();
     };
 
     // TODO: getLocationUseCase.execute(&this.cb);
 
-    String response = responseBuilder.buildSuccess(cb);
-    loggerInfo("RequestController.execute", "Process finished", "response: " + response);
-    return response;
+    ResponseDto responseDto(this->cb);
+    loggerInfo("RequestController.execute", "Process finished");
+    return responseDto;
 };

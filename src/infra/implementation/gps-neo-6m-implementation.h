@@ -5,8 +5,11 @@
 
 class GpsNeo6M
 {
+    private:
+    String location;
 public:
     GpsNeo6M();
+    void setLocation(); 
     String getLocation();
     void setupGps();
 };

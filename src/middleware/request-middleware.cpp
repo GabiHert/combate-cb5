@@ -8,21 +8,26 @@ RequestMiddleware::RequestMiddleware(Cb cb)
   this->requestController = RequestController(cb);
 };
 
-String RequestMiddleware::execute(String request)
+ResponseModel RequestMiddleware::execute(String request)
 {
 
-  loggerInfo("main", "Process started", "Serial info. available");
+  loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available");
 
   bool isRequestValid = requestValidationMiddleware.validate(request);
   RequestDto requestDto(request);
 
-  String response;
-
   if (isRequestValid)
   {
-    response = requestController.execute(requestDto);
+    ResponseDto responseDto = requestController.execute(requestDto);
+    ResponseModel responseModel(responseDto);
+    return responseModel;
+  }
+  else
+  {
+
+    ResponseModel responseModel("001");
+    return responseModel;
   }
 
-  loggerInfo("main", "Process finished");
-  return response;
+  loggerInfo("RequestMiddleware.execute", "Process finished");
 }

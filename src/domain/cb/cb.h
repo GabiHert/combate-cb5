@@ -12,7 +12,7 @@ class Cb
 private:
     String _id;
     RequestModel requestModel;
-    char _wheelBoltsCount[2];
+    char _wheelBoltsCount[2] = {'0','0'};
 
 public:
     IDisplay display;

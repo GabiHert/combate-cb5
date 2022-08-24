@@ -5,16 +5,15 @@
 
 SoftwareSerial gpsSerial(CONFIG().GPS_RX, CONFIG().GPS_TX);
 
-String GpsNeo6M::getLocation()
+void GpsNeo6M::setLocation()
 {
     loggerInfo("GpsNeo6M.getLocation", "Process started");
     if (gpsSerial.available())
     {
         String location = gpsSerial.readString();
         loggerInfo("GpsNeo6M.getLocation", "Process finished", " location: " + location);
-        return location;
+        this->location = location;
     };
-    return "";
 };
 void GpsNeo6M::setupGps()
 {
@@ -23,5 +22,10 @@ void GpsNeo6M::setupGps()
     gpsSerial.begin(CONFIG().SERIAL_BOUD_RATE);
 
     loggerInfo("GpsNeo6M.setupGps", "Process finished");
+};
+
+String GpsNeo6M::getLocation()
+{
+    return this->location;
 };
 GpsNeo6M::GpsNeo6M(){};

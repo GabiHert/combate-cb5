@@ -1,6 +1,6 @@
 #include "middleware/validation/request-validation-middleware.h"
 #include "utils/utils.h"
-#include "middleware/builder/check-sum-builder.h"
+#include "domain/builder/check-sum-builder.h"
 #include "config/config.h"
 
 RequestValidationMiddleware::RequestValidationMiddleware(){};

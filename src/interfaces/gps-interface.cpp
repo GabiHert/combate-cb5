@@ -1,11 +1,13 @@
 #include "interfaces/gps-interface.h"
 
-String IGps::getLocation()
+void IGps::setLocation()
 {
-    String location =  this->gps.getLocation();
-    this->data = location;
-    return location;
+    this->gps.setLocation();
 };
+
+String IGps::getLocation(){
+    return this->gps.getLocation();
+}
 
 void IGps::setupGps()
 {

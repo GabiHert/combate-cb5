@@ -10,8 +10,8 @@ private:
     GpsNeo6M gps;
 
 public:
-    String data;
     String getLocation();
+    void setLocation();
     void setupGps();
 };
 

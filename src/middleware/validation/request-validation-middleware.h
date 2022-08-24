@@ -2,7 +2,7 @@
 #ifndef REQUEST_VALIDATION_MIDDLEWARE_H
 #define REQUEST_VALIDATION_MIDDLEWARE_H
 #include <Arduino.h>
-#include "middleware/builder/check-sum-builder.h"
+#include "domain/builder/check-sum-builder.h"
 
 class RequestValidationMiddleware
 {

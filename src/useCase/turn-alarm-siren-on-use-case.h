@@ -4,9 +4,13 @@
 
 class TurnAlarmSirenOnUseCase
 {
+private:
+    Cb *cb;
+
 public:
-    TurnAlarmSirenOnUseCase();
-    void execute(Cb *cb);
+    TurnAlarmSirenOnUseCase(Cb *cb);
+    TurnAlarmSirenOnUseCase(){};
+    void execute();
 };
 
 #endif

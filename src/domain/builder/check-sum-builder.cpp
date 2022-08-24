@@ -1,4 +1,4 @@
-#include "middleware/builder/check-sum-builder.h"
+#include "domain/builder/check-sum-builder.h"
 #include "utils/utils.h"
 
 int CheckSumBuilder::build(String data)

@@ -29,17 +29,16 @@ void Cb::clearWhellBoltsCount()
     this->_wheelBoltsCount[1] = '0';
 };
 
-void Cb::addWhellBoltsCount(){
-    //TODO: Implemetar logica
-    // add somente ate 99
+void Cb::addWhellBoltsCount()
+{
+    // TODO: Implemetar logica
+    //  add somente ate 99
 }
-
 
 void Cb::setRequestModel(RequestModel requestModel)
 {
     this->requestModel = requestModel;
 };
-
 
 RequestModel Cb::getRequestModel()
 {
