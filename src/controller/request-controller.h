@@ -6,6 +6,7 @@
 #include "useCase/turn-alarm-siren-on-use-case.h"
 #include "useCase/dose-use-case.h"
 #include "useCase/clear-whell-bolts-counter-use-case.h"
+#include "useCase/get-gps-location-use-case.h"
 #include "domain/dto/response-dto.h"
 #include "domain/dto/request-dto.h"
 
@@ -16,6 +17,7 @@ private:
     TurnAlarmSirenOnUseCase turnAlarmSirenOnUseCase;
     DoseUseCase doseUseCase;
     ClearWhellBoltsCounterUseCase clearWhellBoltsCounterUseCase;
+    GetGpsLocationUseCase getGpsLocationUseCase;
 
 public:
     RequestController(Cb cb);

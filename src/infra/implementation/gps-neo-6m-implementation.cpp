@@ -3,7 +3,7 @@
 #include "config/config.h"
 #include "utils/utils.h"
 
-SoftwareSerial gpsSerial(CONFIG().GPS_RX, CONFIG().GPS_TX);
+SoftwareSerial gpsSerial(CONFIG().PORT_GPS_RX, CONFIG().PORT_GPS_TX);
 
 void GpsNeo6M::setLocation()
 {

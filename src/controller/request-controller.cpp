@@ -17,6 +17,9 @@ RequestController::RequestController(Cb cb)
 
     ClearWhellBoltsCounterUseCase clearWhellBoltsCounterUseCase(&cb);
     this->clearWhellBoltsCounterUseCase = clearWhellBoltsCounterUseCase;
+
+    GetGpsLocationUseCase getGpsLocationUseCase(&cb);
+    this->getGpsLocationUseCase = getGpsLocationUseCase;
 };
 
 RequestController::RequestController(){};
@@ -50,7 +53,7 @@ ResponseDto RequestController::execute(RequestDto requestDto)
         this->clearWhellBoltsCounterUseCase.execute();
     };
 
-    // TODO: getLocationUseCase.execute(&this.cb);
+    this->getGpsLocationUseCase.execute();
 
     ResponseDto responseDto(this->cb);
     loggerInfo("RequestController.execute", "Process finished");
