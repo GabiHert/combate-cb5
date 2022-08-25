@@ -9,7 +9,7 @@ App::App(String deviceName)
 
 void App::start()
 {
-    loggerInfo("App.start", "Process started");
+    loggerInfo("App.start", "Process started", "deviceName: " + deviceName);
     this->serialBT.begin(this->deviceName);
     loggerInfo("App.start", "Process finished", "Bluetooth now available");
 };

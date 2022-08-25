@@ -16,7 +16,7 @@ public:
 
     char getAlarmSiren();
     char getDose();
-    char* getWhellBoltsCounter();
+    char getWhellBoltsCounter();
 };
 
 #endif // REQUEST_DTO_H

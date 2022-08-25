@@ -10,7 +10,7 @@ void GpsNeo6M::setLocation()
     loggerInfo("GpsNeo6M.getLocation", "Process started");
     if (gpsSerial.available())
     {
-        String location = gpsSerial.readString();
+        String location = "$GPRMC,144326.00,A,5107.0017737,N,11402.3291611,W,0.080,323.3,210307,0.0,E,A*20"; // TODO: gpsSerial.readString();
         loggerInfo("GpsNeo6M.getLocation", "Process finished", " location: " + location);
         this->location = location;
     };

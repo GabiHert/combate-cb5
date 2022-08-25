@@ -17,9 +17,9 @@ private:
     String _extraChar;
 
 public:
-    ResponseDto::ResponseDto(Cb cb);
-    ResponseDto::ResponseDto(Cb cb, String errorCode);
-    ResponseDto::ResponseDto();
+    ResponseDto(Cb cb);
+    ResponseDto(Cb cb, String errorCode);
+    ResponseDto(){};
     String getInitializer();
     String getErrorCode();
     char *getWhellBoltsCount();

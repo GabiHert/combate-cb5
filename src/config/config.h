@@ -1,3 +1,6 @@
+
+#ifndef CONFIG_H
+#define CONFIG_H
 #include <Arduino.h>
 
 struct CONFIG
@@ -9,4 +12,4 @@ struct CONFIG
     char PROTOCOL_DO_NOT_DOSE = 'N', PROTOCOL_DO_NOT_CLEAR_WHELL_BOLT_COUNTS = 'N', ALARM_SIREN_OFF = '0';
 };
 
-CONFIG config;
+#endif

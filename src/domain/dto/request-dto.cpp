@@ -23,3 +23,4 @@ char RequestDto::getDose()
 char RequestDto::getWhellBoltsCounter()
 {
     return this->_whellBoltsCounter;
+}

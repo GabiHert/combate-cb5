@@ -47,8 +47,7 @@ void loop()
 
     ResponseModel responseModel = requestMiddleware.execute(request);
 
-    loggerInfo("main", "Process finished");
-
     app.write(responseModel.toString());
+    loggerInfo("main", "Process finished");
   }
 }

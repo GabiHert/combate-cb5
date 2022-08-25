@@ -6,27 +6,28 @@
 #include "config/config.h"
 #include "domain/dto/response-dto.h"
 
-class ResponseModel {
+class ResponseModel
+{
 private:
-CheckSumBuilder _checkSumBuilder;
-String _initializer;
-String _errorCode;
-char _whellBoltsCount[2];
-String _gpsData;
-String _checkSum;
-String _extraChar;
-int _lineFeed;
-int _carriageReturn;
+    CheckSumBuilder _checkSumBuilder;
+    String _initializer;
+    String _errorCode;
+    char _whellBoltsCount[2];
+    String _gpsData;
+    String _checkSum;
+    String _extraChar;
+    int _lineFeed;
+    int _carriageReturn;
 
 public:
-ResponseModel::ResponseModel(ResponseDto ResponseDto);
-ResponseModel::ResponseModel(String errorCode);
-ResponseModel::ResponseModel();
-String toString();
-String getInitializer();
-String getErrorCode();
-char* getWhellBoltsCount();
-String getGpsData();
+    ResponseModel(ResponseDto ResponseDto);
+    ResponseModel(String errorCode);
+    ResponseModel(){};
+    String toString();
+    String getInitializer();
+    String getErrorCode();
+    char *getWhellBoltsCount();
+    String getGpsData();
 };
 
 #endif

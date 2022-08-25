@@ -2,13 +2,16 @@
 #include "utils/utils.h"
 ResponseModel::ResponseModel(ResponseDto responseDto)
 {
+    loggerInfo("ResponseModel", "Process started - constructor");
+
     this->_initializer = responseDto.getInitializer();
     this->_errorCode = responseDto.getErrorCode();
     this->_whellBoltsCount[0] = responseDto.getWhellBoltsCount()[0];
     this->_whellBoltsCount[1] = responseDto.getWhellBoltsCount()[1];
     this->_gpsData = responseDto.getGpsData();
-    this->_lineFeed = config.PROTOCOL_LF;
-    this->_carriageReturn = config.PROTOCOL_CR;
+    this->_lineFeed = CONFIG().PROTOCOL_LF;
+    this->_carriageReturn = CONFIG().PROTOCOL_CR;
+    loggerInfo("ResponseModel", "Process finished - constructor");
 };
 
 ResponseModel::ResponseModel(String errorCode)
@@ -28,7 +31,7 @@ String ResponseModel::toString()
     response += this->_checkSumBuilder.build(response);
     response += "," + this->_gpsData;
     response += String(this->_carriageReturn) + String(this->_lineFeed);
-    loggerInfo("ResponseModel.toString", "Process finished");
+    loggerInfo("ResponseModel.toString", "Process finished", "response: " + response);
 
     return response;
 }

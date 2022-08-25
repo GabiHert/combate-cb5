@@ -20,14 +20,16 @@ ResponseModel RequestMiddleware::execute(String request)
   {
     ResponseDto responseDto = requestController.execute(requestDto);
     ResponseModel responseModel(responseDto);
+    loggerInfo("RequestMiddleware.execute", "Process finished");
+
     return responseModel;
   }
   else
   {
 
     ResponseModel responseModel("001");
+    loggerError("RequestMiddleware.execute", "Process error");
+
     return responseModel;
   }
-
-  loggerInfo("RequestMiddleware.execute", "Process finished");
 }

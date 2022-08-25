@@ -18,7 +18,7 @@ char RequestModel::getDose()
     return this->_dose;
 };
 
-char* RequestModel::getWhellBoltsCounter()
+char RequestModel::getWhellBoltsCounter()
 {
     return this->_whellBoltsCounter;
 };
