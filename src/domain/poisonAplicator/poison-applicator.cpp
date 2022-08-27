@@ -1,14 +1,28 @@
 #include "domain/poisonAplicator/poison-applicator.h"
 #include "utils/utils.h"
+#include "config/config.h"
 
 PoisonApplicator::PoisonApplicator(unsigned char motorPortA, unsigned char motorPortB, unsigned char sensorPort)
 {
-    pinMode(motorPortA, OUTPUT);
-    pinMode(motorPortB, OUTPUT);
-    pinMode(sensorPort, INPUT);
+
+    this->sys.setPort(motorPortA, OUTPUT);
+    this->sys.setPort(motorPortB, OUTPUT);
+    this->sys.setPort(sensorPort, INPUT);
+
     this->motorPortA = motorPortA;
     this->motorPortB = motorPortB;
     this->sensorPort = sensorPort;
+}
+
+void PoisonApplicator::calibrate()
+{
+    loggerInfo("PoisonApplicator.calibrate", "Process started");
+    while (this->readSensor())
+    {
+        this->spin(CONFIG().SPIN_DIRECTION_CLOCKWISE);
+    }
+    this->stop();
+    loggerInfo("PoisonApplicator.calibrate", "Process started");
 }
 
 void PoisonApplicator::spin(unsigned char direction)
@@ -22,14 +36,14 @@ void PoisonApplicator::spin(unsigned char direction)
 
     if (direction)
     {
-        digitalWrite(motorPortA, HIGH);
-        digitalWrite(motorPortA, LOW);
+        this->sys.setPort(motorPortA, HIGH);
+        this->sys.setPort(motorPortA, LOW);
         loggerInfo("PoisonApplicator.readSensor", "Process finished", " motorPortA: HIGH - motorPortB = LOW");
     }
     else
     {
-        digitalWrite(motorPortA, LOW);
-        digitalWrite(motorPortA, HIGH);
+        this->sys.setPort(motorPortA, LOW);
+        this->sys.setPort(motorPortA, HIGH);
         loggerInfo("PoisonApplicator.readSensor", "Process finished", " motorPortA: LOW - motorPortB = HIGH");
     }
 };
@@ -37,7 +51,15 @@ void PoisonApplicator::spin(unsigned char direction)
 bool PoisonApplicator::readSensor()
 {
     loggerInfo("PoisonApplicator.readSensor", "Process started");
-    bool result = digitalRead(this->sensorPort) ? true : false;
+    bool result = this->sys.readDigitalPort(this->sensorPort) ? true : false;
     loggerInfo("PoisonApplicator.readSensor", "Process finished", " result: " + String(result));
     return result;
 };
+
+void PoisonApplicator::stop()
+{
+    loggerInfo("PoisonApplicator.stop", "Process started");
+    this->sys.setPort(motorPortA, LOW);
+    this->sys.setPort(motorPortA, LOW);
+    loggerInfo("PoisonApplicator.stop", "Process finished");
+}

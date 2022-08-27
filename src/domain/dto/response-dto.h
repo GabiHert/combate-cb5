@@ -9,9 +9,10 @@ class ResponseDto
 {
 private:
     CheckSumBuilder _checkSumBuilder;
+    char _whellBoltsCount[2];
     String _initializer;
     String _errorCode;
-    char _whellBoltsCount[2];
+    String _status;
     String _gpsData;
     String _checkSum;
     String _extraChar;
@@ -24,6 +25,7 @@ public:
     String getErrorCode();
     char *getWhellBoltsCount();
     String getGpsData();
+    String getStatus();
 };
 
 #endif

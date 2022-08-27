@@ -56,6 +56,6 @@ ResponseDto RequestController::execute(RequestDto requestDto)
     this->getGpsLocationUseCase.execute();
 
     ResponseDto responseDto(this->cb);
-    loggerInfo("RequestController.execute", "Process finished");
+    loggerInfo("RequestController.execute", "Process finished", " gpsData: " + String(responseDto.getGpsData()));
     return responseDto;
 };

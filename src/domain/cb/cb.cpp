@@ -5,15 +5,25 @@
 
 void Cb::dose()
 {
-    loggerInfo("Cb.dose", "Process started");
-    do
-    { // TODO:CONFERIR
-        this->poisonApplicator[0].spin(CONFIG().SPIN_DIRECTION_CLOCKWISE);
 
-    } while (!this->poisonApplicator[0].readSensor());
+    loggerInfo("Cb.dose", "Process started");
+    Timer timer;
+    timer.setTimer(200);
+    if (!this->poisonApplicator[0].readSensor())
+    {
+        do
+        {
+
+            this->poisonApplicator[0].spin(CONFIG().SPIN_DIRECTION_CLOCKWISE);
+
+        } while (!this->poisonApplicator[0].readSensor() || !timer.status());
+    }
+
+    this->poisonApplicator[0].stop();
 
     loggerInfo("Cb.dose", "Process finished");
 };
+
 String Cb::getId()
 {
     return this->_id;

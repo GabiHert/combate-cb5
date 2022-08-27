@@ -5,6 +5,7 @@ ResponseModel::ResponseModel(ResponseDto responseDto)
     loggerInfo("ResponseModel", "Process started - constructor");
 
     this->_initializer = responseDto.getInitializer();
+    this->_status = responseDto.getStatus();
     this->_errorCode = responseDto.getErrorCode();
     this->_whellBoltsCount[0] = responseDto.getWhellBoltsCount()[0];
     this->_whellBoltsCount[1] = responseDto.getWhellBoltsCount()[1];
@@ -25,9 +26,8 @@ ResponseModel::ResponseModel(String errorCode)
 String ResponseModel::toString()
 {
     loggerInfo("ResponseModel.toString", "Process started");
-    String response = this->_initializer + this->_errorCode + this->_extraChar;
-    response += this->_whellBoltsCount[0] + this->_whellBoltsCount[1];
-
+    String response = this->_initializer + this->_whellBoltsCount[0] + this->_whellBoltsCount[1] + this->_status;
+    response += this->_errorCode + this->_extraChar;
     response += this->_checkSumBuilder.build(response);
     response += "," + this->_gpsData;
     response += String(this->_carriageReturn) + String(this->_lineFeed);

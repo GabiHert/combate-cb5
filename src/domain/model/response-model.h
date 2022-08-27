@@ -12,6 +12,7 @@ private:
     CheckSumBuilder _checkSumBuilder;
     String _initializer;
     String _errorCode;
+    String _status;
     char _whellBoltsCount[2];
     String _gpsData;
     String _checkSum;
