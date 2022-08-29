@@ -3,6 +3,8 @@
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
+// TODO: se a mensagem ja estiver printada n printar novamente
+//  guardar mensagem em atributo privado
 void IDisplay::print(String message)
 {
     loggerInfo("Lcd.display", "Process started", message);

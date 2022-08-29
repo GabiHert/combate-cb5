@@ -1,6 +1,6 @@
 
 #include "utils/utils.h"
-#include "server/app.h"
+#include "infra/server/app.h"
 
 App::App(String deviceName)
 {

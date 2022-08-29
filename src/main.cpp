@@ -5,7 +5,7 @@
 #include "config/config.h"
 #include "utils/utils.h"
 
-#include "server/app.h"
+#include "infra/server/app.h"
 
 #include "domain/cb/cb.h"
 #include "middleware/request-middleware.h"

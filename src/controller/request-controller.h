@@ -1,7 +1,6 @@
 #ifndef REQUEST_CONTROLLER_H
 #define REQUEST_CONTROLLER_H
 #include "domain/cb/cb.h"
-#include "server/app.h"
 #include <Arduino.h>
 #include "useCase/turn-alarm-siren-on-use-case.h"
 #include "useCase/dose-use-case.h"
