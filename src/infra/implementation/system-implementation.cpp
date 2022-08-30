@@ -15,3 +15,18 @@ int ISystem::readDigitalPort(unsigned char pin)
 {
     return digitalRead(pin);
 }
+
+void ISystem::serialPrint(String message)
+{
+    Serial.print(message);
+};
+
+void ISystem::serialPrintln(String message)
+{
+    Serial.println(message);
+};
+
+String ISystem::serialRead()
+{
+    return Serial.readString();
+};
