@@ -9,17 +9,13 @@ RequestController::RequestController(Cb cb)
 {
     this->cb = cb;
 
-    DoseUseCase doseUseCase(&cb);
-    this->doseUseCase = doseUseCase;
+    this->doseUseCase = DoseUseCase(&cb);
 
-    TurnAlarmSirenOnUseCase turnAlarmSirenOnUseCase(&cb);
-    this->turnAlarmSirenOnUseCase = turnAlarmSirenOnUseCase;
+    this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(&cb);
 
-    ClearWhellBoltsCounterUseCase clearWhellBoltsCounterUseCase(&cb);
-    this->clearWhellBoltsCounterUseCase = clearWhellBoltsCounterUseCase;
+    this->clearWhellBoltsCounterUseCase = ClearWhellBoltsCounterUseCase(&cb);
 
-    GetGpsLocationUseCase getGpsLocationUseCase(&cb);
-    this->getGpsLocationUseCase = getGpsLocationUseCase;
+    this->getGpsLocationUseCase = GetGpsLocationUseCase(&cb);
 };
 
 RequestController::RequestController(){};
