@@ -8,10 +8,12 @@ DoseUseCase::DoseUseCase(Cb *cb)
 
 void DoseUseCase::execute(int amount)
 {
-    loggerInfo("DoseUseCase", "Proces started");
+    loggerInfo("DoseUseCase", "Process started", "amount: " + String(amount));
+    loggerInfo("DoseUseCase", "amount: " + String(amount));
+
     for (int dose = 0; dose <= amount; dose++)
     {
         this->cb->dose();
     }
-    loggerInfo("DoseUseCase", "Proces finished");
+    loggerInfo("DoseUseCase", "Process finished");
 };

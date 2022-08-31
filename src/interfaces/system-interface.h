@@ -13,6 +13,7 @@ public:
     void serialPrintln(String message);
     void serialPrint(String message);
     String serialRead();
+    int serialAvailable();
 };
 
 #endif

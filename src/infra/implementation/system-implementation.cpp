@@ -13,7 +13,7 @@ void ISystem::setupPort(unsigned char pin, unsigned char mode)
 
 int ISystem::readDigitalPort(unsigned char pin)
 {
-    return digitalRead(pin);
+    return 1; // TODO:digitalRead(pin);
 }
 
 void ISystem::serialPrint(String message)
@@ -30,3 +30,8 @@ String ISystem::serialRead()
 {
     return Serial.readString();
 };
+
+int ISystem::serialAvailable()
+{
+    return Serial.available();
+}
