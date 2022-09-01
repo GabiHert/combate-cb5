@@ -6,7 +6,8 @@
 RequestDto::RequestDto(String request)
 {
     this->_alarmSiren = request[3];
-    this->_dose = request[4];
+    this->_dose = request[4]; // FLAG: first time dose is initialized
+    loggerInfo("RequestDto - constructor", "first time dose is initialized", "initializedDose: " + String(this->_dose) + " receivedDose: " + request[4]);
     this->_whellBoltsCounter = request[5];
 };
 

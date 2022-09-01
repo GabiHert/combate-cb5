@@ -12,7 +12,7 @@ Cb cb("CB5 DEV");
 RequestMiddleware requestMiddleware(cb);
 ISystem sys;
 
-int CheckSumBuilder(String data)
+int buildCheckSum(String data)
 {
     unsigned char dataLastIndex = data.length() - 1;
     int sum = 0;
@@ -60,7 +60,7 @@ char HexByte(char *p)
 
 String endPointBuilder(String request)
 {
-    String cs = String(CheckSumBuilder(request));
+    String cs = String(buildCheckSum(request));
     String endPoint = "";
 
     for (unsigned i = 0; i < cs.length(); i += 2)

@@ -6,6 +6,7 @@
 class CheckSumBuilder
 {
 public:
+    CheckSumBuilder(){};
     int build(String request);
 };
 #endif // CHECKSUM_BUILDER_H
