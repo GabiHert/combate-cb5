@@ -7,6 +7,7 @@
 #include "interfaces/system-interface.h"
 #include <bits/stdc++.h>
 #include <string>
+#include "exceptions/validation-error.h"
 
 Cb cb("CB5 DEV");
 RequestMiddleware requestMiddleware(cb);
@@ -113,6 +114,10 @@ void CB5::execute()
     String alarm = sys.serialRead();
 
     loggerWarn("CB5 Serial", " getting alarm status", "received alarm status: " + alarm);
+    if (alarm = 'E')
+    {
+        throw ValidationError("Error");
+    }
 
     sys.serialPrintln("Dose status [N (no) or 1...9 (number of doses)] : ");
     while (!sys.serialAvailable())

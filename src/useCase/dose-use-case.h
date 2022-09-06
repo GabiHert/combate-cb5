@@ -10,7 +10,7 @@ private:
 public:
     DoseUseCase(Cb *cb);
     DoseUseCase(){};
-    void execute(int amount);
+    void execute(char amount);
 };
 
 #endif

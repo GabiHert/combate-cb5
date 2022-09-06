@@ -6,14 +6,17 @@ DoseUseCase::DoseUseCase(Cb *cb)
     this->cb = cb;
 };
 
-void DoseUseCase::execute(int amount)
+void DoseUseCase::execute(char amount)
 {
-    loggerInfo("DoseUseCase", "Process started", "amount: " + String(amount));
-    loggerInfo("DoseUseCase", "amount: " + String(amount));
+    amount = asciiCharToNumber(amount);
 
-    for (int dose = 0; dose <= amount; dose++)
+    loggerInfo("DoseUseCase", "Process started", "amount: " + String((int)amount));
+    for (int dose = 0; dose < amount; dose++)
     {
+        loggerInfo("DoseUseCase", "starting dose N: " + String(dose));
+
         this->cb->dose();
     }
+
     loggerInfo("DoseUseCase", "Process finished");
 };
