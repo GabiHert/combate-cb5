@@ -114,7 +114,7 @@ void CB5::execute()
     String alarm = sys.serialRead();
 
     loggerWarn("CB5 Serial", " getting alarm status", "received alarm status: " + alarm);
-    if (alarm = 'E')
+    if (alarm != "0" || alarm != "1")
     {
         throw ValidationError("Error");
     }
@@ -126,6 +126,12 @@ void CB5::execute()
     String dose = sys.serialRead();
 
     loggerWarn("CB5 Serial", "getting dose status", "received dose status: " + dose);
+
+    loggerWarn("CB5 Serial", " getting alarm status", "received alarm status: " + alarm);
+    if (dose != "0" || dose != "1" || dose != "2" || dose != "3" || dose != "4" || dose != "5" || dose != "6" || dose != "7" || dose != "8" || dose != "9" || dose != "N")
+    {
+        throw ValidationError("Error");
+    }
 
     sys.serialPrintln("Clear wheel bolts counter status [N (no) C (clear)] : ");
     while (!sys.serialAvailable())

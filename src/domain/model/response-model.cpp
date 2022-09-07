@@ -12,6 +12,7 @@ ResponseModel::ResponseModel(ResponseDto responseDto)
     this->_gpsData = responseDto.getGpsData();
     this->_lineFeed = CONFIG().PROTOCOL_LF;
     this->_carriageReturn = CONFIG().PROTOCOL_CR;
+    this->_extraChar = "xxx";
     loggerInfo("ResponseModel", "Process finished - constructor");
 };
 
