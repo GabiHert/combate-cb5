@@ -2,19 +2,21 @@
 #ifndef APP_H
 #define APP_H
 #include "BluetoothSerial.h"
+#include <string>
+using namespace std;
 
 class App
 {
 private:
-    String deviceName;
+    string deviceName;
     BluetoothSerial serialBT;
 
 public:
-    App(String deviceName);
+    App(string deviceName);
     void start();
     int read();
-    void write(String response);
-    String readString();
+    void write(string response);
+    string readstring();
 
     int avaliable();
 };

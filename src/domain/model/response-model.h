@@ -5,30 +5,32 @@
 #include "domain/builder/check-sum-builder.h"
 #include "config/config.h"
 #include "domain/dto/response-dto.h"
+#include <string>
+using namespace std;
 
 class ResponseModel
 {
 private:
     CheckSumBuilder _checkSumBuilder;
-    String _initializer;
-    String _errorCode;
-    String _status;
+    string _initializer;
+    char _errorCode[3];
+    string _status;
     char _whellBoltsCount[2];
-    String _gpsData;
-    String _checkSum;
-    String _extraChar;
+    string _gpsData;
+    string _checkSum;
+    string _extraChar;
     int _lineFeed;
     int _carriageReturn;
 
 public:
     ResponseModel(ResponseDto ResponseDto);
-    ResponseModel(String errorCode);
+    ResponseModel(char errorCode[3]);
     ResponseModel(){};
-    String toString();
-    String getInitializer();
-    String getErrorCode();
+    string tostring();
+    string getInitializer();
+    string getErrorCode();
     char *getWhellBoltsCount();
-    String getGpsData();
+    string getGpsData();
 };
 
 #endif

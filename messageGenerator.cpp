@@ -51,7 +51,7 @@ int main()
     string response = inf + alarm + dose + clearWheelBoltsCounter + extra;
 
     int cs = CheckSumBuilder(response);
-    //    std::string csString = std::to_string(cs);
+    //    std::string csstring = std::to_string(cs);
 
     printResponseToHexa(response, cs);
 

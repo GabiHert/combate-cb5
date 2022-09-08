@@ -7,13 +7,14 @@
 #include "interfaces/system-interface.h"
 #include <bits/stdc++.h>
 #include <string>
+using namespace std;
 #include "exceptions/validation-error.h"
 
 Cb cb("CB5 DEV");
 RequestMiddleware requestMiddleware(cb);
 ISystem sys;
 
-int buildCheckSum(String data)
+int buildCheckSum(string data)
 {
     unsigned char dataLastIndex = data.length() - 1;
     int sum = 0;
@@ -59,23 +60,23 @@ char HexByte(char *p)
     return value;
 }
 
-String endPointBuilder(String request)
+string endPointBuilder(string request)
 {
-    String cs = String(buildCheckSum(request));
-    String endPoint = "";
+    string cs = to_string(buildCheckSum(request));
+    string endPoint = "";
 
     for (unsigned i = 0; i < cs.length(); i += 2)
     {
         endPoint += HexByte(&cs[i]);
     };
     /*
-         String cr = String(CONFIG().PROTOCOL_CR);
+         string cr = string(CONFIG().PROTOCOL_CR);
         for (unsigned i = 0; i < cr.length(); i += 2)
         {
             endPoint += HexByte(&cr[i]);
         };
 
-        String lf = String(CONFIG().PROTOCOL_LF);
+        string lf = string(CONFIG().PROTOCOL_LF);
         for (unsigned i = 0; i < lf.length(); i += 2)
         {
             endPoint += HexByte(&lf[i]);
@@ -111,42 +112,32 @@ void CB5::execute()
     while (!sys.serialAvailable())
     {
     }
-    String alarm = sys.serialRead();
+    string alarm = sys.serialRead();
 
     loggerWarn("CB5 Serial", " getting alarm status", "received alarm status: " + alarm);
-    if (alarm != "0" || alarm != "1")
-    {
-        throw ValidationError("Error");
-    }
 
     sys.serialPrintln("Dose status [N (no) or 1...9 (number of doses)] : ");
     while (!sys.serialAvailable())
     {
     }
-    String dose = sys.serialRead();
+    string dose = sys.serialRead();
 
     loggerWarn("CB5 Serial", "getting dose status", "received dose status: " + dose);
-
-    loggerWarn("CB5 Serial", " getting alarm status", "received alarm status: " + alarm);
-    if (dose != "0" || dose != "1" || dose != "2" || dose != "3" || dose != "4" || dose != "5" || dose != "6" || dose != "7" || dose != "8" || dose != "9" || dose != "N")
-    {
-        throw ValidationError("Error");
-    }
 
     sys.serialPrintln("Clear wheel bolts counter status [N (no) C (clear)] : ");
     while (!sys.serialAvailable())
     {
     }
-    String wheelBoltsCounter = sys.serialRead();
+    string wheelBoltsCounter = sys.serialRead();
 
     loggerWarn("CB5 Serial", "getting wheelBoltsCounter status", "received wheelBoltsCounter status: " + wheelBoltsCounter);
 
-    String inf = "INF", extra = "xxxxxxx";
-    String request = alarm + dose + wheelBoltsCounter + extra;
+    string inf = "INF", extra = "xxxxxxx";
+    string request = alarm + dose + wheelBoltsCounter + extra;
 
     request += endPointBuilder(request);
     request = inf + request;
 
     ResponseModel responseModel = requestMiddleware.execute(request);
-    sys.serialPrintln("RESPONSE: " + responseModel.toString());
+    sys.serialPrintln("RESPONSE: " + responseModel.tostring());
 };

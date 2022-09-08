@@ -22,11 +22,11 @@ void CB5::execute()
     {
         loggerInfo("main", "Process started", "Serial info. available");
 
-        String request = app.readString();
+        string request = app.readstring();
 
         ResponseModel responseModel = requestMiddleware.execute(request);
 
-        app.write(responseModel.toString());
+        app.write(responseModel.tostring());
         loggerInfo("main", "Process finished");
     }
 };

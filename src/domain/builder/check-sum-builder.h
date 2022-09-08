@@ -1,12 +1,12 @@
 
 #ifndef CHECKSUM_BUILDER_H
 #define CHECKSUM_BUILDER_H
-#include <Arduino.h>
-
+#include <string>
+using namespace std;
 class CheckSumBuilder
 {
 public:
     CheckSumBuilder(){};
-    int build(String request);
+    int build(string request);
 };
 #endif // CHECKSUM_BUILDER_H

@@ -1,13 +1,15 @@
 #include <Arduino.h>
-
+#include <string.h>
+using namespace std;
 #ifndef UTILS_H
 #define UTILS_H
 
-void loggerInfo(String event, String details, String message = "");
-void loggerError(String event, String details, String message = "");
-void loggerWarn(String event, String details, String message = "");
+void loggerInfo(string event, string details, string message = "");
+void loggerError(string event, string details, string message = "");
+void loggerWarn(string event, string details, string message = "");
 char asciiCharToNumber(char c);
-
+String stdStringToArduinoString(string str);
+string arduinoStringToStdString(String str);
 class Timer
 {
 private:

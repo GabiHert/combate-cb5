@@ -2,8 +2,10 @@
 #include "domain/dto/request-dto.h"
 #include "utils/utils.h"
 #include "config/config.h"
+#include <string>
+using namespace std;
 
-RequestDto::RequestDto(String request)
+RequestDto::RequestDto(string request)
 {
     this->_alarmSiren = request[3];
     this->_dose = request[4];

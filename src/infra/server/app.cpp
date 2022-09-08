@@ -1,8 +1,9 @@
 
 #include "utils/utils.h"
 #include "infra/server/app.h"
+#include <string.h>
 
-App::App(String deviceName)
+App::App(string deviceName)
 {
     this->deviceName = deviceName;
 };
@@ -10,7 +11,7 @@ App::App(String deviceName)
 void App::start()
 {
     loggerInfo("App.start", "Process started", "deviceName: " + deviceName);
-    this->serialBT.begin(this->deviceName);
+    this->serialBT.begin(stdStringToArduinoString(this->deviceName));
     loggerInfo("App.start", "Process finished", "Bluetooth now available");
 };
 
@@ -19,16 +20,16 @@ int App::read()
     loggerInfo("App.read", "Process started");
     int serial = this->serialBT.read();
 
-    loggerInfo("App.read", "Process finished", serial != 0 ? "Serial: " + String(serial) : "");
+    loggerInfo("App.read", "Process finished", serial != 0 ? "Serial: " + to_string(serial) : "");
     return serial;
 };
 
-String App::readString()
+string App::readstring()
 {
-    loggerInfo("App.readString", "Process started");
-    String serial = this->serialBT.readString();
+    loggerInfo("App.readstring", "Process started");
+    string serial = arduinoStringToStdString(this->serialBT.readString());
 
-    loggerInfo("App.readString", "Process finished", serial != 0 ? "Serial: " + serial : "");
+    loggerInfo("App.readstring", "Process finished", "serial: " + serial);
     return serial;
 };
 
@@ -38,7 +39,7 @@ int App::avaliable()
     return avaliable;
 };
 
-void App::write(String response)
+void App::write(string response)
 {
     loggerInfo("App.start", "Process started");
     unsigned char responseLength = response.length();

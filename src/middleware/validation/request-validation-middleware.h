@@ -3,16 +3,18 @@
 #define REQUEST_VALIDATION_MIDDLEWARE_H
 #include <Arduino.h>
 #include "domain/builder/check-sum-builder.h"
+#include <string>
+using namespace std;
 
 class RequestValidationMiddleware
 {
 private:
     CheckSumBuilder checkSumBuilder;
-    bool validateProtocol(String request);
-    bool validateCheckSum(String request);
+    bool validateProtocol(string request);
+    bool validateCheckSum(string request);
 
 public:
-    bool validate(String request);
+    bool validate(string request);
     RequestValidationMiddleware();
 };
 

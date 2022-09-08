@@ -16,7 +16,7 @@ private:
 
 public:
     RequestMiddleware(Cb cb);
-    ResponseModel execute(String request);
+    ResponseModel execute(string request);
 };
 
 #endif // REQUEST_MIDDLEWARE

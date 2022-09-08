@@ -2,23 +2,27 @@
 #include "utils/utils.h"
 #include "interfaces/system-interface.h"
 
-void loggerInfo(String event, String details, String message)
+void loggerInfo(string event, string details, string message)
 {
+    String _event = stdStringToArduinoString(event), _details = stdStringToArduinoString(details), _message = stdStringToArduinoString(message);
 
-    Serial.println("INFO - :: -  event: " + event + " |  details: " + details + " | message:" + message);
+    Serial.println("INFO - :: -  event: " + _event + " |  details: " + _details + " | message:" + _message);
     Serial.println();
 };
 
-void loggerError(String event, String details, String error)
+void loggerError(string event, string details, string error)
 {
+    String _event = stdStringToArduinoString(event), _details = stdStringToArduinoString(details), _error = stdStringToArduinoString(error);
 
-    Serial.println("ERROR - :: -  event: " + event + " |  details: " + details + " | error:" + error);
+    Serial.println("ERROR - :: -  event: " + _event + " |  details: " + _details + " | error:" + _error);
     Serial.println();
 };
 
-void loggerWarn(String event, String details, String warn)
+void loggerWarn(string event, string details, string warn)
 {
-    Serial.println("WARN - :: -  event: " + event + " |  details: " + details + " | warn:" + warn);
+    String _event = stdStringToArduinoString(event), _details = stdStringToArduinoString(details), _warn = stdStringToArduinoString(warn);
+
+    Serial.println("WARN - :: -  event: " + _event + " |  details: " + _details + " | warn:" + _warn);
 
     Serial.println();
 };

@@ -12,7 +12,7 @@
 class Cb
 {
 private:
-    String _id;
+    string _id;
     RequestModel requestModel;
     PoisonApplicator poisonApplicator[3];
     char _wheelBoltsCount[2];
@@ -22,13 +22,13 @@ public:
     IDisplay display;
     IGps gps;
 
-    Cb(String id);
+    Cb(string id);
     Cb();
 
     void setup();
     void dose();
 
-    String getId();
+    string getId();
 
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();

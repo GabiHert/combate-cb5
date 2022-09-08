@@ -1,6 +1,7 @@
 #ifndef SYSTEM_INTERFACE_H
 #define SYSTEM_INTERFACE_H
-#include <Arduino.h>
+#include <string>
+using namespace std;
 
 class ISystem
 {
@@ -10,9 +11,9 @@ public:
     void setupPort(unsigned char pin, unsigned char mode);
     void setPort(unsigned char pin, unsigned char state);
     int readDigitalPort(unsigned char pin);
-    void serialPrintln(String message);
-    void serialPrint(String message);
-    String serialRead();
+    void serialPrintln(string message);
+    void serialPrint(string message);
+    string serialRead();
     int serialAvailable();
 };
 

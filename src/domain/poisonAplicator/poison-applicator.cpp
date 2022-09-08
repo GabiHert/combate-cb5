@@ -1,6 +1,9 @@
 #include "domain/poisonAplicator/poison-applicator.h"
 #include "utils/utils.h"
 #include "config/config.h"
+#include <Arduino.h>
+#include <string.h>
+using namespace std;
 
 PoisonApplicator::PoisonApplicator(unsigned char motorPortA, unsigned char motorPortB, unsigned char sensorPort)
 {
@@ -27,7 +30,7 @@ void PoisonApplicator::calibrate()
 
 void PoisonApplicator::spin(unsigned char direction)
 {
-    loggerInfo("PoisonApplicator.spin", "Process started", "direction: " + String(direction));
+    loggerInfo("PoisonApplicator.spin", "Process started", "direction: " + to_string(direction));
 
     if (direction != (unsigned char)0 || direction != (unsigned char)1)
     {
@@ -52,7 +55,7 @@ bool PoisonApplicator::readSensor()
 {
     loggerInfo("PoisonApplicator.readSensor", "Process started");
     bool result = this->sys.readDigitalPort(this->sensorPort) ? true : false;
-    loggerInfo("PoisonApplicator.readSensor", "Process finished", " result: " + String(result));
+    loggerInfo("PoisonApplicator.readSensor", "Process finished", " result: " + to_string(result));
     return result;
 };
 

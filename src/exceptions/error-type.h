@@ -1,7 +1,10 @@
+#ifndef ERROR_TYPE_H
+#define ERROR_TYPE_H
 #include <Arduino.h>
 
 struct ERROR_TYPE
 {
-    String description;
-    String errorCode;
+    string description;
+    char errorCode[3];
 };
+#endif

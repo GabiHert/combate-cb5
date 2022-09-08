@@ -1,7 +1,8 @@
-#include <Arduino.h>
 
 #ifndef REQUEST_DTO_H
 #define REQUEST_DTO_H
+#include <string>
+using namespace std;
 
 class RequestDto
 {
@@ -9,10 +10,10 @@ private:
     char _alarmSiren;
     char _dose;
     char _whellBoltsCounter;
-    bool validate(String request);
+    bool validate(string request);
 
 public:
-    RequestDto(String request);
+    RequestDto(string request);
 
     char getAlarmSiren();
     char getDose();

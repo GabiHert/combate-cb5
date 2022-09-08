@@ -1,6 +1,8 @@
 #include "interfaces/system-interface.h"
 #include <Arduino.h>
-
+#include <string.h>
+#include "utils/utils.h"
+using namespace std;
 void ISystem::setPort(unsigned char pin, unsigned char state)
 {
     digitalWrite(pin, state);
@@ -16,19 +18,19 @@ int ISystem::readDigitalPort(unsigned char pin)
     return 1; // TODO:digitalRead(pin);
 }
 
-void ISystem::serialPrint(String message)
+void ISystem::serialPrint(string message)
 {
-    Serial.print(message);
+    Serial.print(stdStringToArduinoString(message));
 };
 
-void ISystem::serialPrintln(String message)
+void ISystem::serialPrintln(string message)
 {
-    Serial.println(message);
+    Serial.println(stdStringToArduinoString(message));
 };
 
-String ISystem::serialRead()
+string ISystem::serialRead()
 {
-    return Serial.readString();
+    return arduinoStringToStdString(Serial.readString());
 };
 
 int ISystem::serialAvailable()

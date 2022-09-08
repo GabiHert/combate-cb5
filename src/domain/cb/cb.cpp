@@ -2,29 +2,38 @@
 #include "domain/cb/cb.h"
 #include "utils/utils.h"
 #include "config/config.h"
+#include "exceptions/error.h"
+#include "exceptions/cb-dose-error.h"
 
 void Cb::dose()
 {
-
-    loggerInfo("Cb.dose", "Process started");
-    Timer timer;
-    timer.setTimer(200);
-    if (!this->poisonApplicator[0].readSensor())
+    try
     {
-        do
+        loggerInfo("Cb.dose", "Process started");
+        Timer timer;
+        timer.setTimer(200);
+        if (!this->poisonApplicator[0].readSensor())
         {
+            do
+            {
 
-            this->poisonApplicator[0].spin(CONFIG().SPIN_DIRECTION_CLOCKWISE);
+                this->poisonApplicator[0].spin(CONFIG().SPIN_DIRECTION_CLOCKWISE);
 
-        } while (!this->poisonApplicator[0].readSensor() || !timer.status());
+            } while (!this->poisonApplicator[0].readSensor() || !timer.status());
+        }
+
+        this->poisonApplicator[0].stop();
+
+        loggerInfo("Cb.dose", "Process finished");
     }
-
-    this->poisonApplicator[0].stop();
-
-    loggerInfo("Cb.dose", "Process finished");
+    catch (Error err)
+    {
+        loggerError("cb.dose", "Process error", "error: " + err.message());
+        throw CbDoseError(err.message());
+    }
 };
 
-String Cb::getId()
+string Cb::getId()
 {
     return this->_id;
 };
@@ -60,7 +69,7 @@ RequestModel Cb::getRequestModel()
     return this->requestModel;
 };
 
-Cb::Cb(String id)
+Cb::Cb(string id)
 {
     this->_id = id;
     this->_wheelBoltsCount[0] = '0';

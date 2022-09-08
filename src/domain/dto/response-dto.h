@@ -10,22 +10,22 @@ class ResponseDto
 private:
     CheckSumBuilder _checkSumBuilder;
     char _whellBoltsCount[2];
-    String _initializer;
-    String _errorCode;
-    String _status;
-    String _gpsData;
-    String _checkSum;
-    String _extraChar;
+    string _initializer;
+    char _errorCode[3];
+    string _status;
+    string _gpsData;
+    string _checkSum;
+    string _extraChar;
 
 public:
     ResponseDto(Cb cb);
-    ResponseDto(Cb cb, String errorCode);
+    ResponseDto(Cb cb, char errorCode[3]);
     ResponseDto(){};
-    String getInitializer();
-    String getErrorCode();
+    string getInitializer();
+    char *getErrorCode();
     char *getWhellBoltsCount();
-    String getGpsData();
-    String getStatus();
+    string getGpsData();
+    string getStatus();
 };
 
 #endif

@@ -1,16 +1,16 @@
 
 #ifndef IGPS_H
 #define IGPS_H
-#include <Arduino.h>
-
+#include <string>
+using namespace std;
 class IGps
 {
 private:
-    String location;
+    string location;
 
 public:
     IGps(){};
-    String getLocation();
+    string getLocation();
     void setLocation();
     void setupGps();
 };

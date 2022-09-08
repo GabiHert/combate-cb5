@@ -1,15 +1,18 @@
 #include "interfaces/lcd-interface.h"
 #include "utils/utils.h"
 #include <LiquidCrystal_I2C.h>
+#include <Arduino.h>
+#include <string.h>
+using namespace std;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // TODO: se a mensagem ja estiver printada n printar novamente
 //  guardar mensagem em atributo privado
-void IDisplay::print(String message)
+void IDisplay::print(string message)
 {
-    loggerInfo("Lcd.display", "Process started", message);
-    lcd.print(message);
-    loggerInfo("Lcd.display", "Process finished");
+    loggerInfo("Lcd.display", "Process started");
+    lcd.print(stdStringToArduinoString(message));
+    loggerInfo("Lcd.dissplay", "Process finished");
 }
 
 void IDisplay::clearDisplay()
