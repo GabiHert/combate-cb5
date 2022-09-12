@@ -3,7 +3,7 @@
 #include <iostream>
 #include <Arduino.h>
 #include "error-type.h"
-#include <string>
+#include <string.h>
 using namespace std;
 
 class Error : public std::exception

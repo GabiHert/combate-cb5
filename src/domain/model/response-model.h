@@ -5,7 +5,7 @@
 #include "domain/builder/check-sum-builder.h"
 #include "config/config.h"
 #include "domain/dto/response-dto.h"
-#include <string>
+#include <string.h>
 using namespace std;
 
 class ResponseModel

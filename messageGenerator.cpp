@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <string.h>
 #include <algorithm>
 #include <sstream>
 #include <iterator>

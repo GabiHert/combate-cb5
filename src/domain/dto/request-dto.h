@@ -1,7 +1,7 @@
 
 #ifndef REQUEST_DTO_H
 #define REQUEST_DTO_H
-#include <string>
+#include <string.h>
 using namespace std;
 
 class RequestDto

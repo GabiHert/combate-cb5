@@ -5,8 +5,7 @@
 #include "middleware/request-middleware.h"
 #include "config/config.h"
 #include "interfaces/system-interface.h"
-#include <bits/stdc++.h>
-#include <string>
+#include <string.h>
 using namespace std;
 #include "exceptions/validation-error.h"
 
@@ -90,11 +89,10 @@ string endPointBuilder(string request)
 
 void CB5::setup()
 {
-    Serial.begin(CONFIG().SERIAL_BOUD_RATE);
+    cb.setup();
+    Serial.begin(CONFIG().SERIAL_BOUD_RATE); // TODO: usar classe System
 
     loggerInfo("Setup", "Process started");
-
-    cb.setup();
 
     cb.display.setCursor(0, 0);
     cb.display.print("Nome Bluetooth: ");

@@ -3,7 +3,7 @@
 #define REQUEST_VALIDATION_MIDDLEWARE_H
 #include <Arduino.h>
 #include "domain/builder/check-sum-builder.h"
-#include <string>
+#include <string.h>
 using namespace std;
 
 class RequestValidationMiddleware

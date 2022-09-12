@@ -9,6 +9,7 @@
 RequestController::RequestController(Cb cb)
 {
     this->cb = cb;
+    loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb.getId());
 
     this->doseUseCase = DoseUseCase(&cb);
 
@@ -19,13 +20,16 @@ RequestController::RequestController(Cb cb)
     this->getGpsLocationUseCase = GetGpsLocationUseCase(&cb);
 };
 
-RequestController::RequestController(){};
+RequestController::RequestController()
+{
+    loggerInfo("RequestController", "CONSTRUCTOR");
+};
 
 ResponseDto RequestController::execute(RequestDto requestDto)
 {
     try
     {
-        loggerInfo("RequestController.execute", "Process started");
+        loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb.getId());
 
         RequestModel requestModel(requestDto);
         this->cb.setRequestModel(requestModel);

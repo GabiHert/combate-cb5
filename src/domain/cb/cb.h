@@ -25,13 +25,13 @@ public:
     Cb(string id);
     Cb();
 
-    void setup();
     void dose();
-
+    void setup();
     string getId();
 
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
+    PoisonApplicator *getPoisonApplicator();
 
     char getWhellBoltsCountDecimal();
     char getWhellBoltsCountUnit();

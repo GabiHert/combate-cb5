@@ -14,6 +14,7 @@ void DoseUseCase::execute(char amount)
         amount = asciiCharToNumber(amount);
 
         loggerInfo("DoseUseCase", "Process started", "amount: " + to_string((int)amount));
+
         for (int dose = 0; dose < amount; dose++)
         {
             loggerInfo("DoseUseCase", "starting dose N: " + to_string(dose));

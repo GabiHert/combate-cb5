@@ -3,7 +3,7 @@
 #include "utils/utils.h"
 #include "config/config.h"
 #include "exceptions/error.h"
-#include <string>
+#include <string.h>
 using namespace std;
 SoftwareSerial gpsSerial(CONFIG().PORT_GPS_RX, CONFIG().PORT_GPS_TX);
 
@@ -36,11 +36,7 @@ string IGps::getLocation()
     return this->location;
 }
 
-void IGps::setupGps()
+void IGps::setup()
 {
-    loggerInfo("IGps.setupGps", "Process started");
-
     gpsSerial.begin(CONFIG().SERIAL_BOUD_RATE);
-
-    loggerInfo("IGps.setupGps", "Process finished");
 };

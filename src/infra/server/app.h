@@ -2,7 +2,7 @@
 #ifndef APP_H
 #define APP_H
 #include "BluetoothSerial.h"
-#include <string>
+#include <string.h>
 using namespace std;
 
 class App

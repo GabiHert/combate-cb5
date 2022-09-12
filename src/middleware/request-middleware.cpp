@@ -15,7 +15,7 @@ ResponseModel RequestMiddleware::execute(string request)
 {
   try
   {
-    loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available");
+    loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb.getId());
 
     bool isRequestValid = requestValidationMiddleware.validate(request);
     RequestDto requestDto(request);

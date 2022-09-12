@@ -3,13 +3,13 @@
 
 int CheckSumBuilder::build(string data)
 {
-    loggerInfo("CheckSumBuilder.build", "Process started");
+    loggerInfo("CheckSumBuilder.build", "Process started", "data: " + data);
 
     unsigned char dataLastIndex = data.length() - 1;
     int sum = 0;
     for (int i = 0; i <= dataLastIndex; i++)
     {
-        sum += int(data[i]);
+        sum += (int)data[i];
     };
 
     int CS = 256 - (sum % 256);

@@ -12,7 +12,7 @@ public:
     IGps(){};
     string getLocation();
     void setLocation();
-    void setupGps();
+    void setup();
 };
 
 #endif // IGPS_H

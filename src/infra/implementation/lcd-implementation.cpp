@@ -31,9 +31,7 @@ void IDisplay::setCursor(uint8_t column, uint8_t line)
 
 void IDisplay::setupDisplay()
 {
-    loggerInfo("Lcd.setupDisplay", "Process started");
     lcd.init();
     lcd.backlight();
-    loggerInfo("Lcd.setupDisplay", "Process finished");
 }
 IDisplay::IDisplay() {}

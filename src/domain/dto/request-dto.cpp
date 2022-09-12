@@ -2,7 +2,7 @@
 #include "domain/dto/request-dto.h"
 #include "utils/utils.h"
 #include "config/config.h"
-#include <string>
+#include <string.h>
 using namespace std;
 
 RequestDto::RequestDto(string request)
