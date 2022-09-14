@@ -23,7 +23,7 @@ private:
     int _carriageReturn;
 
 public:
-    ResponseModel(ResponseDto ResponseDto);
+    ResponseModel(ResponseDto responseDto);
     ResponseModel(char errorCode[3]);
     ResponseModel(){};
     string tostring();

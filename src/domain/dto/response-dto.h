@@ -20,6 +20,8 @@ private:
 public:
     ResponseDto(Cb cb);
     ResponseDto(Cb cb, char errorCode[3]);
+    ResponseDto(char errorCode[3], char whellBoltsCount[2], string gpsLocation);
+    ResponseDto(string status, char whellBoltsCount[2], string gpsLocation);
     ResponseDto(){};
     string getInitializer();
     char *getErrorCode();

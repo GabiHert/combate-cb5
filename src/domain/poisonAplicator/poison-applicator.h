@@ -18,7 +18,7 @@ public:
     int getSensorPort();
 
     void setup(int motorPortA, int motorPortB, int sensorPort);
-    void calibrate();
+    void calibrate();  
     void spin(int direction);
     void stop();
     bool readSensor();

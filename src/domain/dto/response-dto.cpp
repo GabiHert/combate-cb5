@@ -8,7 +8,7 @@ ResponseDto::ResponseDto(Cb cb)
 {
     loggerInfo("ResponseDto", "Process started - constructor");
     this->_initializer = "&";
-    this->_status = "S";
+    this->_status = cb.getStatus();
     this->_errorCode[0] = '0';
     this->_errorCode[1] = '0';
     this->_errorCode[2] = '0';
@@ -17,6 +17,40 @@ ResponseDto::ResponseDto(Cb cb)
     loggerInfo("ResponseDto", "whellBoltsCount assigned", to_string(this->_whellBoltsCount[0]) + to_string(this->_whellBoltsCount[1]));
 
     this->_gpsData = "$GPRMC,144326.00,A,5107.0017737,N,11402.3291611,W,0.080,323.3,210307,0.0,E,A*20"; // cb.gps.getLocation();
+    loggerInfo("ResponseDto", "gpsData assigned", this->_gpsData);
+
+    loggerInfo("ResponseDto", "Process finished - constructor");
+};
+
+ResponseDto::ResponseDto(char errorCode[3], char whellBoltsCount[2], string gpsLocation)
+{
+    loggerInfo("ResponseDto", "Process started - constructor");
+    this->_initializer = "&";
+    this->_status = CONFIG().PROTOCOL_STATUS_ERROR;
+    this->_errorCode[0] = errorCode[0];
+    this->_errorCode[1] = errorCode[1];
+    this->_errorCode[2] = errorCode[2];
+    this->_whellBoltsCount[0] = whellBoltsCount[0];
+    this->_whellBoltsCount[1] = whellBoltsCount[1];
+
+    this->_gpsData = gpsLocation;
+    loggerInfo("ResponseDto", "gpsData assigned", this->_gpsData);
+
+    loggerInfo("ResponseDto", "Process finished - constructor");
+};
+
+ResponseDto::ResponseDto(string status, char whellBoltsCount[2], string gpsLocation)
+{
+    loggerInfo("ResponseDto", "Process started - constructor");
+    this->_initializer = "&";
+    this->_status = status;
+    this->_errorCode[0] = '0';
+    this->_errorCode[1] = '0';
+    this->_errorCode[2] = '0';
+    this->_whellBoltsCount[0] = whellBoltsCount[0];
+    this->_whellBoltsCount[1] = whellBoltsCount[1];
+
+    this->_gpsData = gpsLocation;
     loggerInfo("ResponseDto", "gpsData assigned", this->_gpsData);
 
     loggerInfo("ResponseDto", "Process finished - constructor");

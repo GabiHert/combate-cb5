@@ -1,5 +1,5 @@
 
-/*
+
 #include "delivery/interfaces/cb5.h"
 #include "domain/cb/cb.h"
 #include "infra/server/app.h"
@@ -11,10 +11,9 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-Cb cb("CB5 DEV");
-App app(cb.getId());
+App app(CONFIG().DEVICE_NAME);
+Cb cb(&app);
 RequestMiddleware requestMiddleware(cb);
-#include "BluetoothSerial.h"
 
 void CB5::execute()
 {
@@ -32,12 +31,11 @@ void CB5::execute()
 };
 void CB5::setup()
 {
-    Serial.begin(CONFIG().SERIAL_BOUD_RATE);
-
-    loggerInfo("Setup", "Process started");
+    cb.setup();
+    Serial.begin(CONFIG().SERIAL_BOUD_RATE); // TODO: usar classe System
 
     app.start();
-    cb.setup();
+    loggerInfo("Setup", "Process started");
 
     cb.display.setCursor(0, 0);
     cb.display.print("Nome Bluetooth: ");
@@ -46,4 +44,3 @@ void CB5::setup()
 
     loggerInfo("Setup", "Process finished");
 };
-*/

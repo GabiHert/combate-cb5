@@ -1,3 +1,5 @@
+/*
+
 #include "delivery/interfaces/cb5.h"
 #include "utils/utils.h"
 #include <Arduino.h>
@@ -81,61 +83,63 @@ string endPointBuilder(string request)
             endPoint += HexByte(&lf[i]);
         };
     */
-    endPoint += '\r';
-    endPoint += '\n';
-    sys.serialPrintln("END POINT: " + endPoint);
-    return endPoint;
+/*
+endPoint += '\r';
+endPoint += '\n';
+sys.serialPrintln("END POINT: " + endPoint);
+return endPoint;
 }
 
 void CB5::setup()
 {
-    cb.setup();
-    Serial.begin(CONFIG().SERIAL_BOUD_RATE); // TODO: usar classe System
+ cb.setup();
+ Serial.begin(CONFIG().SERIAL_BOUD_RATE); // TODO: usar classe System
 
-    loggerInfo("Setup", "Process started");
+ loggerInfo("Setup", "Process started");
 
-    cb.display.setCursor(0, 0);
-    cb.display.print("Nome Bluetooth: ");
-    cb.display.setCursor(0, 1);
-    cb.display.print(cb.getId());
+ cb.display.setCursor(0, 0);
+ cb.display.print("Nome Bluetooth: ");
+ cb.display.setCursor(0, 1);
+ cb.display.print(cb.getId());
 
-    loggerInfo("Setup", "Process finished");
+ loggerInfo("Setup", "Process finished");
 };
 
 void CB5::execute()
 {
 
-    sys.serialPrint("Alarm status [0 (off) 1 (on)] : ");
+ sys.serialPrint("Alarm status [0 (off) 1 (on)] : ");
 
-    while (!sys.serialAvailable())
-    {
-    }
-    string alarm = sys.serialRead();
+ while (!sys.serialAvailable())
+ {
+ }
+ string alarm = sys.serialRead();
 
-    loggerWarn("CB5 Serial", " getting alarm status", "received alarm status: " + alarm);
+ loggerWarn("CB5 Serial", " getting alarm status", "received alarm status: " + alarm);
 
-    sys.serialPrintln("Dose status [N (no) or 1...9 (number of doses)] : ");
-    while (!sys.serialAvailable())
-    {
-    }
-    string dose = sys.serialRead();
+ sys.serialPrintln("Dose status [N (no) or 1...9 (number of doses)] : ");
+ while (!sys.serialAvailable())
+ {
+ }
+ string dose = sys.serialRead();
 
-    loggerWarn("CB5 Serial", "getting dose status", "received dose status: " + dose);
+ loggerWarn("CB5 Serial", "getting dose status", "received dose status: " + dose);
 
-    sys.serialPrintln("Clear wheel bolts counter status [N (no) C (clear)] : ");
-    while (!sys.serialAvailable())
-    {
-    }
-    string wheelBoltsCounter = sys.serialRead();
+ sys.serialPrintln("Clear wheel bolts counter status [N (no) C (clear)] : ");
+ while (!sys.serialAvailable())
+ {
+ }
+ string wheelBoltsCounter = sys.serialRead();
 
-    loggerWarn("CB5 Serial", "getting wheelBoltsCounter status", "received wheelBoltsCounter status: " + wheelBoltsCounter);
+ loggerWarn("CB5 Serial", "getting wheelBoltsCounter status", "received wheelBoltsCounter status: " + wheelBoltsCounter);
 
-    string inf = "INF", extra = "xxxxxxx";
-    string request = alarm + dose + wheelBoltsCounter + extra;
+ string inf = "INF", extra = "xxxxxxx";
+ string request = alarm + dose + wheelBoltsCounter + extra;
 
-    request += endPointBuilder(request);
-    request = inf + request;
+ request += endPointBuilder(request);
+ request = inf + request;
 
-    ResponseModel responseModel = requestMiddleware.execute(request);
-    sys.serialPrintln("RESPONSE: " + responseModel.tostring());
+ ResponseModel responseModel = requestMiddleware.execute(request);
+ sys.serialPrintln("RESPONSE: " + responseModel.tostring());
 };
+*/

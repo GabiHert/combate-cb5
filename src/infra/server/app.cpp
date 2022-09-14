@@ -1,12 +1,17 @@
 
 #include "utils/utils.h"
 #include "infra/server/app.h"
+#include "config/config.h"
 #include <string.h>
 
 App::App(string deviceName)
 {
     this->deviceName = deviceName;
 };
+App::App()
+{
+    this->deviceName = CONFIG().DEVICE_NAME;
+}
 
 void App::start()
 {
@@ -50,3 +55,5 @@ void App::write(string response)
 
     loggerInfo("App.start", "Process finished", "Bluetooth now available");
 };
+
+string App::getDeviceName() { return this->deviceName; }

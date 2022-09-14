@@ -8,26 +8,29 @@
 #include "domain/model/request-model.h"
 #include "domain/poisonAplicator/poison-applicator.h"
 #include "config/config.h"
+#include "infra/server/app.h"
 
 class Cb
 {
 private:
+    App *_app;
     string _id;
+    string _status;
     RequestModel requestModel;
-    PoisonApplicator poisonApplicator[3];
+    PoisonApplicator _poisonApplicator[3];
     char _wheelBoltsCount[2];
-    void setupApplicator();
+    void _setupApplicator();
 
 public:
     IDisplay display;
     IGps gps;
-
-    Cb(string id);
+    Cb(App *app);
     Cb();
 
-    void dose();
+    void dose(int amount);
     void setup();
     string getId();
+    string getStatus();
 
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
