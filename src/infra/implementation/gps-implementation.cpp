@@ -7,34 +7,21 @@
 using namespace std;
 SoftwareSerial gpsSerial(CONFIG().PORT_GPS_RX, CONFIG().PORT_GPS_TX);
 
-void IGps::setLocation()
+string IGps::getData()
 {
-    try
-    {
-        loggerInfo("IGps.setLocation", "Process started");
-        if (true) // gpsSerial.available()
-        {
-            string str = "$GPRMC,144326.00,A,5107.0017737,N,11402.3291611,W,0.080,323.3,210307,0.0,E,A*20";
-            //  this->location = string(); // TODO: gpsSerial.readstring();
 
-            loggerInfo("IGps.setLocation", "Process finished", " location: " + this->location);
-        }
-        else
-        {
-            loggerInfo("IGps.setLocation", "Process finished", " No gps available");
-        };
-    }
-    catch (Error err)
+    loggerInfo("IGps.setLocation", "Process started");
+    if (true) // gpsSerial.available()
     {
+        string data = "$GPRMC,144326.00,A,5107.0017737,N,11402.3291611,W,0.080,323.3,210307,0.0,E,A*20"; // TODO: gpsSerial.readstring();
+
+        loggerInfo("IGps.setLocation", "Process finished", " data: " + data);
+        return data;
     }
+
+    loggerInfo("IGps.setLocation", "Process finished", " No gps data available");
+    return "";
 };
-
-string IGps::getLocation()
-{
-    loggerInfo("IGps.getLocation", "Process started", "location: " + this->location);
-
-    return this->location;
-}
 
 void IGps::setup()
 {

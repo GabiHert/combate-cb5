@@ -5,13 +5,9 @@
 using namespace std;
 class IGps
 {
-private:
-    string location;
-
 public:
     IGps(){};
-    string getLocation();
-    void setLocation();
+    string getData();
     void setup();
 };
 

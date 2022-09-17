@@ -12,7 +12,7 @@ void GetGpsLocationUseCase::execute()
     try
     {
         loggerInfo("GetGpsUseCase.execute", "Process started");
-        this->cb->gps.setLocation();
+        this->cb->getGpsData();
         loggerInfo("GetGpsUseCase.execute", "Process finished");
     }
     catch (Error err)

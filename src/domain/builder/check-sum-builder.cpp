@@ -1,5 +1,6 @@
 #include "domain/builder/check-sum-builder.h"
 #include "utils/utils.h"
+#include "interfaces/system-interface.h"
 
 int CheckSumBuilder::build(string data)
 {

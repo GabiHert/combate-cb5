@@ -29,7 +29,7 @@ bool RequestValidationMiddleware::validateCheckSum(string request)
 
     int calculatedCS = checkSumBuilder.build(requestData);
 
-    int receivedCS = int(request[13]);
+    int receivedCS = (int)request[13];
 
     if (receivedCS != calculatedCS)
     {

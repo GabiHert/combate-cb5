@@ -14,10 +14,8 @@ ResponseDto::ResponseDto(Cb cb)
     this->_errorCode[2] = '0';
     this->_whellBoltsCount[0] = cb.getWhellBoltsCountDecimal();
     this->_whellBoltsCount[1] = cb.getWhellBoltsCountUnit();
+    this->_gpsData = cb.getGpsData();
     loggerInfo("ResponseDto", "whellBoltsCount assigned", to_string(this->_whellBoltsCount[0]) + to_string(this->_whellBoltsCount[1]));
-
-    this->_gpsData = "$GPRMC,144326.00,A,5107.0017737,N,11402.3291611,W,0.080,323.3,210307,0.0,E,A*20"; // cb.gps.getLocation();
-    loggerInfo("ResponseDto", "gpsData assigned", this->_gpsData);
 
     loggerInfo("ResponseDto", "Process finished - constructor");
 };
@@ -66,7 +64,7 @@ ResponseDto::ResponseDto(Cb cb, char errorCode[3])
     this->_errorCode[2] = errorCode[2];
     this->_whellBoltsCount[0] = cb.getWhellBoltsCountDecimal();
     this->_whellBoltsCount[1] = cb.getWhellBoltsCountUnit();
-    this->_gpsData = cb.gps.getLocation();
+    this->_gpsData = cb.getGpsData();
     loggerInfo("ResponseDto", "Process finished - constructor");
 }
 

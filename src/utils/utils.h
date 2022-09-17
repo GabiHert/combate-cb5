@@ -17,7 +17,7 @@ private:
 
 public:
     Timer();
-    void setTimer(unsigned int ms);
+    void setTimer(unsigned long ms);
     bool status();
 };
 

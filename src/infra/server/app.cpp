@@ -46,14 +46,14 @@ int App::avaliable()
 
 void App::write(string response)
 {
-    loggerInfo("App.start", "Process started");
+    loggerInfo("App.write", "Process started", response);
     unsigned char responseLength = response.length();
-    for (int i = 0; i <= responseLength; i++)
+    for (int i = 0; i < responseLength; i++)
     {
         this->serialBT.write(response[i]);
     };
 
-    loggerInfo("App.start", "Process finished", "Bluetooth now available");
+    loggerInfo("App.write", "Process finished", "Bluetooth now available");
 };
 
 string App::getDeviceName() { return this->deviceName; }

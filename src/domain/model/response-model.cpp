@@ -41,7 +41,7 @@ string ResponseModel::tostring()
 {
     loggerInfo("ResponseModel.tostring", "Process started");
     string response = this->_initializer + this->_whellBoltsCount[0] + this->_whellBoltsCount[1] + this->_status;
-    response += this->_errorCode[0] + this->_errorCode[1] + this->_errorCode[2];
+    response += to_string(this->_errorCode[0]) + to_string(this->_errorCode[1]) + to_string(this->_errorCode[2]);
     response += this->_extraChar;
     response += this->_checkSumBuilder.build(response);
     response += "," + this->_gpsData;
