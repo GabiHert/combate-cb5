@@ -13,11 +13,6 @@ String stdStringToArduinoString(string str)
 
 string arduinoStringToStdString(String str)
 {
-    string stdStr;
 
-    for (int c = 0; c < str.length(); c++)
-    {
-        stdStr += str[c];
-    }
-    return stdStr;
+    return string(str.c_str());
 }

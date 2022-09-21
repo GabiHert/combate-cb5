@@ -14,6 +14,7 @@ private:
 
 public:
     RequestDto(string request);
+    RequestDto(){};
 
     char getAlarmSiren();
     char getDose();

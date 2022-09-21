@@ -8,7 +8,8 @@
 #include "useCase/get-gps-location-use-case.h"
 #include "domain/dto/response-dto.h"
 #include "domain/dto/request-dto.h"
-
+#include "types/error-or-response-dto.h"
+#include "interfaces/gps-interface.h"
 class RequestController
 {
 private:
@@ -19,9 +20,9 @@ private:
     GetGpsLocationUseCase getGpsLocationUseCase;
 
 public:
-    RequestController(Cb cb);
+    RequestController(Cb cb, IGps gps);
     RequestController();
 
-    ResponseDto execute(RequestDto requestDto);
+    ErrorOrResponseDto execute(RequestDto requestDto);
 };
 #endif // REQUEST_CONTROLLER_H

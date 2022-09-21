@@ -1,23 +1,24 @@
 
 #include "useCase/get-gps-location-use-case.h"
 #include "utils/utils.h"
-#include "exceptions/error.h"
 
-GetGpsLocationUseCase::GetGpsLocationUseCase(Cb *cb)
+GetGpsLocationUseCase::GetGpsLocationUseCase(IGps *gps)
 {
-    this->cb = cb;
+    this->gps = gps;
 }
-void GetGpsLocationUseCase::execute()
+ErrorOrString GetGpsLocationUseCase::execute()
 {
-    try
+
+    loggerInfo("GetGpsUseCase.execute", "Process started");
+    ErrorOrString errorOrString = this->gps->getData();
+
+    if (errorOrString.isError())
     {
-        loggerInfo("GetGpsUseCase.execute", "Process started");
-        this->cb->getGpsData();
-        loggerInfo("GetGpsUseCase.execute", "Process finished");
+        loggerError("GetGpsUseCase.execute", "Process error", errorOrString.getError().description);
+
+        return ErrorOrString(errorOrString.getError());
     }
-    catch (Error err)
-    {
-        loggerError("getGpsLocationUseCase.execute", "Process error", "error: " + err.message());
-        throw err;
-    }
+    loggerInfo("GetGpsUseCase.execute", "Process finished");
+
+    return errorOrString;
 }

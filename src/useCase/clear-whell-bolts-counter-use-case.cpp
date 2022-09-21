@@ -5,9 +5,10 @@ ClearWhellBoltsCounterUseCase::ClearWhellBoltsCounterUseCase(Cb *cb)
     this->cb = cb;
 }
 
-void ClearWhellBoltsCounterUseCase::execute()
+ErrorOrBool ClearWhellBoltsCounterUseCase::execute()
 {
     loggerInfo("ClearWhellBoltsVounterUseCase.execute", "Process started");
     this->cb->clearWhellBoltsCount();
     loggerInfo("ClearWhellBoltsVounterUseCase.execute", "Process finished");
+    return ErrorOrBool(true);
 };

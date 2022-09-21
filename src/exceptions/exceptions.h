@@ -1,0 +1,10 @@
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
+#include "error-type.h"
+struct EXCEPTIONS
+{
+    ERROR_TYPE VALIDATION_ERROR = ERROR_TYPE("Invalid request", ERROR_CODE().VALIDATION_ERROR);
+    ERROR_TYPE DOSE_PROCESS_TIME_OUT = ERROR_TYPE("Dose process timed out", ERROR_CODE().DOSE_PROCESS_TIME_OUT);
+};
+
+#endif

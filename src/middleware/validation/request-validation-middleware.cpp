@@ -2,22 +2,24 @@
 #include "utils/utils.h"
 #include "domain/builder/check-sum-builder.h"
 #include "config/config.h"
-#include "exceptions/validation-error.h"
+#include "exceptions/exceptions.h"
 
 RequestValidationMiddleware::RequestValidationMiddleware(){};
-bool RequestValidationMiddleware::validate(string request)
+ErrorOrBool RequestValidationMiddleware::validate(string request)
 {
+
     loggerInfo("RequestValidationMiddleware.validate", "Process started", "request: " + request);
     bool isProtocolValid = validateProtocol(request);
     bool isCheckSumValid = validateCheckSum(request);
+
     bool isRequestValid = isProtocolValid && isCheckSumValid;
     if (!isRequestValid)
     {
-        loggerError("requestValidationMiddleware.validate", "Process error");
-        throw ValidationError("Invalid Request");
+        loggerError("requestValidationMiddleware.validate", "Process error - first throw", "Invalid request");
+        return ErrorOrBool(EXCEPTIONS().VALIDATION_ERROR);
     }
     loggerInfo("RequestValidationMiddleware.validate", "Process finished", "isRequestValid: " + to_string(isRequestValid));
-    return isRequestValid;
+    return ErrorOrBool(isRequestValid);
 };
 
 bool RequestValidationMiddleware::validateCheckSum(string request)
@@ -67,7 +69,7 @@ bool RequestValidationMiddleware::validateProtocol(string request)
     if (request[requestLastIndex - 1] != CONFIG().PROTOCOL_CR)
     {
 
-        loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request Line feed is different from protocol; carriageReturn : " + request[requestLastIndex - 1]);
+        loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request Carriage Return is different from protocol; carriageReturn : " + request[requestLastIndex - 1]);
 
         return false;
     };

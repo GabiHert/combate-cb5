@@ -11,7 +11,7 @@ private:
     CheckSumBuilder _checkSumBuilder;
     char _whellBoltsCount[2];
     string _initializer;
-    char _errorCode[3];
+    string _errorCode;
     string _status;
     string _gpsData;
     string _checkSum;
@@ -19,15 +19,17 @@ private:
 
 public:
     ResponseDto(Cb cb);
-    ResponseDto(Cb cb, char errorCode[3]);
-    ResponseDto(char errorCode[3], char whellBoltsCount[2], string gpsLocation);
-    ResponseDto(string status, char whellBoltsCount[2], string gpsLocation);
+    ResponseDto(Cb cb, string errorCode);
+
+    ResponseDto(string errorCode, char whellBoltsCount[2], string gpsLocation);
+    ResponseDto(char whellBoltsCount[2], string status, string gpsLocation);
     ResponseDto(){};
     string getInitializer();
-    char *getErrorCode();
+    string getErrorCode();
     char *getWhellBoltsCount();
     string getGpsData();
     string getStatus();
+    void setErrorCode(string errorCode);
 };
 
 #endif

@@ -13,24 +13,23 @@ class ResponseModel
 private:
     CheckSumBuilder _checkSumBuilder;
     string _initializer;
-    char _errorCode[3];
+    string _errorCode;
     string _status;
     char _whellBoltsCount[2];
     string _gpsData;
     string _checkSum;
     string _extraChar;
-    int _lineFeed;
-    int _carriageReturn;
 
 public:
     ResponseModel(ResponseDto responseDto);
-    ResponseModel(char errorCode[3]);
-    ResponseModel(){};
-    string tostring();
+    ResponseModel(string errorCode);
+    ResponseModel();
+    string toString();
     string getInitializer();
     string getErrorCode();
     char *getWhellBoltsCount();
     string getGpsData();
+    void setErrorCode(string errorCode);
 };
 
 #endif

@@ -6,8 +6,9 @@ TurnAlarmSirenOnUseCase::TurnAlarmSirenOnUseCase(Cb *cb)
     this->cb = cb;
 };
 
-void TurnAlarmSirenOnUseCase::execute()
+ErrorOrBool TurnAlarmSirenOnUseCase::execute()
 {
     loggerInfo("TurnAlarmSirenOnUseCase", "Proces started");
     loggerInfo("TurnAlarmSirenOnUseCase", "Proces finished");
+    return ErrorOrBool(true);
 };

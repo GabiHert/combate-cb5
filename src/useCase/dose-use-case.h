@@ -1,6 +1,7 @@
 #ifndef DOSE_USE_CASE_H
 #define DOSE_USE_CASE_H
 #include "domain/cb/cb.h"
+#include "types/error-or-boolean.h"
 
 class DoseUseCase
 {
@@ -10,7 +11,7 @@ private:
 public:
     DoseUseCase(Cb *cb);
     DoseUseCase(){};
-    void execute(char amount);
+    ErrorOrBool execute(char amount);
 };
 
 #endif

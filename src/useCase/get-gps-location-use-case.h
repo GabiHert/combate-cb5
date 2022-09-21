@@ -1,17 +1,18 @@
 #ifndef GET_GPS_LOCATION_USE_CASE_H
 #define GET_GPS_LOCATION_USE_CASE_H
-#include "domain/cb/cb.h"
+#include "interfaces/gps-interface.h"
+#include "types/error-or-string.h"
 
 class GetGpsLocationUseCase
 {
 
 private:
-    Cb *cb;
+    IGps *gps;
 
 public:
     GetGpsLocationUseCase() {}
-    GetGpsLocationUseCase(Cb *cb);
-    void execute();
+    GetGpsLocationUseCase(IGps *gps);
+    ErrorOrString execute();
 };
 
 #endif

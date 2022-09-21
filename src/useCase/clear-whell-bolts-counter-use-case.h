@@ -1,6 +1,7 @@
 #ifndef CLEAR_WHELL_BOLTS_COUNTER_USE_CASE_H
 #define CLEAR_WHELL_BOLTS_COUNTER_USE_CASE_H
 #include "domain/cb/cb.h"
+#include "types/error-or-boolean.h"
 
 class ClearWhellBoltsCounterUseCase
 {
@@ -10,7 +11,7 @@ private:
 public:
     ClearWhellBoltsCounterUseCase(Cb *cb);
     ClearWhellBoltsCounterUseCase(){};
-    void execute();
+    ErrorOrBool execute();
 };
 
 #endif

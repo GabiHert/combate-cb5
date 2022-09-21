@@ -9,18 +9,18 @@
 #include "domain/poisonAplicator/poison-applicator.h"
 #include "config/config.h"
 #include "infra/server/app.h"
+#include "types/error-or-boolean.h"
 
 class Cb
 {
 private:
-    IGps _gps;
     App *_app;
     string _id;
     string _status;
     RequestModel requestModel;
     PoisonApplicator _poisonApplicator[3];
     char _wheelBoltsCount[2];
-    string _gpsData;
+    string _location;
     void _setupApplicator();
 
 public:
@@ -29,16 +29,18 @@ public:
     Cb(App *app);
     Cb();
 
-    void dose(int amount);
+    ErrorOrBool dose(int amount);
     void setup();
 
     string getId();
     string getStatus();
-    string getGpsData();
 
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
     PoisonApplicator *getPoisonApplicator();
+
+    string getLocation() { return this->_location; };
+    void setLocation(string location) { this->_location = location; };
 
     char getWhellBoltsCountDecimal();
     char getWhellBoltsCountUnit();

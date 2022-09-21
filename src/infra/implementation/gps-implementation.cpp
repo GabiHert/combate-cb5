@@ -2,7 +2,6 @@
 #include <SoftwareSerial.h>
 #include "utils/utils.h"
 #include "config/config.h"
-#include "exceptions/error.h"
 #include <string.h>
 using namespace std;
 SoftwareSerial gpsSerial(CONFIG().PORT_GPS_RX, CONFIG().PORT_GPS_TX);
@@ -13,7 +12,7 @@ string IGps::getData()
     loggerInfo("IGps.setLocation", "Process started");
     if (true) // gpsSerial.available()
     {
-        string data = "$GPRMC,144326.00,A,5107.0017737,N,11402.3291611,W,0.080,323.3,210307,0.0,E,A*20"; // TODO: gpsSerial.readstring();
+        string data = "001220.00,A,3001.89425,S,05109.81024,W,0.374,,240719,,,A*75"; // TODO: gpsSerial.readstring();
 
         loggerInfo("IGps.setLocation", "Process finished", " data: " + data);
         return data;

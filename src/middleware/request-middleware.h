@@ -6,6 +6,7 @@
 #include "domain/dto/response-dto.h"
 #include <Arduino.h>
 #include "domain/model/response-model.h"
+#include "interfaces/gps-interface.h"
 
 class RequestMiddleware
 {
@@ -15,7 +16,7 @@ private:
     RequestValidationMiddleware requestValidationMiddleware;
 
 public:
-    RequestMiddleware(Cb cb);
+    RequestMiddleware(Cb cb, IGps gps);
     ResponseModel execute(string request);
 };
 

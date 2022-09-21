@@ -1,35 +1,47 @@
 #include "middleware/request-middleware.h"
 #include "utils/utils.h"
 #include "middleware/validation/request-validation-middleware.h"
-#include "exceptions/error.h"
 #include <string.h>
+#include "types/error-or-response-dto.h"
+
 using namespace std;
 
-RequestMiddleware::RequestMiddleware(Cb cb)
+RequestMiddleware::RequestMiddleware(Cb cb, IGps gps)
 {
   this->cb = cb;
-  this->requestController = RequestController(cb);
+  this->requestController = RequestController(cb, gps);
 };
 
 ResponseModel RequestMiddleware::execute(string request)
 {
-  try
-  {
-    loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb.getId());
 
-    bool isRequestValid = requestValidationMiddleware.validate(request);
-    RequestDto requestDto(request);
-    ResponseDto responseDto = requestController.execute(requestDto);
-    ResponseModel responseModel(responseDto);
-    loggerInfo("RequestMiddleware.execute", "Process finished");
-    return responseModel;
-  }
-  catch (Error err)
-  {
+  loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb.getId());
 
-    ResponseModel responseModel(err.errorType().errorCode);
-    loggerError("RequestMiddleware.execute", "Process error", "error: " + err.message());
+  ErrorOrBool erroOrBool = requestValidationMiddleware.validate(request);
+  if (erroOrBool.isError())
+  {
+    loggerError("RequestMiddleware.execute", "Process error", "error: " + erroOrBool.getError().description);
+
+    ResponseModel responseModel(erroOrBool.getError().errorCode);
 
     return responseModel;
   }
+
+  RequestDto requestDto(request);
+
+  ErrorOrResponseDto errorOrResponseDto = requestController.execute(requestDto);
+  if (errorOrResponseDto.isError())
+  {
+    loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.getError().description);
+
+    ResponseModel responseModel(errorOrResponseDto.getError().errorCode);
+
+    return responseModel;
+  }
+
+  ResponseModel responseModel(errorOrResponseDto.getResponseDto());
+
+  loggerInfo("RequestMiddleware.execute", "Process finished");
+
+  return responseModel;
 }
