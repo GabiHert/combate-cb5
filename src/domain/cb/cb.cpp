@@ -34,7 +34,7 @@ ErrorOrBool Cb::dose(int amount)
 
         while (!result)
         {
-            if (timer.status())
+            if (timer.timedOut())
             {
                 loggerError("Cb.dose", "Process error", "Time out");
                 return ErrorOrBool(EXCEPTIONS().DOSE_PROCESS_TIME_OUT);

@@ -18,7 +18,7 @@ private:
 public:
     Timer();
     void setTimer(unsigned long ms);
-    bool status();
+    bool timedOut();
 };
 
 #endif // UTILS_H

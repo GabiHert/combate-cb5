@@ -18,7 +18,19 @@ ErrorOrString GetGpsLocationUseCase::execute()
 
         return ErrorOrString(errorOrString.getError());
     }
-    loggerInfo("GetGpsUseCase.execute", "Process finished");
+    string result = errorOrString.getString();
 
-    return errorOrString;
+    int i;
+    for (i = 0; i < result.length(); i++)
+    {
+        if (result[i] == ',')
+        {
+            break;
+        }
+    }
+
+    result = result.substr(i - 1);
+    loggerInfo("GetGpsUseCase.execute", "Process finished", result);
+
+    return ErrorOrString(result);
 }

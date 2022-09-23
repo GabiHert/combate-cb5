@@ -3,26 +3,43 @@
 #include "utils/utils.h"
 #include "config/config.h"
 #include <string.h>
+#include "exceptions/exceptions.h"
 using namespace std;
 SoftwareSerial gpsSerial(CONFIG().PORT_GPS_RX, CONFIG().PORT_GPS_TX);
 
-string IGps::getData()
+ErrorOrString IGps::getData()
 {
-
     loggerInfo("IGps.setLocation", "Process started");
-    if (true) // gpsSerial.available()
-    {
-        string data = "001220.00,A,3001.89425,S,05109.81024,W,0.374,,240719,,,A*75"; // TODO: gpsSerial.readstring();
 
-        loggerInfo("IGps.setLocation", "Process finished", " data: " + data);
-        return data;
+    Timer timer;
+
+    timer.setTimer(CONFIG().GPS_DATA_TIMEOUT);
+
+    string data;
+    int gpsData;
+
+    while (gpsData != CONFIG().PROTOCOL_LF)
+    {
+        if (timer.timedOut())
+        {
+            loggerError("IGps.setLocation", "Process error", "Gps timed out");
+            return ErrorOrString(EXCEPTIONS().GPS_TIME_OUT);
+        }
+
+        if (gpsSerial.available() > 0)
+        {
+            gpsData = gpsSerial.read();
+            if (gpsData != CONFIG().PROTOCOL_LF && gpsData != CONFIG().PROTOCOL_CR)
+                data += gpsData;
+        }
     }
 
-    loggerInfo("IGps.setLocation", "Process finished", " No gps data available");
-    return "";
+    loggerInfo("IGps.setLocation", "Process finished", " data: " + data);
+
+    return ErrorOrString(data);
 };
 
 void IGps::setup()
 {
-    gpsSerial.begin(CONFIG().SERIAL_BOUD_RATE);
+    gpsSerial.begin(CONFIG().GPS_SERIAL_BOUD_RATE);
 };

@@ -1,6 +1,7 @@
 #ifndef ERROR_TYPE_H
 #define ERROR_TYPE_H
-#include <Arduino.h>
+#include <string>
+using namespace std;
 
 class ERROR_TYPE
 {
@@ -13,8 +14,7 @@ public:
 
 struct ERROR_CODE
 {
-    string VALIDATION_ERROR = "001";
-    string DOSE_PROCESS_TIME_OUT = "002";
+    string VALIDATION_ERROR = "001", DOSE_PROCESS_TIME_OUT = "002", GPS_TIME_OUT = "003";
 };
 
 #endif
