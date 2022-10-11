@@ -7,39 +7,70 @@
 using namespace std;
 SoftwareSerial gpsSerial(CONFIG().PORT_GPS_RX, CONFIG().PORT_GPS_TX);
 
-ErrorOrString IGps::getData()
+ErrorOrString IGps::getData(int timeOut)
 {
-    loggerInfo("IGps.setLocation", "Process started");
+    loggerInfo("IGps.getData", "Process started");
 
     Timer timer;
 
-    timer.setTimer(CONFIG().GPS_DATA_TIMEOUT);
+    timer.setTimer(timeOut);
 
     string data;
     int gpsData;
+    bool dataTransferStarted = false, dataTransferFinished = false, restartTransfer = false;
 
     while (gpsData != CONFIG().PROTOCOL_LF)
     {
         if (timer.timedOut())
         {
-            loggerError("IGps.setLocation", "Process error", "Gps timed out");
+            loggerError("IGps.getData", "Process error", "Gps timed out");
             return ErrorOrString(EXCEPTIONS().GPS_TIME_OUT);
         }
 
         if (gpsSerial.available() > 0)
         {
             gpsData = gpsSerial.read();
-            if (gpsData != CONFIG().PROTOCOL_LF && gpsData != CONFIG().PROTOCOL_CR)
-                data += gpsData;
+
+            if (gpsData == '$')
+            {
+                if (!dataTransferStarted)
+                {
+                    dataTransferStarted = true;
+                }
+                else
+                {
+                    loggerWarn("IGps.getData", "Process warn", "reset");
+
+                    dataTransferStarted = false;
+                    if (gpsSerial.available() > 0)
+                        data = "";
+                }
+            }
+
+            if (dataTransferStarted)
+            {
+                if (gpsData != CONFIG().PROTOCOL_LF && gpsData != CONFIG().PROTOCOL_CR)
+                {
+                    data += gpsData;
+                }
+            }
         }
     }
 
-    loggerInfo("IGps.setLocation", "Process finished", " data: " + data);
+    loggerInfo("IGps.getData", "Process finished", " data: " + data);
 
     return ErrorOrString(data);
 };
 
-void IGps::setup()
+ErrorOrBool IGps::setup()
 {
     gpsSerial.begin(CONFIG().GPS_SERIAL_BOUD_RATE);
+    // return ErrorOrBool(true);
+    ErrorOrString errorOrString = this->getData(CONFIG().GPS_SETUP_TIMEOUT);
+    if (errorOrString.isError())
+    {
+        return ErrorOrBool(EXCEPTIONS().GPS_TIME_OUT);
+    }
+
+    return ErrorOrBool(true);
 };

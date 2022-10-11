@@ -21,6 +21,9 @@ ResponseModel RequestMiddleware::execute(string request)
   if (erroOrBool.isError())
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + erroOrBool.getError().description);
+    cb.display.clearDisplay();
+    cb.display.print(erroOrBool.getError().description, 0, 0);
+    cb.display.print(erroOrBool.getError().errorCode, 0, 0);
 
     ResponseModel responseModel(erroOrBool.getError().errorCode);
 
@@ -33,6 +36,10 @@ ResponseModel RequestMiddleware::execute(string request)
   if (errorOrResponseDto.isError())
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.getError().description);
+
+    cb.display.clearDisplay();
+    cb.display.print(erroOrBool.getError().description, 0, 0);
+    cb.display.print(erroOrBool.getError().errorCode, 0, 0);
 
     ResponseModel responseModel(errorOrResponseDto.getError().errorCode);
 

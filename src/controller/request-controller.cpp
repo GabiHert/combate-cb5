@@ -17,7 +17,7 @@ RequestController::RequestController(Cb cb, IGps gps)
 
     this->clearWhellBoltsCounterUseCase = ClearWhellBoltsCounterUseCase(&cb);
 
-    this->getGpsLocationUseCase = GetGpsLocationUseCase(&gps);
+    this->getGpsLocationUseCase = GetGpsLocationUseCase(&gps, &cb);
 };
 
 RequestController::RequestController(){};
@@ -76,6 +76,10 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
     }
 
     this->cb.setLocation(errorOrString.getString());
+
+    this->cb.display.clearDisplay();
+    this->cb.display.print("PROCESSOS", 0, 0);
+    this->cb.display.print("FINALIZADOS", 0, 1);
 
     ResponseDto responseDto(this->cb);
     loggerInfo("RequestController.execute", "Process finished", " gpsData: " + string(responseDto.getGpsData()));

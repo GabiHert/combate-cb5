@@ -11,6 +11,7 @@ ErrorOrBool Cb::dose(int amount)
 
     this->_status = CONFIG().PROTOCOL_STATUS_BUSY;
     loggerInfo("Cb.dose", "Process started");
+    // TODO: e se o dosador N 3 terminar, e o 1 nao
     for (int dose = 0; dose < amount; dose++)
     {
 
@@ -44,7 +45,9 @@ ErrorOrBool Cb::dose(int amount)
             int count = 0;
             for (int i = 0; i < POISON_APPLICATORS; i++)
             {
-                tasksDone[i] = this->_poisonApplicator[i].readSensor();
+                if (!tasksDone[i])
+                    tasksDone[i] = this->_poisonApplicator[i].readSensor();
+
                 if (tasksDone[i])
                 {
                     loggerInfo("Cb.dose", "dose from applicator" + to_string(i) + "done");

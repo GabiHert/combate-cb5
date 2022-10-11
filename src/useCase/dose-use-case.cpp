@@ -8,10 +8,15 @@ DoseUseCase::DoseUseCase(Cb *cb)
 
 ErrorOrBool DoseUseCase::execute(char amount)
 {
+    if (amount = 0)
+        amount = 10;
+    loggerInfo("DoseUseCase", "Process started", "amount: " + to_string((int)amount));
 
     amount = asciiCharToNumber(amount);
 
-    loggerInfo("DoseUseCase", "Process started", "amount: " + to_string((int)amount));
+    this->cb->display.clearDisplay();
+    this->cb->display.print("INICIO DOSAGEM", 0, 0);
+    this->cb->display.print(to_string(amount) + " DOSES", 0, 1);
 
     ErrorOrBool errorOrBool = this->cb->dose(amount);
     if (errorOrBool.isError())
@@ -20,5 +25,10 @@ ErrorOrBool DoseUseCase::execute(char amount)
         return ErrorOrBool(errorOrBool.getError());
     }
 
+    this->cb->display.clearDisplay();
+    this->cb->display.print("DOSAGEM FINALIZADA", 0, 0);
+
     loggerInfo("DoseUseCase", "Process finished");
+
+    return ErrorOrBool(true);
 };

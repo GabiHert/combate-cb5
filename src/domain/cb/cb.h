@@ -21,7 +21,6 @@ private:
     PoisonApplicator _poisonApplicator[3];
     char _wheelBoltsCount[2];
     string _location;
-    void _setupApplicator();
 
 public:
     IDisplay display;

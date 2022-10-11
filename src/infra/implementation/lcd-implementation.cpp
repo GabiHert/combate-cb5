@@ -8,9 +8,17 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // TODO: se a mensagem ja estiver printada n printar novamente
 //  guardar mensagem em atributo privado
-void IDisplay::print(string message)
+void IDisplay::print(string message, uint8_t column, uint8_t line)
 {
     loggerInfo("Lcd.display", "Process started");
+    this->setCursor(column, line);
+    lcd.print(stdStringToArduinoString(message));
+    loggerInfo("Lcd.dissplay", "Process finished");
+}
+
+void IDisplay::print(string message)
+{
+    loggerInfo("Lcd.display", "Process started", message);
     lcd.print(stdStringToArduinoString(message));
     loggerInfo("Lcd.dissplay", "Process finished");
 }
