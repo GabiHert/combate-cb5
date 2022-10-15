@@ -11,7 +11,7 @@
 using namespace std;
 #include "exceptions/validation-error.h"
 
-App app(CONFIG().DEVICE_NAME);
+App app(CONFIG_DEVICE_NAME);
 Cb cb(&app);
 
 RequestMiddleware requestMiddleware(cb);
@@ -74,7 +74,7 @@ int intToAscii(int number)
 
 string endPointBuilder(string request)
 {
-    string requestData = request.substr(CONFIG().PROTOCOL_DATA_START_INDEX, CONFIG().PROTOCOL_DATA_END_INDEX);
+    string requestData = request.substr(CONFIG_PROTOCOL_DATA_START_INDEX, CONFIG_PROTOCOL_DATA_END_INDEX);
 
     CheckSumBuilder csBuilder;
     string cs;
@@ -97,7 +97,7 @@ string endPointBuilder(string request)
 void CB5::setup()
 {
     cb.setup();
-    Serial.begin(CONFIG().SERIAL_BOUD_RATE); // TODO: usar classe System
+    Serial.begin(CONFIG_SERIAL_BOUD_RATE); // TODO: usar classe System
 
     loggerInfo("Setup", "Process started");
 

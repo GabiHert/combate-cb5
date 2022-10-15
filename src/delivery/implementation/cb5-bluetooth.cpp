@@ -12,11 +12,6 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-App app(CONFIG().DEVICE_NAME);
-Cb cb(&app);
-IGps gps;
-RequestMiddleware requestMiddleware(cb, gps);
-
 void CB5::execute()
 {
     if (app.avaliable())
@@ -31,7 +26,7 @@ void CB5::execute()
         app.write(responseString);
 
         string separator;
-        for (int i = 0; i < CONFIG().GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
+        for (int i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
         {
             separator += "-";
         }
@@ -43,13 +38,15 @@ void CB5::execute()
 };
 void CB5::setup()
 {
-    Serial.begin(CONFIG().SERIAL_BOUD_RATE); // TODO: usar classe System
+
+    Serial.begin(CONFIG_SERIAL_BOUD_RATE); // TODO: usar classe System
     loggerInfo("CB5.setup", "Process started");
 
-    cb.setup();
+    this->cb = Cb(&app);
+    this->requestMiddleware = RequestMiddleware(&this->cb, &this->gps);
 
     int retries = 0;
-    for (retries; retries <= CONFIG().GPS_MAX_SETUP_RETRIES; retries++)
+    for (retries; retries <= CONFIG_GPS_MAX_SETUP_RETRIES; retries++)
     {
         cb.display.clearDisplay();
         cb.display.print("TESTANDO GPS", 0, 0);
@@ -68,8 +65,8 @@ void CB5::setup()
             }
             cb.display.clearDisplay();
             cb.display.print("RETENTANDO EM ", 0, 0);
-            cb.display.print(to_string(CONFIG().GPS_SETUP_RETRY_INTERVAL / 1000) + " SEGUNDOS", 0, 1);
-            timer.setTimer(CONFIG().GPS_SETUP_RETRY_INTERVAL);
+            cb.display.print(to_string(CONFIG_GPS_SETUP_RETRY_INTERVAL / 1000) + " SEGUNDOS", 0, 1);
+            timer.setTimer(CONFIG_GPS_SETUP_RETRY_INTERVAL);
             while (!timer.timedOut())
             {
             }

@@ -18,7 +18,7 @@ private:
     string _id;
     string _status;
     RequestModel requestModel;
-    PoisonApplicator _poisonApplicator[3];
+    PoisonApplicator _poisonApplicator[CONFIG_POISON_APPLICATORS];
     char _wheelBoltsCount[2];
     string _location;
 
@@ -28,9 +28,7 @@ public:
     Cb(App *app);
     Cb();
 
-    ErrorOrBool dose(int amount);
-    void setup();
-
+    ErrorOrBool dose(char amount);
     string getId();
     string getStatus();
 

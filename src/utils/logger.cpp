@@ -8,7 +8,7 @@ void loggerInfo(string event, string details, string message)
 
     Serial.println("INFO - :: -  event: " + _event + " |  details: " + _details + " | message: " + _message);
 
-    Serial.println();
+    Serial.println("");
 };
 
 void loggerError(string event, string details, string error)
@@ -16,7 +16,7 @@ void loggerError(string event, string details, string error)
     String _event = stdStringToArduinoString(event), _details = stdStringToArduinoString(details), _error = stdStringToArduinoString(error);
 
     Serial.println("ERROR - :: -  event: " + _event + " |  details: " + _details + " | error: " + _error);
-    Serial.println();
+    Serial.println("");
 };
 
 void loggerWarn(string event, string details, string warn)
@@ -26,5 +26,5 @@ void loggerWarn(string event, string details, string warn)
 
     Serial.println("WARN - :: -  event: " + _event + " |  details: " + _details + " | warn: " + _warn);
 
-    Serial.println();
+    Serial.println("");
 };

@@ -10,7 +10,7 @@ class IGps
 {
 public:
     IGps(){};
-    ErrorOrString getData(int timeOut = CONFIG().GPS_TIMEOUT);
+    ErrorOrString getData(int timeOut = CONFIG_GPS_TIMEOUT);
     ErrorOrBool setup();
 };
 

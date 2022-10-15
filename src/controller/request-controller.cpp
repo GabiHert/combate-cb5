@@ -6,18 +6,19 @@
 #include "useCase/clear-whell-bolts-counter-use-case.h"
 #include "types/error-or-string.h"
 
-RequestController::RequestController(Cb cb, IGps gps)
+RequestController::RequestController(Cb *cb, IGps *gps)
 {
     this->cb = cb;
-    loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb.getId());
 
-    this->doseUseCase = DoseUseCase(&cb);
+    loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb->getId());
 
-    this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(&cb);
+    this->doseUseCase = DoseUseCase(cb);
 
-    this->clearWhellBoltsCounterUseCase = ClearWhellBoltsCounterUseCase(&cb);
+    this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(cb);
 
-    this->getGpsLocationUseCase = GetGpsLocationUseCase(&gps, &cb);
+    this->clearWhellBoltsCounterUseCase = ClearWhellBoltsCounterUseCase(cb);
+
+    this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb);
 };
 
 RequestController::RequestController(){};
@@ -25,14 +26,14 @@ RequestController::RequestController(){};
 ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
 {
 
-    loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb.getId());
+    loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb->getId());
 
     RequestModel requestModel(requestDto);
-    this->cb.setRequestModel(requestModel);
+    this->cb->setRequestModel(requestModel);
 
-    bool turnAlarmSirenOnRequest = requestModel.getAlarmSiren() != CONFIG().ALARM_SIREN_OFF;
-    bool doseRequest = requestModel.getDose() != CONFIG().PROTOCOL_DO_NOT_DOSE;
-    bool clearWhellBoltsCounterRequest = requestModel.getWhellBoltsCounter() != CONFIG().PROTOCOL_DO_NOT_CLEAR_WHELL_BOLT_COUNTS;
+    bool turnAlarmSirenOnRequest = requestModel.getAlarmSiren() != CONFIG_PROTOCOL_ALARM_SIREN_OFF;
+    bool doseRequest = requestModel.getDose() != CONFIG_PROTOCOL_DO_NOT_DOSE;
+    bool clearWhellBoltsCounterRequest = requestModel.getWhellBoltsCounter() != CONFIG_PROTOCOL_DO_NOT_CLEAR_WHELL_BOLT_COUNTS;
 
     if (turnAlarmSirenOnRequest)
     {
@@ -75,13 +76,13 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
         return ErrorOrResponseDto(errorOrString.getError());
     }
 
-    this->cb.setLocation(errorOrString.getString());
+    this->cb->setLocation(errorOrString.getString());
 
-    this->cb.display.clearDisplay();
-    this->cb.display.print("PROCESSOS", 0, 0);
-    this->cb.display.print("FINALIZADOS", 0, 1);
+    this->cb->display.clearDisplay();
+    this->cb->display.print("PROCESSOS", 0, 0);
+    this->cb->display.print("FINALIZADOS", 0, 1);
 
-    ResponseDto responseDto(this->cb);
+    ResponseDto responseDto(*this->cb);
     loggerInfo("RequestController.execute", "Process finished", " gpsData: " + string(responseDto.getGpsData()));
     return ErrorOrResponseDto(responseDto);
 };

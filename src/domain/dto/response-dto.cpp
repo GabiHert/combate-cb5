@@ -22,7 +22,7 @@ ResponseDto::ResponseDto(string errorCode, char whellBoltsCount[2], string gpsLo
 {
     loggerInfo("ResponseDto", "Process started - constructor");
     this->_initializer = "&";
-    this->_status = CONFIG().PROTOCOL_STATUS_ERROR;
+    this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
     this->setErrorCode(errorCode);
     this->_whellBoltsCount[0] = whellBoltsCount[0];
     this->_whellBoltsCount[1] = whellBoltsCount[1];

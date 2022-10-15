@@ -27,7 +27,7 @@ bool RequestValidationMiddleware::validateCheckSum(string request)
 
     loggerInfo("RequestValidationMiddleware.validateCheckSum", "Process started", "request: " + request);
 
-    string requestData = request.substr(CONFIG().PROTOCOL_DATA_START_INDEX, CONFIG().PROTOCOL_DATA_END_INDEX);
+    string requestData = request.substr(CONFIG_PROTOCOL_DATA_START_INDEX, CONFIG_PROTOCOL_DATA_END_INDEX);
 
     int calculatedCS = checkSumBuilder.build(requestData);
 
@@ -50,7 +50,7 @@ bool RequestValidationMiddleware::validateProtocol(string request)
     unsigned char requestLastIndex = request.length() - 1;
 
     unsigned char requestLength = request.length();
-    if (requestLength != CONFIG().PROTOCOL_STRING_LENGTH)
+    if (requestLength != CONFIG_PROTOCOL_STRING_LENGTH)
     {
 
         loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request length is different from protocol; requestLength: " + to_string(requestLength));
@@ -58,7 +58,7 @@ bool RequestValidationMiddleware::validateProtocol(string request)
         return false;
     };
 
-    if (request[requestLastIndex] != CONFIG().PROTOCOL_LF)
+    if (request[requestLastIndex] != CONFIG_PROTOCOL_LF)
     {
 
         loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request Line feed is different from protocol; linefeed : " + request[requestLastIndex]);
@@ -66,7 +66,7 @@ bool RequestValidationMiddleware::validateProtocol(string request)
         return false;
     };
 
-    if (request[requestLastIndex - 1] != CONFIG().PROTOCOL_CR)
+    if (request[requestLastIndex - 1] != CONFIG_PROTOCOL_CR)
     {
 
         loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request Carriage Return is different from protocol; carriageReturn : " + request[requestLastIndex - 1]);
@@ -74,14 +74,14 @@ bool RequestValidationMiddleware::validateProtocol(string request)
         return false;
     };
 
-    string requestIdentifier = request.substr(CONFIG().PROTOCOL_IDENTIFIER_START_INDEX, CONFIG().PROTOCOL_IDENTIFIER_END_INDEX);
+    string requestIdentifier = request.substr(CONFIG_PROTOCOL_IDENTIFIER_START_INDEX, CONFIG_PROTOCOL_IDENTIFIER_END_INDEX);
 
     for (int requestCharacterIndex = 0; requestCharacterIndex <= requestLastIndex - 2; requestCharacterIndex++)
     {
         string protocolAllowedElementValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES[requestCharacterIndex];
         unsigned char protocolAllowedElementValueLength = protocolAllowedElementValues.length() - 1;
 
-        if (CONFIG().PROTOCOL_ANY_VALUE_VALID != protocolAllowedElementValues)
+        if (CONFIG_PROTOCOL_ANY_VALUE_VALID != protocolAllowedElementValues)
         {
             bool present = false;
 

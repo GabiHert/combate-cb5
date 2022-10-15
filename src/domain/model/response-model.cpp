@@ -19,7 +19,7 @@ ResponseModel::ResponseModel(string errorCode)
     loggerInfo("ResponseModel", "Process started - constructor");
 
     this->_initializer = "&";
-    this->_status = CONFIG().PROTOCOL_STATUS_ERROR;
+    this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
     this->setErrorCode(errorCode);
 
     this->_whellBoltsCount[0] = 0;
@@ -49,8 +49,8 @@ string ResponseModel::toString()
     response += this->_checkSumBuilder.build(response);
     response += ",";
     response += this->_gpsData;
-    response += CONFIG().PROTOCOL_CR;
-    response += CONFIG().PROTOCOL_LF;
+    response += CONFIG_PROTOCOL_CR;
+    response += CONFIG_PROTOCOL_LF;
     response = this->_initializer + response;
     loggerInfo("ResponseModel.tostring", "Process finished", "response: " + response);
 

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-RequestMiddleware::RequestMiddleware(Cb cb, IGps gps)
+RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps)
 {
   this->cb = cb;
   this->requestController = RequestController(cb, gps);
@@ -15,15 +15,15 @@ RequestMiddleware::RequestMiddleware(Cb cb, IGps gps)
 ResponseModel RequestMiddleware::execute(string request)
 {
 
-  loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb.getId());
+  loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->getId());
 
   ErrorOrBool erroOrBool = requestValidationMiddleware.validate(request);
   if (erroOrBool.isError())
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + erroOrBool.getError().description);
-    cb.display.clearDisplay();
-    cb.display.print(erroOrBool.getError().description, 0, 0);
-    cb.display.print(erroOrBool.getError().errorCode, 0, 0);
+    cb->display.clearDisplay();
+    cb->display.print(erroOrBool.getError().description, 0, 0);
+    cb->display.print(erroOrBool.getError().errorCode, 0, 0);
 
     ResponseModel responseModel(erroOrBool.getError().errorCode);
 
@@ -37,9 +37,9 @@ ResponseModel RequestMiddleware::execute(string request)
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.getError().description);
 
-    cb.display.clearDisplay();
-    cb.display.print(erroOrBool.getError().description, 0, 0);
-    cb.display.print(erroOrBool.getError().errorCode, 0, 0);
+    cb->display.clearDisplay();
+    cb->display.print(erroOrBool.getError().description, 0, 0);
+    cb->display.print(erroOrBool.getError().errorCode, 0, 0);
 
     ResponseModel responseModel(errorOrResponseDto.getError().errorCode);
 

@@ -13,14 +13,14 @@
 class RequestController
 {
 private:
-    Cb cb;
+    Cb *cb;
     TurnAlarmSirenOnUseCase turnAlarmSirenOnUseCase;
     DoseUseCase doseUseCase;
     ClearWhellBoltsCounterUseCase clearWhellBoltsCounterUseCase;
     GetGpsLocationUseCase getGpsLocationUseCase;
 
 public:
-    RequestController(Cb cb, IGps gps);
+    RequestController(Cb *cb, IGps *gps);
     RequestController();
 
     ErrorOrResponseDto execute(RequestDto requestDto);

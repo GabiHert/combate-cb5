@@ -11,12 +11,13 @@
 class RequestMiddleware
 {
 private:
-    Cb cb;
+    Cb *cb;
     RequestController requestController;
     RequestValidationMiddleware requestValidationMiddleware;
 
 public:
-    RequestMiddleware(Cb cb, IGps gps);
+    RequestMiddleware(){};
+    RequestMiddleware(Cb *cb, IGps *gps);
     ResponseModel execute(string request);
 };
 

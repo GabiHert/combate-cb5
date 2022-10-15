@@ -4,13 +4,9 @@
 #include "config/config.h"
 #include <string.h>
 
-App::App(string deviceName)
-{
-    this->deviceName = deviceName;
-};
 App::App()
 {
-    this->deviceName = CONFIG().DEVICE_NAME;
+    this->deviceName = CONFIG_DEVICE_NAME;
 }
 
 void App::start()
