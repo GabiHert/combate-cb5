@@ -3,8 +3,6 @@
 #ifndef CB_H
 #define CB_H
 
-#include "interfaces/gps-interface.h"
-#include "interfaces/lcd-interface.h"
 #include "domain/model/request-model.h"
 #include "domain/poisonAplicator/poison-applicator.h"
 #include "config/config.h"
@@ -23,8 +21,6 @@ private:
     string _location;
 
 public:
-    IDisplay display;
-
     Cb(App *app);
     Cb();
 

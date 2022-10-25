@@ -12,7 +12,6 @@ private:
 
 public:
     App();
-    App(string deviceName);
     void start();
     int read();
     void write(string response);

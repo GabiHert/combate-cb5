@@ -14,6 +14,7 @@
 
 void CB5::execute()
 {
+
     if (app.avaliable())
     {
         loggerInfo("CB5.execute", "Process started", "Serial info. available");
@@ -38,34 +39,42 @@ void CB5::execute()
 };
 void CB5::setup()
 {
+    Serial.begin(CONFIG_SERIAL_BOUD_RATE); // TODO: usar classe System
+
+    IDisplay display;
+
+    display.clear();
+    display.print("TESTANDO GPS", 0, 0);
+    display.print("AGUARDE...", 0, 1);
 
     Serial.begin(CONFIG_SERIAL_BOUD_RATE); // TODO: usar classe System
     loggerInfo("CB5.setup", "Process started");
 
-    this->cb = Cb(&app);
-    this->requestMiddleware = RequestMiddleware(&this->cb, &this->gps);
+    this->cb = Cb(&this->app);
+
+    this->requestMiddleware = RequestMiddleware(&this->cb, &this->gps, &display);
 
     int retries = 0;
     for (retries; retries <= CONFIG_GPS_MAX_SETUP_RETRIES; retries++)
     {
-        cb.display.clearDisplay();
-        cb.display.print("TESTANDO GPS", 0, 0);
-        cb.display.print("AGUARDE...", 0, 1);
+        display.clear();
+        display.print("TESTANDO GPS", 0, 0);
+        display.print("AGUARDE...", 0, 1);
 
         ErrorOrBool errorOrBool = gps.setup();
         if (errorOrBool.isError())
         {
-            cb.display.clearDisplay();
-            cb.display.print(errorOrBool.getError().description, 0, 0);
-            cb.display.print(errorOrBool.getError().errorCode, 0, 1);
+            display.clear();
+            display.print(errorOrBool.getError().description, 0, 0);
+            display.print(errorOrBool.getError().errorCode, 0, 1);
             Timer timer;
             timer.setTimer(3000);
             while (!timer.timedOut())
             {
             }
-            cb.display.clearDisplay();
-            cb.display.print("RETENTANDO EM ", 0, 0);
-            cb.display.print(to_string(CONFIG_GPS_SETUP_RETRY_INTERVAL / 1000) + " SEGUNDOS", 0, 1);
+            display.clear();
+            display.print("RETENTANDO EM ", 0, 0);
+            display.print(to_string(CONFIG_GPS_SETUP_RETRY_INTERVAL / 1000) + " SEGUNDOS", 0, 1);
             timer.setTimer(CONFIG_GPS_SETUP_RETRY_INTERVAL);
             while (!timer.timedOut())
             {
@@ -75,17 +84,17 @@ void CB5::setup()
         else
         {
 
-            cb.display.clearDisplay();
-            cb.display.print("GPS TESTADO COM", 0, 0);
-            cb.display.print("SUCESSO", 0, 1);
+            display.clear();
+            display.print("GPS TESTADO COM", 0, 0);
+            display.print("SUCESSO", 0, 1);
             break;
         }
     }
 
     app.start();
 
-    cb.display.print("Nome Bluetooth: ", 0, 0);
-    cb.display.print(cb.getId(), 0, 1);
+    display.print("Nome Bluetooth: ", 0, 0);
+    display.print(cb.getId(), 0, 1);
 
     loggerInfo("CB5.setup", "Process finished");
 };

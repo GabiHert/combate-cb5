@@ -6,19 +6,21 @@
 #include "useCase/clear-whell-bolts-counter-use-case.h"
 #include "types/error-or-string.h"
 
-RequestController::RequestController(Cb *cb, IGps *gps)
+RequestController::RequestController(Cb *cb, IGps *gps, IDisplay *display)
 {
     this->cb = cb;
 
+    this->display = display;
+
     loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb->getId());
 
-    this->doseUseCase = DoseUseCase(cb);
+    this->doseUseCase = DoseUseCase(cb, this->display);
 
     this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(cb);
 
     this->clearWhellBoltsCounterUseCase = ClearWhellBoltsCounterUseCase(cb);
 
-    this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb);
+    this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb, this->display);
 };
 
 RequestController::RequestController(){};
@@ -78,9 +80,9 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
 
     this->cb->setLocation(errorOrString.getString());
 
-    this->cb->display.clearDisplay();
-    this->cb->display.print("PROCESSOS", 0, 0);
-    this->cb->display.print("FINALIZADOS", 0, 1);
+    this->display->clear();
+    this->display->print("PROCESSOS", 0, 0);
+    this->display->print("FINALIZADOS", 0, 1);
 
     ResponseDto responseDto(*this->cb);
     loggerInfo("RequestController.execute", "Process finished", " gpsData: " + string(responseDto.getGpsData()));

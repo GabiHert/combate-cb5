@@ -6,10 +6,11 @@
 
 using namespace std;
 
-RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps)
+RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, IDisplay *display)
 {
+  this->display = display;
   this->cb = cb;
-  this->requestController = RequestController(cb, gps);
+  this->requestController = RequestController(cb, gps, display);
 };
 
 ResponseModel RequestMiddleware::execute(string request)
@@ -21,9 +22,9 @@ ResponseModel RequestMiddleware::execute(string request)
   if (erroOrBool.isError())
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + erroOrBool.getError().description);
-    cb->display.clearDisplay();
-    cb->display.print(erroOrBool.getError().description, 0, 0);
-    cb->display.print(erroOrBool.getError().errorCode, 0, 0);
+    this->display->clear();
+    this->display->print(erroOrBool.getError().description, 0, 0);
+    this->display->print(erroOrBool.getError().errorCode, 0, 0);
 
     ResponseModel responseModel(erroOrBool.getError().errorCode);
 
@@ -37,9 +38,9 @@ ResponseModel RequestMiddleware::execute(string request)
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.getError().description);
 
-    cb->display.clearDisplay();
-    cb->display.print(erroOrBool.getError().description, 0, 0);
-    cb->display.print(erroOrBool.getError().errorCode, 0, 0);
+    this->display->clear();
+    this->display->print(erroOrBool.getError().description, 0, 0);
+    this->display->print(erroOrBool.getError().errorCode, 0, 0);
 
     ResponseModel responseModel(errorOrResponseDto.getError().errorCode);
 

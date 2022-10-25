@@ -126,18 +126,15 @@ Cb::Cb(App *app)
     this->_wheelBoltsCount[0] = 0;
     this->_wheelBoltsCount[1] = 0;
     this->_poisonApplicator[0] = PoisonApplicator(CONFIG_PORT_GPIO_MOTOR_A_1, CONFIG_PORT_GPIO_MOTOR_B_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
-    this->display.setupDisplay();
 };
 
 Cb::Cb()
 {
-
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->_location = "NO_DATA";
     this->_wheelBoltsCount[0] = 0;
     this->_wheelBoltsCount[1] = 0;
     this->_poisonApplicator[0] = PoisonApplicator(CONFIG_PORT_GPIO_MOTOR_A_1, CONFIG_PORT_GPIO_MOTOR_B_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
-    this->display.setupDisplay();
-}
+};
 
-string Cb::getStatus() { return this->_status; }
+string Cb::getStatus() { return this->_status; };
