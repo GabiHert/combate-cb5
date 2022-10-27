@@ -16,7 +16,7 @@ RequestController::RequestController(Cb *cb, IGps *gps, IDisplay *display)
 
     this->doseUseCase = DoseUseCase(cb, this->display);
 
-    this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(cb);
+    this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(cb, this->display);
 
     this->clearWhellBoltsCounterUseCase = ClearWhellBoltsCounterUseCase(cb);
 
@@ -79,11 +79,6 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
     }
 
     this->cb->setLocation(errorOrString.getString());
-
-    this->display->clear();
-    this->display->print("PROCESSOS", 0, 0);
-    this->display->print("FINALIZADOS", 0, 1);
-
     ResponseDto responseDto(*this->cb);
     loggerInfo("RequestController.execute", "Process finished", " gpsData: " + string(responseDto.getGpsData()));
     return ErrorOrResponseDto(responseDto);

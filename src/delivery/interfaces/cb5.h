@@ -11,6 +11,7 @@
 class CB5
 {
 private:
+    IDisplay *display;
     App app;
     Cb cb;
     IGps gps;

@@ -14,8 +14,8 @@ ErrorOrString GetGpsLocationUseCase::execute()
     loggerInfo("GetGpsUseCase.execute", "Process started");
 
     this->display->clear();
-    this->display->print("INICIO CONSULTA", 0, 0);
-    this->display->print("GPS", 0, 1);
+    this->display->print("CONSULTANDO LOC.", 0, 0);
+    this->display->print("GPS. -> AGUARDE.", 0, 1);
 
     ErrorOrString errorOrString = ErrorOrString("$GPRMC,001220.00,A,3001.89425,S,05109.81024,W,0.374,,240719,,,N*75"); // this->gps->getData();
 
