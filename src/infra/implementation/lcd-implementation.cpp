@@ -3,11 +3,12 @@
 #include <Arduino.h>
 #include <string.h>
 using namespace std;
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
 
 void IDisplay::print(string message, uint8_t column, uint8_t line)
 {
-    this->setCursor(column, line);
-    this->print(message);
+    setCursor(column, line);
+    print(message);
 }
 
 void IDisplay::print(string message)
@@ -35,6 +36,6 @@ IDisplay::IDisplay()
 {
     loggerInfo("Lcd", "Constructor");
 
-    this->lcd.init();
-    this->lcd.backlight();
+    lcd.init();
+    lcd.backlight();
 }

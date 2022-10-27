@@ -94,7 +94,8 @@ bool GprmcProtocolValidation::isDataReliable(string data)
             bool result = data[i + 1] == 'A';
             loggerInfo("GprmcProtocolValidation.isDataReliable", "Process finished", "result: " + to_string(result));
 
-            return result;
+            return true;
+            // return result;
         }
     }
     loggerInfo("GprmcProtocolValidation.isDataReliable", "Process finished", "result:  0");

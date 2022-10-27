@@ -29,15 +29,14 @@ void CB5::execute()
 
         string separator;
         for (int i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
-        {
             separator += "-";
-        }
 
         app.write(separator);
 
         loggerInfo("CB5.execute", "Process finished");
     }
 };
+
 void CB5::setup()
 {
     Serial.begin(CONFIG_SERIAL_BOUD_RATE); // TODO: usar classe System
@@ -114,6 +113,9 @@ void CB5::setup()
                 display.clear();
                 display.print("VERIFICANDO DADOS", 0, 0);
                 display.print("GPS. -> OK!", 0, 1);
+                timer.setTimer(1000);
+                timer.wait();
+
                 break;
             }
 
@@ -135,7 +137,7 @@ void CB5::setup()
 
     app.start();
 
-    display.print("Nome Bluetooth: ", 0, 0);
+    display.print("   BLUETOOTH:   ", 0, 0);
     display.print(cb.getId(), 0, 1);
 
     loggerInfo("CB5.setup", "Process finished");
