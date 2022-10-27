@@ -2,6 +2,7 @@
 #define ERROR_OR_STRING_H
 #include "exceptions/error-type.h"
 #include "string"
+#include "infra/validation/gprmc-protocol-validation.h"
 using namespace std;
 
 class ErrorOrString

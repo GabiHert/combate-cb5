@@ -2,28 +2,24 @@
 #include <SoftwareSerial.h>
 #include "utils/utils.h"
 #include "config/config.h"
+#include <Arduino.h>
 #include <string.h>
 #include "exceptions/exceptions.h"
 using namespace std;
 SoftwareSerial gpsSerial(CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
 
-ErrorOrString IGps::getData(int timeOut)
+ErrorOrString IGps::_getData(Timer *timer)
 {
-    loggerInfo("IGps.getData", "Process started");
-
-    Timer timer;
-
-    timer.setTimer(timeOut);
 
     string data = "";
-    string header = "$GPRMC";
-    char i = 0;
+    char startHeaderCount = 0;
     int gpsData;
     bool dataTransferStarted = false;
 
     while (gpsData != CONFIG_PROTOCOL_LF || !dataTransferStarted)
     {
-        if (timer.timedOut())
+
+        if (timer->timedOut())
         {
             loggerError("IGps.getData", "Process error", "Gps timed out");
             return ErrorOrString(EXCEPTIONS().GPS_TIME_OUT);
@@ -38,46 +34,67 @@ ErrorOrString IGps::getData(int timeOut)
             {
                 loggerWarn("IGps.getData", "Process warn", "data reset");
 
-                i = 0;
+                startHeaderCount = 0;
                 dataTransferStarted = false;
                 data = "";
             }
 
             if (!dataTransferStarted)
             {
-                if (gpsData == header[i])
+                if (this->gprmcProtocolValidation.validateStartHeader(gpsData, startHeaderCount))
                 {
-                    i++;
-                    if (i == header.length())
+                    startHeaderCount++;
+                    if (startHeaderCount == string(CONFIG_GPS_START_HEADER).length())
                     {
                         dataTransferStarted = true;
-                        data = header;
+                        data = CONFIG_GPS_START_HEADER;
                     }
                 }
                 else
                 {
                     loggerWarn("IGps.getData", "Process warn", "data reset " + gpsData);
 
-                    i = 0;
+                    startHeaderCount = 0;
                     dataTransferStarted = false;
                     data = "";
                 }
             }
-            else if (dataTransferStarted)
+            else
             {
-
                 if (gpsData != CONFIG_PROTOCOL_LF && gpsData != CONFIG_PROTOCOL_CR)
                 {
-
                     data += gpsData;
                 }
             }
         }
     }
 
-    loggerInfo("IGps.getData", "Process finished", data);
-
     return ErrorOrString(data);
+}
+
+ErrorOrString IGps::getData(int timeOut)
+{
+    loggerInfo("IGps.getData", "Process started");
+
+    Timer timer;
+    timer.setTimer(timeOut);
+
+    ErrorOrString errorOrString;
+    do
+    {
+        errorOrString = this->_getData(&timer);
+        if (errorOrString.isError())
+        {
+            loggerError("IGps.getData", "Process error", errorOrString.getError().description);
+
+            return errorOrString;
+        }
+
+    } while (!this->gprmcProtocolValidation.validate(errorOrString.getString()));
+
+    loggerInfo("IGps.getData", "Process finished", errorOrString.getString());
+
+    return errorOrString;
 };
 
 ErrorOrBool IGps::setup()
@@ -87,7 +104,7 @@ ErrorOrBool IGps::setup()
     ErrorOrString errorOrString = this->getData(CONFIG_GPS_SETUP_TIMEOUT);
     if (errorOrString.isError())
     {
-        return ErrorOrBool(EXCEPTIONS().GPS_TIME_OUT);
+        return ErrorOrBool(errorOrString.getError());
     }
 
     return ErrorOrBool(true);

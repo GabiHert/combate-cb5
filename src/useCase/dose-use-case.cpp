@@ -1,4 +1,5 @@
 #include "utils/utils.h"
+#include "exceptions/exceptions.h"
 #include "useCase/dose-use-case.h"
 
 DoseUseCase::DoseUseCase(Cb *cb, IDisplay *display)
@@ -9,10 +10,17 @@ DoseUseCase::DoseUseCase(Cb *cb, IDisplay *display)
 
 ErrorOrBool DoseUseCase::execute(char amount)
 {
+
+    amount = asciiCharToNumber(amount);
+
     if (amount == 0)
         amount = 10;
 
-    amount = asciiCharToNumber(amount);
+    if (amount == -1)
+    {
+        loggerError("DoseUseCase", "Process error", "amount could not be parsed to number");
+        return ErrorOrBool(EXCEPTIONS().PARSE_ERROR);
+    }
 
     loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
 

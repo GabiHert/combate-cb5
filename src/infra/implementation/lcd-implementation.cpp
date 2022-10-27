@@ -6,17 +6,15 @@ using namespace std;
 
 void IDisplay::print(string message, uint8_t column, uint8_t line)
 {
-    loggerInfo("Lcd.display", "Process started");
     this->setCursor(column, line);
-    lcd.print(stdStringToArduinoString(message));
-    loggerInfo("Lcd.dissplay", "Process finished");
+    this->print(message);
 }
 
 void IDisplay::print(string message)
 {
-    loggerInfo("Lcd.display", "Process started", message);
+    loggerInfo("Lcd.print", "Process started", message);
     lcd.print(stdStringToArduinoString(message));
-    loggerInfo("Lcd.dissplay", "Process finished");
+    loggerInfo("Lcd.print", "Process finished");
 }
 
 void IDisplay::clear()

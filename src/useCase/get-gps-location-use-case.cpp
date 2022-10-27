@@ -17,7 +17,7 @@ ErrorOrString GetGpsLocationUseCase::execute()
     this->display->print("INICIO CONSULTA", 0, 0);
     this->display->print("GPS", 0, 1);
 
-    ErrorOrString errorOrString = ErrorOrString("$GPRMC,001220.00,A,3001.89425,S,05109.81024,W,0.374,,240719,,,A75"); // this->gps->getData();
+    ErrorOrString errorOrString = ErrorOrString("$GPRMC,001220.00,A,3001.89425,S,05109.81024,W,0.374,,240719,,,N*75"); // this->gps->getData();
 
     if (errorOrString.isError())
     {
@@ -25,9 +25,11 @@ ErrorOrString GetGpsLocationUseCase::execute()
 
         return ErrorOrString(errorOrString.getError());
     }
+
     string result = errorOrString.getString();
 
     result = result.substr(7);
+    result = result.replace(result.length() - 3, 1, "");
 
     loggerInfo("GetGpsUseCase.execute", "Process finished", result);
 

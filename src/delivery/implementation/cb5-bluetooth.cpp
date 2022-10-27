@@ -7,6 +7,7 @@
 #include "utils/utils.h"
 #include "BluetoothSerial.h"
 #include "types/error-or-boolean.h"
+#include "infra/validation/gprmc-protocol-validation.h"
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -42,12 +43,12 @@ void CB5::setup()
     Serial.begin(CONFIG_SERIAL_BOUD_RATE); // TODO: usar classe System
 
     IDisplay display;
+    Timer timer;
 
     display.clear();
-    display.print("TESTANDO GPS", 0, 0);
-    display.print("AGUARDE...", 0, 1);
+    display.print("INICIALIZANDO CB", 0, 0);
+    display.print("   AGUARDE...   ", 0, 1);
 
-    Serial.begin(CONFIG_SERIAL_BOUD_RATE); // TODO: usar classe System
     loggerInfo("CB5.setup", "Process started");
 
     this->cb = Cb(&this->app);
@@ -55,39 +56,80 @@ void CB5::setup()
     this->requestMiddleware = RequestMiddleware(&this->cb, &this->gps, &display);
 
     int retries = 0;
-    for (retries; retries <= CONFIG_GPS_MAX_SETUP_RETRIES; retries++)
+    for (retries; retries < CONFIG_GPS_MAX_SETUP_RETRIES; retries++)
     {
         display.clear();
-        display.print("TESTANDO GPS", 0, 0);
-        display.print("AGUARDE...", 0, 1);
+        display.print(" INICIALIZANDO  ", 0, 0);
+        display.print("GPS. -> AGUARDE.", 0, 1);
 
         ErrorOrBool errorOrBool = gps.setup();
+
         if (errorOrBool.isError())
         {
             display.clear();
             display.print(errorOrBool.getError().description, 0, 0);
             display.print(errorOrBool.getError().errorCode, 0, 1);
-            Timer timer;
-            timer.setTimer(3000);
-            while (!timer.timedOut())
-            {
-            }
+
+            timer.setTimer(1500);
+            timer.wait();
+
             display.clear();
             display.print("RETENTANDO EM ", 0, 0);
             display.print(to_string(CONFIG_GPS_SETUP_RETRY_INTERVAL / 1000) + " SEGUNDOS", 0, 1);
+
             timer.setTimer(CONFIG_GPS_SETUP_RETRY_INTERVAL);
-            while (!timer.timedOut())
-            {
-            }
-            retries++;
+            timer.wait();
         }
         else
         {
 
             display.clear();
-            display.print("GPS TESTADO COM", 0, 0);
-            display.print("SUCESSO", 0, 1);
+            display.print(" INICIALIZANDO  ", 0, 0);
+            display.print("GPS. -> OK!", 0, 1);
+
+            timer.setTimer(1500);
+            timer.wait();
             break;
+        }
+    }
+
+    retries = 0;
+    for (retries; retries <= CONFIG_GPS_MAX_SETUP_RETRIES; retries++)
+    {
+        display.clear();
+        display.print("VERIFICANDO DADOS", 0, 0);
+        display.print("GPS.  AGUARDE...", 0, 1);
+
+        ErrorOrString errorOrString = this->gps.getData();
+        if (errorOrString.isError())
+        {
+            display.clear();
+            display.print(errorOrString.getError().description, 0, 0);
+            display.print(errorOrString.getError().errorCode, 0, 1);
+        }
+        else
+        {
+            if (gps.gprmcProtocolValidation.isDataReliable(errorOrString.getString()))
+            {
+                display.clear();
+                display.print("VERIFICANDO DADOS", 0, 0);
+                display.print("GPS. -> OK!", 0, 1);
+                break;
+            }
+
+            display.clear();
+            display.print("VERIFICANDO DADOS", 0, 0);
+            display.print("GPS. -> INCERTOS!", 0, 1);
+
+            timer.setTimer(1500);
+            timer.wait();
+
+            display.clear();
+            display.print("RETENTANDO EM ", 0, 0);
+            display.print(to_string(CONFIG_GPS_SETUP_RETRY_INTERVAL / 1000) + " SEGUNDOS", 0, 1);
+
+            timer.setTimer(CONFIG_GPS_SETUP_RETRY_INTERVAL);
+            timer.wait();
         }
     }
 
