@@ -5,15 +5,14 @@
 #include <string.h>
 using namespace std;
 
-PoisonApplicator::PoisonApplicator(unsigned char motorPortA, unsigned char motorPortB, unsigned char sensorPort)
+PoisonApplicator::PoisonApplicator(ISystem *sys, unsigned char motorPort, unsigned char _sensorPort)
 {
-    this->motorPortA = motorPortA;
-    this->motorPortB = motorPortB;
-    this->sensorPort = sensorPort;
+    this->_sys = sys;
+    this->_motorPort = motorPort;
+    this->_sensorPort = _sensorPort;
 
-    this->sys.setupPort(this->motorPortA, OUTPUT);
-    this->sys.setupPort(this->motorPortB, OUTPUT);
-    this->sys.setupPort(this->sensorPort, INPUT);
+    this->_sys->setupPort(this->_motorPort, OUTPUT);
+    this->_sys->setupPort(this->_sensorPort, INPUT);
 }
 
 PoisonApplicator::PoisonApplicator()
@@ -22,43 +21,28 @@ PoisonApplicator::PoisonApplicator()
 
 void PoisonApplicator::calibrate()
 {
-    loggerInfo("PoisonApplicator.calibrate", "Process started", "motorPortA: " + to_string(this->motorPortA) + " motorPortB: " + to_string(this->motorPortB));
+    loggerInfo("PoisonApplicator.calibrate", "Process started", "motorPort: " + to_string(this->_motorPort));
     while (this->readSensor())
     {
-        this->spin(CONFIG_SPIN_DIRECTION_CLOCKWISE);
+        this->spin();
     }
     this->stop();
     loggerInfo("PoisonApplicator.calibrate", "Process started");
 }
 
-void PoisonApplicator::spin(int direction)
+void PoisonApplicator::spin()
 {
 
-    loggerInfo("PoisonApplicator.spin", "Process started", "direction: " + to_string(direction) + " motorPortA: " + to_string(this->motorPortA) + " motorPortB: " + to_string(this->motorPortB));
+    loggerInfo("PoisonApplicator.spin", "Process started, _motorPort: " + to_string(this->_motorPort));
 
-    if (direction != 0 || direction != 1)
-    {
-        // TODO: throw error
-    }
-
-    if (direction)
-    {
-        this->sys.setPort(this->motorPortA, HIGH);
-        this->sys.setPort(this->motorPortB, LOW);
-        loggerInfo("PoisonApplicator.readSensor", "Process finished", " motorPortA: HIGH - motorPortB = LOW");
-    }
-    else
-    {
-        this->sys.setPort(this->motorPortA, LOW);
-        this->sys.setPort(this->motorPortB, HIGH);
-        loggerInfo("PoisonApplicator.readSensor", "Process finished", " motorPortA: LOW - motorPortB = HIGH");
-    }
+    this->_sys->setPort(this->_motorPort, HIGH);
+    loggerInfo("PoisonApplicator.readSensor", "Process finished", " _motorPort: HIGH");
 };
 
 bool PoisonApplicator::readSensor()
 {
     loggerInfo("PoisonApplicator.readSensor", "Process started");
-    bool result = this->sys.readDigitalPort(this->sensorPort) ? true : false;
+    bool result = this->_sys->readDigitalPort(this->_sensorPort) ? true : false;
     loggerInfo("PoisonApplicator.readSensor", "Process finished", " result: " + to_string(result));
     return result;
 };
@@ -66,12 +50,10 @@ bool PoisonApplicator::readSensor()
 void PoisonApplicator::stop()
 {
 
-    loggerInfo("PoisonApplicator.stop", "Process started", "motorPortA: " + to_string(this->motorPortA) + " motorPortB: " + to_string(this->motorPortB));
-    this->sys.setPort(this->motorPortA, 0);
-    this->sys.setPort(this->motorPortB, 0);
+    loggerInfo("PoisonApplicator.stop", "Process started", "_motorPort: " + to_string(this->_motorPort));
+    this->_sys->setPort(this->_motorPort, 0);
     loggerInfo("PoisonApplicator.stop", "Process finished");
 }
 
-unsigned char PoisonApplicator::getMotorPortA() { return this->motorPortA; }
-unsigned char PoisonApplicator::getMotorPortB() { return this->motorPortB; }
-unsigned char PoisonApplicator::getSensorPort() { return this->sensorPort; }
+unsigned char PoisonApplicator::getMotorPort() { return this->_motorPort; }
+unsigned char PoisonApplicator::getSensorPort() { return this->_sensorPort; }

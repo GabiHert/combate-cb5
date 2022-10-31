@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #include <string.h>
 #include "utils/utils.h"
+#include "config/config.h"
+
 using namespace std;
 void ISystem::setPort(unsigned char pin, unsigned char state)
 {
@@ -15,7 +17,7 @@ void ISystem::setupPort(unsigned char pin, unsigned char mode)
 
 int ISystem::readDigitalPort(unsigned char pin)
 {
-    return 1; // TODO:digitalRead(pin);
+    return digitalRead(pin);
 }
 
 void ISystem::serialPrint(string message)
@@ -36,4 +38,9 @@ string ISystem::serialRead()
 int ISystem::serialAvailable()
 {
     return Serial.available();
+}
+
+ISystem::ISystem()
+{
+    Serial.begin(CONFIG_SERIAL_BOUD_RATE);
 }

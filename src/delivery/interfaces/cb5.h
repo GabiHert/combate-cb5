@@ -11,11 +11,12 @@
 class CB5
 {
 private:
-    IDisplay *display;
-    App app;
-    Cb cb;
-    IGps gps;
-    RequestMiddleware requestMiddleware;
+    IDisplay *_display;
+    App _app;
+    Cb _cb;
+    IGps _gps;
+    RequestMiddleware _requestMiddleware;
+    ISystem *_sys;
 
 public:
     CB5(){};

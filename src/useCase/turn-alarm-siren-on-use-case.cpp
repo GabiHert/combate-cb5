@@ -1,6 +1,5 @@
 #include "utils/utils.h"
 #include "useCase/turn-alarm-siren-on-use-case.h"
-#
 
 TurnAlarmSirenOnUseCase::TurnAlarmSirenOnUseCase(Cb *cb, IDisplay *display)
 {

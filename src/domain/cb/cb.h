@@ -7,11 +7,14 @@
 #include "domain/poisonAplicator/poison-applicator.h"
 #include "config/config.h"
 #include "infra/server/app.h"
+#include "interfaces/system-interface.h"
 #include "types/error-or-boolean.h"
+#include "types/error-or-int.h"
 
 class Cb
 {
 private:
+    ISystem *_sys;
     App *_app;
     string _id;
     string _status;
@@ -19,9 +22,10 @@ private:
     PoisonApplicator _poisonApplicator[CONFIG_POISON_APPLICATORS];
     char _wheelBoltsCount[2];
     string _location;
+    ErrorOrInt _connectedApplicators;
 
 public:
-    Cb(App *app);
+    Cb(App *app, ISystem *sys);
     Cb();
 
     ErrorOrBool dose(char amount);
@@ -30,6 +34,7 @@ public:
 
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
+
     PoisonApplicator *getPoisonApplicator();
 
     string getLocation() { return this->_location; };
@@ -37,7 +42,11 @@ public:
 
     char getWhellBoltsCountDecimal();
     char getWhellBoltsCountUnit();
+    ErrorOrInt getConnectedApplicators();
+
     void addWhellBoltsCount();
     void clearWhellBoltsCount();
+
+    ErrorOrInt updateConnectedApplicators();
 };
 #endif // CB_H

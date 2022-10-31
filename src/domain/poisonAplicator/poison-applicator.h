@@ -6,19 +6,18 @@
 class PoisonApplicator
 {
 private:
-    unsigned char motorPortA, motorPortB, sensorPort;
-    ISystem sys;
+    unsigned char _motorPort, _sensorPort;
+    ISystem *_sys;
 
 public:
     PoisonApplicator();
-    PoisonApplicator(unsigned char motorPortA, unsigned char motorPortB, unsigned char sensorPort);
+    PoisonApplicator(ISystem *sys, unsigned char motorPortA, unsigned char sensorPort);
 
-    unsigned char getMotorPortA();
-    unsigned char getMotorPortB();
+    unsigned char getMotorPort();
     unsigned char getSensorPort();
 
     void calibrate();
-    void spin(int direction);
+    void spin();
     void stop();
     bool readSensor();
 };

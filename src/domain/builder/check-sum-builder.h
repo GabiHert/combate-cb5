@@ -8,7 +8,6 @@ class CheckSumBuilder
 {
 
 public:
-    ISystem sys;
     CheckSumBuilder(){};
     int build(string request);
 };

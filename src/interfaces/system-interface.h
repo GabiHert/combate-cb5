@@ -7,7 +7,7 @@ class ISystem
 {
 private:
 public:
-    ISystem(){};
+    ISystem();
     void setupPort(unsigned char pin, unsigned char mode);
     void setPort(unsigned char pin, unsigned char state);
     int readDigitalPort(unsigned char pin);

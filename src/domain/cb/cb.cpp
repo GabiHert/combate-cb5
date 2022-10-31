@@ -19,11 +19,11 @@ ErrorOrBool Cb::dose(char amount)
         bool executedOnce = false;
         if (!executedOnce)
         {
-            for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+            for (int i = 0; i < this->_connectedApplicators.getInt(); i++)
             {
                 if (this->_poisonApplicator[i].readSensor())
                 {
-                    this->_poisonApplicator[i].spin(1);
+                    this->_poisonApplicator[i].spin();
                 }
             }
         }
@@ -40,9 +40,9 @@ ErrorOrBool Cb::dose(char amount)
                 return ErrorOrBool(EXCEPTIONS().DOSE_PROCESS_TIME_OUT);
             }
 
-            bool tasksDone[CONFIG_POISON_APPLICATORS];
+            bool tasksDone[this->_connectedApplicators.getInt()];
             int count = 0;
-            for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+            for (int i = 0; i < this->_connectedApplicators.getInt(); i++)
             {
                 if (!tasksDone[i])
                     tasksDone[i] = this->_poisonApplicator[i].readSensor();
@@ -56,7 +56,7 @@ ErrorOrBool Cb::dose(char amount)
                 }
             }
 
-            if (count == CONFIG_POISON_APPLICATORS)
+            if (count == this->_connectedApplicators.getInt())
             {
                 result = true;
             }
@@ -80,6 +80,12 @@ string Cb::getId()
 {
     return this->_id;
 };
+
+string Cb::getStatus() { return this->_status; };
+ErrorOrInt Cb::getConnectedApplicators()
+{
+    return this->_connectedApplicators;
+}
 
 PoisonApplicator *Cb::getPoisonApplicator()
 {
@@ -117,15 +123,19 @@ RequestModel Cb::getRequestModel()
     return this->requestModel;
 };
 
-Cb::Cb(App *app)
+Cb::Cb(App *app, ISystem *sys)
 {
-    this->_location = "NO_DATA"; // TODO: qual seria o valor defoult para a string do gps
+    this->_location = "NO_DATA";
+    this->_sys = sys;
     this->_app = app;
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->_id = app->getDeviceName();
     this->_wheelBoltsCount[0] = 0;
     this->_wheelBoltsCount[1] = 0;
-    this->_poisonApplicator[0] = PoisonApplicator(CONFIG_PORT_GPIO_MOTOR_A_1, CONFIG_PORT_GPIO_MOTOR_B_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
+    this->updateConnectedApplicators();
+    this->_poisonApplicator[0] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
+    this->_poisonApplicator[1] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
+    this->_poisonApplicator[2] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
 };
 
 Cb::Cb()
@@ -134,7 +144,31 @@ Cb::Cb()
     this->_location = "NO_DATA";
     this->_wheelBoltsCount[0] = 0;
     this->_wheelBoltsCount[1] = 0;
-    this->_poisonApplicator[0] = PoisonApplicator(CONFIG_PORT_GPIO_MOTOR_A_1, CONFIG_PORT_GPIO_MOTOR_B_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
+    this->updateConnectedApplicators();
+    this->_poisonApplicator[0] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
+    this->_poisonApplicator[0] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
+    this->_poisonApplicator[0] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
 };
 
-string Cb::getStatus() { return this->_status; };
+ErrorOrInt Cb::updateConnectedApplicators()
+{
+    loggerInfo("Cb.updateConnectedApplicators", "Process started");
+    int applicators = 0;
+    for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+    {
+        if (this->_sys->readDigitalPort(CONFIG().PORT_GPIO_SENSOR_CONNECTED_APPLICATORS[i]) > 0)
+        {
+            applicators++;
+        }
+    }
+    if (!applicators)
+    {
+        loggerError("Cb.updateConnectedApplicators", "Process error", "applicators: " + to_string(applicators));
+
+        return ErrorOrInt(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
+    }
+
+    loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(applicators));
+    this->_connectedApplicators = ErrorOrInt(applicators);
+    return this->_connectedApplicators;
+}
