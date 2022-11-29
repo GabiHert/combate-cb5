@@ -8,6 +8,7 @@
 #include "config/config.h"
 #include "infra/server/app.h"
 #include "interfaces/system-interface.h"
+#include "types/error-or-boolean-vector.h"
 #include "types/error-or-boolean.h"
 #include "types/error-or-int.h"
 
@@ -22,7 +23,7 @@ private:
     PoisonApplicator _poisonApplicator[CONFIG_POISON_APPLICATORS];
     char _wheelBoltsCount[2];
     string _location;
-    ErrorOrInt _connectedApplicators;
+    ErrorOrBoolVector _connectedApplicators;
 
 public:
     Cb(App *app, ISystem *sys);
@@ -42,7 +43,7 @@ public:
 
     char getWhellBoltsCountDecimal();
     char getWhellBoltsCountUnit();
-    ErrorOrInt getConnectedApplicators();
+    ErrorOrBoolVector getConnectedApplicators();
 
     void addWhellBoltsCount();
     void clearWhellBoltsCount();
