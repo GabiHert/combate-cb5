@@ -17,6 +17,10 @@ private:
     IGps _gps;
     RequestMiddleware _requestMiddleware;
     ISystem *_sys;
+    Timer _timer;
+
+    void _scanConnectedApplicators();
+    void _initGps();
 
 public:
     CB5(){};

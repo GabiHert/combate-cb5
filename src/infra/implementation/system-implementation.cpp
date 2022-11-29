@@ -17,7 +17,11 @@ void ISystem::setupPort(unsigned char pin, unsigned char mode)
 
 int ISystem::readDigitalPort(unsigned char pin)
 {
-    return digitalRead(pin);
+    loggerInfo("ISystem.readDigitalPort", "Process started", "pin: " + to_string(pin));
+    int result = digitalRead(pin);
+    loggerInfo("ISystem.readDigitalPort", "Process finished", "result: " + to_string(result));
+
+    return result;
 }
 
 void ISystem::serialPrint(string message)
