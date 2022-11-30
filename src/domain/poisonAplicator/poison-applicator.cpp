@@ -13,10 +13,12 @@ PoisonApplicator::PoisonApplicator(ISystem *sys, unsigned char motorPort, unsign
 
     this->_sys->setupPort(this->_motorPort, OUTPUT);
     this->_sys->setupPort(this->_sensorPort, INPUT);
+    this->stop();
 }
 
 PoisonApplicator::PoisonApplicator()
 {
+    this->stop();
 }
 
 void PoisonApplicator::calibrate()
@@ -35,7 +37,7 @@ void PoisonApplicator::spin()
 
     loggerInfo("PoisonApplicator.spin", "Process started, _motorPort: " + to_string(this->_motorPort));
 
-    this->_sys->setPort(this->_motorPort, HIGH);
+    this->_sys->setPort(this->_motorPort, 1);
     loggerInfo("PoisonApplicator.readSensor", "Process finished", " _motorPort: HIGH");
 };
 

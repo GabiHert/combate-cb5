@@ -162,6 +162,7 @@ ErrorOrInt Cb::updateConnectedApplicators()
 {
     loggerInfo("Cb.updateConnectedApplicators", "Process started");
     int applicators = 0;
+    vector<bool> connectedApplicators = vector<bool>(CONFIG_POISON_APPLICATORS);
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {
         if (this->_sys->readDigitalPort(CONFIG().PORT_GPIO_SENSOR_CONNECTED_APPLICATORS[i]) > 0)
@@ -169,13 +170,13 @@ ErrorOrInt Cb::updateConnectedApplicators()
             loggerInfo("Cb.updateConnectedApplicators", "Applicator found");
 
             applicators++;
-            this->_connectedApplicators.getBoolVector().push_back(true);
+            connectedApplicators.at(i) = true;
         }
         else
         {
             loggerInfo("Cb.updateConnectedApplicators", "Empty slot");
 
-            this->_connectedApplicators.getBoolVector().push_back(false);
+            connectedApplicators.at(i) = false;
         }
     }
     if (!applicators)
@@ -184,6 +185,7 @@ ErrorOrInt Cb::updateConnectedApplicators()
         this->_connectedApplicators = ErrorOrBoolVector(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
         return ErrorOrInt(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
     }
+    this->_connectedApplicators = ErrorOrBoolVector(connectedApplicators);
 
     loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(applicators));
     return ErrorOrInt(applicators);

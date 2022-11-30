@@ -10,7 +10,8 @@ SoftwareSerial gpsSerial(CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
 
 ErrorOrString IGps::_getData(Timer *timer)
 {
-
+    ErrorOrString errorOrString = ErrorOrString("$GPRMC,001220.00,A,3001.89425,S,05109.81024,W,0.374,,240719,,,N*75");
+    return errorOrString;
     string data = "";
     char startHeaderCount = 0;
     int gpsData;
@@ -100,7 +101,7 @@ ErrorOrString IGps::getData(int timeOut)
 ErrorOrBool IGps::setup()
 {
     gpsSerial.begin(CONFIG_GPS_SERIAL_BOUD_RATE);
-    // return ErrorOrBool(true);
+    return ErrorOrBool(true);
     ErrorOrString errorOrString = this->getData(CONFIG_GPS_SETUP_TIMEOUT);
     if (errorOrString.isError())
     {

@@ -43,11 +43,11 @@ void CB5::execute()
 
 void CB5::_scanConnectedApplicators()
 {
-    this->_cb = Cb(&this->_app, this->_sys);
-
+    loggerInfo("CB5._scanConnectedApplicators", "Process started");
+    ErrorOrInt connectedApplicators;
     do
     {
-        _cb.updateConnectedApplicators();
+        connectedApplicators = _cb.updateConnectedApplicators();
         if (_cb.getConnectedApplicators().isError())
         {
             this->_display->clear();
@@ -60,9 +60,10 @@ void CB5::_scanConnectedApplicators()
 
     this->_display->clear();
     this->_display->print("   DOSADORES    ", 0, 0);
-    this->_display->print("CONECTADOS -> " + to_string(int(_cb.getConnectedApplicators().getBoolVector().size())), 0, 1);
+    this->_display->print("CONECTADOS -> " + to_string(connectedApplicators.getInt()), 0, 1);
     this->_timer.setTimer(1000);
     this->_timer.wait();
+    loggerInfo("CB5._scanConnectedApplicators", "Process finished");
 }
 
 void CB5::_initGps()
@@ -162,6 +163,8 @@ void CB5::setup()
     this->_timer.wait();
 
     loggerInfo("CB5.setup", "Process started");
+
+    this->_cb = Cb(&this->_app, this->_sys);
 
     this->_scanConnectedApplicators();
 
