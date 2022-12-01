@@ -13,6 +13,7 @@ void loggerWarn(string event, string details, string message = " ");
 char asciiCharToNumber(char c);
 String stdStringToArduinoString(string str);
 string arduinoStringToStdString(String str);
+string centerString(string str, int length);
 
 // TIMER
 class Timer

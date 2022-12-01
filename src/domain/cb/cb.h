@@ -4,6 +4,7 @@
 #define CB_H
 
 #include "domain/model/request-model.h"
+#include "interfaces/lcd-interface.h"
 #include "domain/poisonAplicator/poison-applicator.h"
 #include "config/config.h"
 #include "infra/server/app.h"
@@ -21,12 +22,13 @@ private:
     string _status;
     RequestModel requestModel;
     PoisonApplicator _poisonApplicator[CONFIG_POISON_APPLICATORS];
+    IDisplay *_display;
     char _wheelBoltsCount[2];
     string _location;
     ErrorOrBoolVector _connectedApplicators;
 
 public:
-    Cb(App *app, ISystem *sys);
+    Cb(App *app, ISystem *sys, IDisplay *display);
     Cb();
 
     ErrorOrBool dose(char amount);

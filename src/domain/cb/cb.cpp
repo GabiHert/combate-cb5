@@ -10,24 +10,35 @@ ErrorOrBool Cb::dose(char amount)
 {
     loggerInfo("Cb.dose", "Process started");
     // this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
-    int connectedApplicators = int(this->_connectedApplicators.getBoolVector().size());
+    int connectedApplicators;
+    for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+        connectedApplicators += this->_connectedApplicators.getBoolVector()[i];
+
     for (char dose = 0; dose < amount; dose++)
     {
-
         loggerInfo("Cb.dose", "Starting dose: " + to_string(amount));
+
+        this->_display->clear();
+        this->_display->print("  INICIO DOSE", 0, 0);
+        this->_display->print(centerString(to_string(dose), CONFIG_DISPLAY_COLUMNS_LENGTH), 0, 1);
 
         bool executedOnce = false;
         if (!executedOnce)
         {
-            for (int i = 0; i < connectedApplicators; i++)
-            {
-                if (this->_connectedApplicators.getBoolVector()[i])
-                {
+            loggerInfo("Cb.dose", "Starting all applicators");
 
-                    if (this->_poisonApplicator[i].readSensor())
-                    {
-                        this->_poisonApplicator[i].spin();
-                    }
+            for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+            {
+                bool isApplicatorConnected = this->_connectedApplicators.getBoolVector()[i];
+                if (!isApplicatorConnected)
+                {
+                    loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
+                    continue;
+                }
+
+                if (this->_poisonApplicator[i].readSensor())
+                {
+                    this->_poisonApplicator[i].spin();
                 }
             }
         }
@@ -47,27 +58,36 @@ ErrorOrBool Cb::dose(char amount)
             vector<bool> tasksDone = vector<bool>(CONFIG_POISON_APPLICATORS);
 
             int count = 0;
-            for (int i = 0; i < connectedApplicators; i++)
+            for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
             {
-                if (this->_connectedApplicators.getBoolVector()[i])
+                bool isApplicatorConnected = this->_connectedApplicators.getBoolVector()[i];
+                if (!isApplicatorConnected)
                 {
-                    if (!tasksDone[i])
-                        tasksDone[i] = this->_poisonApplicator[i].readSensor();
+                    loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
+                    continue;
+                }
 
-                    if (tasksDone[i])
-                    {
-                        loggerInfo("Cb.dose", "dose from applicator" + to_string(i) + "done");
+                if (!tasksDone[i])
+                {
+                    loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " in process");
+                    tasksDone[i] = this->_poisonApplicator[i].readSensor();
+                }
 
-                        this->_poisonApplicator[i].stop();
-                        count++;
-                    }
+                if (tasksDone[i])
+                {
+                    loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " finished");
+                    this->_poisonApplicator[i].stop();
+
+                    this->_display->clear();
+                    this->_display->print(" DOSE REALIZADA", 0, 0);
+                    this->_display->print("  DOSADOR -> " + to_string(i), 0, 1);
+
+                    count++;
                 }
             }
 
             if (count == connectedApplicators)
-            {
                 result = true;
-            }
 
             if (this->_app->avaliable())
             {
@@ -131,8 +151,9 @@ RequestModel Cb::getRequestModel()
     return this->requestModel;
 };
 
-Cb::Cb(App *app, ISystem *sys)
+Cb::Cb(App *app, ISystem *sys, IDisplay *display)
 {
+
     this->_location = "NO_DATA";
     this->_sys = sys;
     this->_app = app;
@@ -144,6 +165,7 @@ Cb::Cb(App *app, ISystem *sys)
     this->_poisonApplicator[1] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
     this->_poisonApplicator[2] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
     this->updateConnectedApplicators();
+    this->_display = display;
 };
 
 Cb::Cb()
