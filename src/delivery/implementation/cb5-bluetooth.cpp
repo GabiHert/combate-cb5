@@ -16,7 +16,7 @@
 void CB5::execute()
 {
     this->_display->print("AGUARDANDO IHM.", 0, 0);
-    this->_display->print(this->_cb.getId(), 0, 1);
+    this->_display->printCentered(this->_cb.getId(), 0, 1);
 
     if (_app.avaliable())
     {
@@ -185,9 +185,11 @@ void CB5::setup()
     _app.start();
 
     this->_display->clear();
-    this->_display->print("   BLUETOOTH:   ", 0, 0);
-    this->_display->print(_cb.getId(), 0, 1);
+    this->_display->printCentered("BLUETOOTH:", 0, 0);
+    this->_display->printCentered(_cb.getId(), 0, 1);
     this->_timer.setTimer(1500);
     this->_timer.wait();
+    this->_display->clear();
+
     loggerInfo("CB5.setup", "Process finished");
 };

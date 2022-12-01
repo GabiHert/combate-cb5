@@ -1,5 +1,6 @@
 #include "interfaces/lcd-interface.h"
 #include "utils/utils.h"
+#include "config/config.h"
 #include <Arduino.h>
 #include <string.h>
 using namespace std;
@@ -9,6 +10,16 @@ void IDisplay::print(string message, uint8_t column, uint8_t line)
 {
     setCursor(column, line);
     print(message);
+}
+
+void IDisplay::printCentered(string message, uint8_t column, uint8_t line)
+{
+    print(centerString(message, CONFIG_DISPLAY_COLUMNS_LENGTH), column, line);
+}
+
+void IDisplay::printCentered(string message)
+{
+    print(centerString(message, CONFIG_DISPLAY_COLUMNS_LENGTH));
 }
 
 void IDisplay::print(string message)

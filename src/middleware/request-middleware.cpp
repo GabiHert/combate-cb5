@@ -15,6 +15,7 @@ RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, IDisplay *display)
 
 ResponseModel RequestMiddleware::execute(string request)
 {
+  Timer timer;
 
   loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->getId());
 
@@ -25,6 +26,8 @@ ResponseModel RequestMiddleware::execute(string request)
     this->display->clear();
     this->display->print(erroOrBool.getError().description, 0, 0);
     this->display->print(erroOrBool.getError().errorCode, 0, 0);
+    timer.setTimer(1000);
+    timer.wait();
 
     ResponseModel responseModel(erroOrBool.getError().errorCode);
 
@@ -39,8 +42,10 @@ ResponseModel RequestMiddleware::execute(string request)
     loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.getError().description);
 
     this->display->clear();
-    this->display->print(erroOrBool.getError().description, 0, 0);
-    this->display->print(erroOrBool.getError().errorCode, 0, 0);
+    this->display->print(errorOrResponseDto.getError().description, 0, 0);
+    this->display->print(errorOrResponseDto.getError().errorCode, 0, 0);
+    timer.setTimer(1000);
+    timer.wait();
 
     ResponseModel responseModel(errorOrResponseDto.getError().errorCode);
 

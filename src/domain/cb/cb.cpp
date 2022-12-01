@@ -20,7 +20,7 @@ ErrorOrBool Cb::dose(char amount)
 
         this->_display->clear();
         this->_display->print("  INICIO DOSE", 0, 0);
-        this->_display->print(centerString(to_string(dose), CONFIG_DISPLAY_COLUMNS_LENGTH), 0, 1);
+        this->_display->printCentered(to_string(dose + 1), 0, 1);
 
         bool executedOnce = false;
         if (!executedOnce)
