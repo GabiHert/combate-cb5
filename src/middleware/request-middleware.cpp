@@ -24,8 +24,8 @@ ResponseModel RequestMiddleware::execute(string request)
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + erroOrBool.getError().description);
     this->display->clear();
-    this->display->print(erroOrBool.getError().description, 0, 0);
     this->display->print(erroOrBool.getError().errorCode, 0, 0);
+    this->display->print(erroOrBool.getError().description, 0, 1);
     timer.setTimer(1000);
     timer.wait();
 
@@ -42,8 +42,8 @@ ResponseModel RequestMiddleware::execute(string request)
     loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.getError().description);
 
     this->display->clear();
-    this->display->print(errorOrResponseDto.getError().description, 0, 0);
     this->display->print(errorOrResponseDto.getError().errorCode, 0, 0);
+    this->display->print(errorOrResponseDto.getError().description, 0, 1);
     timer.setTimer(1000);
     timer.wait();
 

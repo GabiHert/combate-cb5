@@ -37,3 +37,9 @@ void loggerWarn(string event, string details, string warn)
 
     Serial.println("");
 };
+
+void logger(string message)
+{
+    String _message = stdStringToArduinoString(message);
+    Serial.println(_message);
+}

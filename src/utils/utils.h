@@ -8,6 +8,7 @@ using namespace std;
 void loggerInfo(string event, string details, string message = " ");
 void loggerError(string event, string details, string message = " ");
 void loggerWarn(string event, string details, string message = " ");
+void logger(string message);
 
 // PARSER
 char asciiCharToNumber(char c);

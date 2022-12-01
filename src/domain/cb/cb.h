@@ -25,7 +25,8 @@ private:
     IDisplay *_display;
     char _wheelBoltsCount[2];
     string _location;
-    ErrorOrBoolVector _connectedApplicators;
+    ErrorOrBoolVector _applicators;
+    int _connectedApplicators;
 
 public:
     Cb(App *app, ISystem *sys, IDisplay *display);
@@ -34,22 +35,17 @@ public:
     ErrorOrBool dose(char amount);
     string getId();
     string getStatus();
-
+    int getConnectedApplicators();
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
-
     PoisonApplicator *getPoisonApplicator();
-
     string getLocation() { return this->_location; };
     void setLocation(string location) { this->_location = location; };
-
     char getWhellBoltsCountDecimal();
     char getWhellBoltsCountUnit();
-    ErrorOrBoolVector getConnectedApplicators();
-
+    ErrorOrBoolVector getApplicators();
     void addWhellBoltsCount();
     void clearWhellBoltsCount();
-
     ErrorOrInt updateConnectedApplicators();
 };
 #endif // CB_H

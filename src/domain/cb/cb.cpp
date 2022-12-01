@@ -10,9 +10,12 @@ ErrorOrBool Cb::dose(char amount)
 {
     loggerInfo("Cb.dose", "Process started");
     // this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
-    int connectedApplicators;
+    int connectedApplicators = 0;
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
-        connectedApplicators += this->_connectedApplicators.getBoolVector()[i];
+        if (this->_applicators.getBoolVector()[i])
+            connectedApplicators++;
+
+    logger("DEBUG-> " + to_string(connectedApplicators));
 
     for (char dose = 0; dose < amount; dose++)
     {
@@ -20,26 +23,22 @@ ErrorOrBool Cb::dose(char amount)
 
         this->_display->clear();
         this->_display->print("  INICIO DOSE", 0, 0);
-        this->_display->printCentered(to_string(dose + 1), 0, 1);
+        this->_display->printCentered(to_string(dose + 1) + "/" + to_string(amount), 0, 1);
 
-        bool executedOnce = false;
-        if (!executedOnce)
+        loggerInfo("Cb.dose", "Starting all applicators");
+
+        for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         {
-            loggerInfo("Cb.dose", "Starting all applicators");
-
-            for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+            bool isApplicatorConnected = this->_applicators.getBoolVector()[i];
+            if (!isApplicatorConnected)
             {
-                bool isApplicatorConnected = this->_connectedApplicators.getBoolVector()[i];
-                if (!isApplicatorConnected)
-                {
-                    loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
-                    continue;
-                }
+                loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
+                continue;
+            }
 
-                if (this->_poisonApplicator[i].readSensor())
-                {
-                    this->_poisonApplicator[i].spin();
-                }
+            if (this->_poisonApplicator[i].readSensor())
+            {
+                this->_poisonApplicator[i].spin();
             }
         }
 
@@ -60,7 +59,7 @@ ErrorOrBool Cb::dose(char amount)
             int count = 0;
             for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
             {
-                bool isApplicatorConnected = this->_connectedApplicators.getBoolVector()[i];
+                bool isApplicatorConnected = this->_applicators.getBoolVector()[i];
                 if (!isApplicatorConnected)
                 {
                     loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
@@ -86,6 +85,7 @@ ErrorOrBool Cb::dose(char amount)
                 }
             }
 
+            // logger("DEBUG-> " + to_string(count) + " " + to_string(connectedApplicators));
             if (count == connectedApplicators)
                 result = true;
 
@@ -112,7 +112,7 @@ string Cb::getId()
 string Cb::getStatus() { return this->_status; };
 ErrorOrBoolVector Cb::getConnectedApplicators()
 {
-    return this->_connectedApplicators;
+    return this->_applicators;
 }
 
 PoisonApplicator *Cb::getPoisonApplicator()
@@ -204,10 +204,10 @@ ErrorOrInt Cb::updateConnectedApplicators()
     if (!applicators)
     {
         loggerError("Cb.updateConnectedApplicators", "Process error", "applicators: " + to_string(applicators));
-        this->_connectedApplicators = ErrorOrBoolVector(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
+        this->_applicators = ErrorOrBoolVector(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
         return ErrorOrInt(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
     }
-    this->_connectedApplicators = ErrorOrBoolVector(connectedApplicators);
+    this->_applicators = ErrorOrBoolVector(connectedApplicators);
 
     loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(applicators));
     return ErrorOrInt(applicators);

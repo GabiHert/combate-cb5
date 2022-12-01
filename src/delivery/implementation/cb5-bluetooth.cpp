@@ -48,15 +48,15 @@ void CB5::_scanConnectedApplicators()
     do
     {
         connectedApplicators = _cb.updateConnectedApplicators();
-        if (_cb.getConnectedApplicators().isError())
+        if (_cb.getApplicators().isError())
         {
             this->_display->clear();
-            this->_display->print(_cb.getConnectedApplicators().getError().description, 0, 0);
-            this->_display->print(_cb.getConnectedApplicators().getError().errorCode, 0, 1);
+            this->_display->print(_cb.getApplicators().getError().description, 0, 0);
+            this->_display->print(_cb.getApplicators().getError().errorCode, 0, 1);
             this->_timer.setTimer(1000);
             this->_timer.wait();
         }
-    } while (_cb.getConnectedApplicators().isError());
+    } while (_cb.getApplicators().isError());
 
     this->_display->clear();
     this->_display->print("   DOSADORES    ", 0, 0);
@@ -64,15 +64,16 @@ void CB5::_scanConnectedApplicators()
     this->_timer.setTimer(1000);
     this->_timer.wait();
 
-    string applicator1Connected = _cb.getConnectedApplicators().getBoolVector()[0] ? "S" : "N";
-    string applicator2Connected = _cb.getConnectedApplicators().getBoolVector()[1] ? "S" : "N";
-    string applicator3Connected = _cb.getConnectedApplicators().getBoolVector()[2] ? "S" : "N";
+    string applicator1Connected = _cb.getApplicators().getBoolVector()[0] ? "S" : "N";
+    string applicator2Connected = _cb.getApplicators().getBoolVector()[1] ? "S" : "N";
+    string applicator3Connected = _cb.getApplicators().getBoolVector()[2] ? "S" : "N";
 
     this->_display->clear();
     this->_display->print("   DOSADORES    ", 0, 0);
-    this->_display->print("1:" + applicator1Connected + " 2:" + applicator2Connected + " 3:" + applicator3Connected, 0, 1);
+    this->_display->printCentered("1:" + applicator1Connected + " 2:" + applicator2Connected + " 3:" + applicator3Connected, 0, 1);
     this->_timer.setTimer(1000);
     this->_timer.wait();
+
     loggerInfo("CB5._scanConnectedApplicators", "Process finished");
 }
 
