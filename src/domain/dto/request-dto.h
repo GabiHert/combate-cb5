@@ -9,7 +9,7 @@ class RequestDto
 private:
     char _alarmSiren;
     char _dose;
-    char _whellBoltsCounter;
+    char _wheelBoltsCounter;
     bool validate(string request);
 
 public:
@@ -18,7 +18,7 @@ public:
 
     char getAlarmSiren();
     char getDose();
-    char getWhellBoltsCounter();
+    char getWheelBoltsCounter();
 };
 
 #endif // REQUEST_DTO_H

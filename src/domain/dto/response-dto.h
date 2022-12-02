@@ -9,7 +9,7 @@ class ResponseDto
 {
 private:
     CheckSumBuilder _checkSumBuilder;
-    char _whellBoltsCount[2];
+    char _wheelBoltsCount[2];
     string _initializer;
     string _errorCode;
     string _status;
@@ -21,12 +21,12 @@ public:
     ResponseDto(Cb cb);
     ResponseDto(Cb cb, string errorCode);
 
-    ResponseDto(string errorCode, char whellBoltsCount[2], string gpsLocation);
-    ResponseDto(char whellBoltsCount[2], string status, string gpsLocation);
+    ResponseDto(string errorCode, char wheelBoltsCount[2], string gpsLocation);
+    ResponseDto(char wheelBoltsCount[2], string status, string gpsLocation);
     ResponseDto(){};
     string getInitializer();
     string getErrorCode();
-    char *getWhellBoltsCount();
+    char *getWheelBoltsCount();
     string getGpsData();
     string getStatus();
     void setErrorCode(string errorCode);

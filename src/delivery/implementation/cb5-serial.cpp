@@ -97,7 +97,7 @@ string endPointBuilder(string request)
 void CB5::setup()
 {
     cb.setup();
-    Serial.begin(CONFIG_SERIAL_BOUD_RATE);
+    Serial.begin(CONFIG_SERIAL_BAUD_RATE);
 
     loggerInfo("Setup", "Process started");
 

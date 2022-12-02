@@ -41,11 +41,11 @@ public:
     PoisonApplicator *getPoisonApplicator();
     string getLocation() { return this->_location; };
     void setLocation(string location) { this->_location = location; };
-    char getWhellBoltsCountDecimal();
-    char getWhellBoltsCountUnit();
+    char getWheelBoltsCountDecimal();
+    char getWheelBoltsCountUnit();
     ErrorOrBoolVector getApplicators();
-    void addWhellBoltsCount();
-    void clearWhellBoltsCount();
+    void addWheelBoltsCount();
+    void clearWheelBoltsCount();
     ErrorOrInt updateConnectedApplicators();
 };
 #endif // CB_H

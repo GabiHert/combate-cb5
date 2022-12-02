@@ -110,7 +110,7 @@ string Cb::getId()
 };
 
 string Cb::getStatus() { return this->_status; };
-ErrorOrBoolVector Cb::getConnectedApplicators()
+ErrorOrBoolVector Cb::getApplicators()
 {
     return this->_applicators;
 }
@@ -120,22 +120,22 @@ PoisonApplicator *Cb::getPoisonApplicator()
     return this->_poisonApplicator;
 };
 
-char Cb::getWhellBoltsCountDecimal()
+char Cb::getWheelBoltsCountDecimal()
 {
     return this->_wheelBoltsCount[0];
 };
-char Cb::getWhellBoltsCountUnit()
+char Cb::getWheelBoltsCountUnit()
 {
     return this->_wheelBoltsCount[1];
 };
 
-void Cb::clearWhellBoltsCount()
+void Cb::clearWheelBoltsCount()
 {
     this->_wheelBoltsCount[0] = 0;
     this->_wheelBoltsCount[1] = 0;
 };
 
-void Cb::addWhellBoltsCount()
+void Cb::addWheelBoltsCount()
 {
     // TODO: Implemetar logica
     //  add somente ate 99
@@ -151,9 +151,14 @@ RequestModel Cb::getRequestModel()
     return this->requestModel;
 };
 
+int Cb::getConnectedApplicators()
+{
+    return this->_connectedApplicators;
+}
+
 Cb::Cb(App *app, ISystem *sys, IDisplay *display)
 {
-
+    this->_connectedApplicators = 0;
     this->_location = "NO_DATA";
     this->_sys = sys;
     this->_app = app;
@@ -170,6 +175,7 @@ Cb::Cb(App *app, ISystem *sys, IDisplay *display)
 
 Cb::Cb()
 {
+    this->_connectedApplicators = 0;
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->_location = "NO_DATA";
     this->_wheelBoltsCount[0] = 0;
@@ -183,32 +189,31 @@ Cb::Cb()
 ErrorOrInt Cb::updateConnectedApplicators()
 {
     loggerInfo("Cb.updateConnectedApplicators", "Process started");
-    int applicators = 0;
-    vector<bool> connectedApplicators = vector<bool>(CONFIG_POISON_APPLICATORS);
+    vector<bool> applicatorsConnection = vector<bool>(CONFIG_POISON_APPLICATORS);
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {
         if (this->_sys->readDigitalPort(CONFIG().PORT_GPIO_SENSOR_CONNECTED_APPLICATORS[i]) > 0)
         {
             loggerInfo("Cb.updateConnectedApplicators", "Applicator found");
 
-            applicators++;
-            connectedApplicators.at(i) = true;
+            this->_connectedApplicators++;
+            applicatorsConnection.at(i) = true;
         }
         else
         {
             loggerInfo("Cb.updateConnectedApplicators", "Empty slot");
 
-            connectedApplicators.at(i) = false;
+            applicatorsConnection.at(i) = false;
         }
     }
-    if (!applicators)
+    if (!this->_connectedApplicators)
     {
-        loggerError("Cb.updateConnectedApplicators", "Process error", "applicators: " + to_string(applicators));
+        loggerError("Cb.updateConnectedApplicators", "Process error", "applicators: " + to_string(this->_connectedApplicators));
         this->_applicators = ErrorOrBoolVector(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
         return ErrorOrInt(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
     }
-    this->_applicators = ErrorOrBoolVector(connectedApplicators);
+    this->_applicators = ErrorOrBoolVector(applicatorsConnection);
 
-    loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(applicators));
-    return ErrorOrInt(applicators);
+    loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(this->_connectedApplicators));
+    return ErrorOrInt(this->_connectedApplicators);
 }

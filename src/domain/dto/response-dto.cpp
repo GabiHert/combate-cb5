@@ -10,22 +10,22 @@ ResponseDto::ResponseDto(Cb cb)
     this->_initializer = "&";
     this->_status = cb.getStatus();
     this->setErrorCode("000");
-    this->_whellBoltsCount[0] = cb.getWhellBoltsCountDecimal();
-    this->_whellBoltsCount[1] = cb.getWhellBoltsCountUnit();
+    this->_wheelBoltsCount[0] = cb.getWheelBoltsCountDecimal();
+    this->_wheelBoltsCount[1] = cb.getWheelBoltsCountUnit();
     this->_gpsData = cb.getLocation();
-    loggerInfo("ResponseDto", "whellBoltsCount assigned", to_string(this->_whellBoltsCount[0]) + to_string(this->_whellBoltsCount[1]));
+    loggerInfo("ResponseDto", "wheelBoltsCount assigned", to_string(this->_wheelBoltsCount[0]) + to_string(this->_wheelBoltsCount[1]));
 
     loggerInfo("ResponseDto", "Process finished - constructor");
 };
 
-ResponseDto::ResponseDto(string errorCode, char whellBoltsCount[2], string gpsLocation)
+ResponseDto::ResponseDto(string errorCode, char wheelBoltsCount[2], string gpsLocation)
 {
     loggerInfo("ResponseDto", "Process started - constructor");
     this->_initializer = "&";
     this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
     this->setErrorCode(errorCode);
-    this->_whellBoltsCount[0] = whellBoltsCount[0];
-    this->_whellBoltsCount[1] = whellBoltsCount[1];
+    this->_wheelBoltsCount[0] = wheelBoltsCount[0];
+    this->_wheelBoltsCount[1] = wheelBoltsCount[1];
 
     this->_gpsData = gpsLocation;
     loggerInfo("ResponseDto", "gpsData assigned", this->_gpsData);
@@ -33,14 +33,14 @@ ResponseDto::ResponseDto(string errorCode, char whellBoltsCount[2], string gpsLo
     loggerInfo("ResponseDto", "Process finished - constructor");
 };
 
-ResponseDto::ResponseDto(char whellBoltsCount[2], string status, string gpsLocation)
+ResponseDto::ResponseDto(char wheelBoltsCount[2], string status, string gpsLocation)
 {
     loggerInfo("ResponseDto", "Process started - constructor");
     this->_initializer = "&";
     this->_status = status;
     this->setErrorCode("000");
-    this->_whellBoltsCount[0] = whellBoltsCount[0];
-    this->_whellBoltsCount[1] = whellBoltsCount[1];
+    this->_wheelBoltsCount[0] = wheelBoltsCount[0];
+    this->_wheelBoltsCount[1] = wheelBoltsCount[1];
 
     this->_gpsData = gpsLocation;
     loggerInfo("ResponseDto", "gpsData assigned", this->_gpsData);
@@ -54,8 +54,8 @@ ResponseDto::ResponseDto(Cb cb, string errorCode)
 
     this->_initializer = "&";
     this->setErrorCode(errorCode);
-    this->_whellBoltsCount[0] = cb.getWhellBoltsCountDecimal();
-    this->_whellBoltsCount[1] = cb.getWhellBoltsCountUnit();
+    this->_wheelBoltsCount[0] = cb.getWheelBoltsCountDecimal();
+    this->_wheelBoltsCount[1] = cb.getWheelBoltsCountUnit();
     this->_gpsData = cb.getLocation();
     loggerInfo("ResponseDto", "Process finished - constructor");
 }
@@ -70,9 +70,9 @@ string ResponseDto::getErrorCode()
     return this->_errorCode;
 }
 
-char *ResponseDto::getWhellBoltsCount()
+char *ResponseDto::getWheelBoltsCount()
 {
-    return this->_whellBoltsCount;
+    return this->_wheelBoltsCount;
 }
 
 string ResponseDto::getGpsData()

@@ -3,7 +3,7 @@
 #include "config/config.h"
 #include "domain/cb/cb.h"
 #include "controller/request-controller.h"
-#include "useCase/clear-whell-bolts-counter-use-case.h"
+#include "useCase/clear-wheel-bolts-counter-use-case.h"
 #include "types/error-or-string.h"
 
 RequestController::RequestController(Cb *cb, IGps *gps, IDisplay *display)
@@ -18,7 +18,7 @@ RequestController::RequestController(Cb *cb, IGps *gps, IDisplay *display)
 
     this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(cb, this->display);
 
-    this->clearWhellBoltsCounterUseCase = ClearWhellBoltsCounterUseCase(cb);
+    this->clearWheelBoltsCounterUseCase = ClearWheelBoltsCounterUseCase(cb);
 
     this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb, this->display);
 };
@@ -35,7 +35,7 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
 
     bool turnAlarmSirenOnRequest = requestModel.getAlarmSiren() != CONFIG_PROTOCOL_ALARM_SIREN_OFF;
     bool doseRequest = requestModel.getDose() != CONFIG_PROTOCOL_DO_NOT_DOSE;
-    bool clearWhellBoltsCounterRequest = requestModel.getWhellBoltsCounter() != CONFIG_PROTOCOL_DO_NOT_CLEAR_WHELL_BOLT_COUNTS;
+    bool clearWheelBoltsCounterRequest = requestModel.getWheelBoltsCounter() != CONFIG_PROTOCOL_DO_NOT_CLEAR_WHELL_BOLT_COUNTS;
 
     if (turnAlarmSirenOnRequest)
     {
@@ -59,10 +59,10 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
         }
     };
 
-    if (clearWhellBoltsCounterRequest)
+    if (clearWheelBoltsCounterRequest)
     {
-        loggerInfo("RequestController.execute", "Clear whell bolts counter request detected");
-        ErrorOrBool errorOrBool = this->clearWhellBoltsCounterUseCase.execute();
+        loggerInfo("RequestController.execute", "Clear wheel bolts counter request detected");
+        ErrorOrBool errorOrBool = this->clearWheelBoltsCounterUseCase.execute();
         if (errorOrBool.isError())
         {
             loggerError("requestController.execute", "Process error", "error: " + errorOrBool.getError().description);

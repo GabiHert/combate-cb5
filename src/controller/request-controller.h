@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include "useCase/turn-alarm-siren-on-use-case.h"
 #include "useCase/dose-use-case.h"
-#include "useCase/clear-whell-bolts-counter-use-case.h"
+#include "useCase/clear-wheel-bolts-counter-use-case.h"
 #include "useCase/get-gps-location-use-case.h"
 #include "domain/dto/response-dto.h"
 #include "domain/dto/request-dto.h"
@@ -17,7 +17,7 @@ private:
     IDisplay *display;
     TurnAlarmSirenOnUseCase turnAlarmSirenOnUseCase;
     DoseUseCase doseUseCase;
-    ClearWhellBoltsCounterUseCase clearWhellBoltsCounterUseCase;
+    ClearWheelBoltsCounterUseCase clearWheelBoltsCounterUseCase;
     GetGpsLocationUseCase getGpsLocationUseCase;
 
 public:

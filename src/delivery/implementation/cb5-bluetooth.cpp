@@ -44,10 +44,9 @@ void CB5::execute()
 void CB5::_scanConnectedApplicators()
 {
     loggerInfo("CB5._scanConnectedApplicators", "Process started");
-    ErrorOrInt connectedApplicators;
     do
     {
-        connectedApplicators = _cb.updateConnectedApplicators();
+        _cb.updateConnectedApplicators();
         if (_cb.getApplicators().isError())
         {
             this->_display->clear();
@@ -60,7 +59,7 @@ void CB5::_scanConnectedApplicators()
 
     this->_display->clear();
     this->_display->print("   DOSADORES    ", 0, 0);
-    this->_display->print("CONECTADOS -> " + to_string(connectedApplicators.getInt()), 0, 1);
+    this->_display->print("CONECTADOS -> " + to_string(_cb.getConnectedApplicators()), 0, 1);
     this->_timer.setTimer(1000);
     this->_timer.wait();
 

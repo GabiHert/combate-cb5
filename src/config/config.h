@@ -4,7 +4,9 @@
 #include <string.h>
 using namespace std;
 
-#define CONFIG_SERIAL_BOUD_RATE 115200
+#define DEBUG_MODE true
+
+#define CONFIG_SERIAL_BAUD_RATE 115200
 #define CONFIG_GPS_MAX_SETUP_VALID_DATA_RETRIES 99
 #define CONFIG_DEVICE_NAME "CB5_DEV"
 

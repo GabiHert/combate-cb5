@@ -46,5 +46,5 @@ int ISystem::serialAvailable()
 
 ISystem::ISystem()
 {
-    Serial.begin(CONFIG_SERIAL_BOUD_RATE);
+    Serial.begin(CONFIG_SERIAL_BAUD_RATE);
 }

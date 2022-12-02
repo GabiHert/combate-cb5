@@ -15,7 +15,7 @@ private:
     string _initializer;
     string _errorCode;
     string _status;
-    char _whellBoltsCount[2];
+    char _wheelBoltsCount[2];
     string _gpsData;
     string _checkSum;
     string _extraChar;
@@ -27,7 +27,7 @@ public:
     string toString();
     string getInitializer();
     string getErrorCode();
-    char *getWhellBoltsCount();
+    char *getWheelBoltsCount();
     string getGpsData();
     void setErrorCode(string errorCode);
 };

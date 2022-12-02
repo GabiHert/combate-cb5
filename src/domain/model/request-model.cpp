@@ -6,7 +6,7 @@ RequestModel::RequestModel(RequestDto requestDto)
 {
     this->_alarmSiren = requestDto.getAlarmSiren();
     this->_dose = requestDto.getDose();
-    this->_whellBoltsCounter = requestDto.getWhellBoltsCounter();
+    this->_wheelBoltsCounter = requestDto.getWheelBoltsCounter();
 };
 
 char RequestModel::getAlarmSiren()
@@ -19,7 +19,7 @@ char RequestModel::getDose()
     return this->_dose;
 };
 
-char RequestModel::getWhellBoltsCounter()
+char RequestModel::getWheelBoltsCounter()
 {
-    return this->_whellBoltsCounter;
+    return this->_wheelBoltsCounter;
 };

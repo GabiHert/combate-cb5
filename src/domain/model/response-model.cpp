@@ -7,8 +7,8 @@ ResponseModel::ResponseModel(ResponseDto responseDto)
     this->_initializer = responseDto.getInitializer();
     this->_status = responseDto.getStatus();
     this->setErrorCode(responseDto.getErrorCode());
-    this->_whellBoltsCount[0] = responseDto.getWhellBoltsCount()[0];
-    this->_whellBoltsCount[1] = responseDto.getWhellBoltsCount()[1];
+    this->_wheelBoltsCount[0] = responseDto.getWheelBoltsCount()[0];
+    this->_wheelBoltsCount[1] = responseDto.getWheelBoltsCount()[1];
     this->_gpsData = responseDto.getGpsData();
     this->_extraChar = "xxx";
     loggerInfo("ResponseModel", "Process finished - constructor");
@@ -22,8 +22,8 @@ ResponseModel::ResponseModel(string errorCode)
     this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
     this->setErrorCode(errorCode);
 
-    this->_whellBoltsCount[0] = 0;
-    this->_whellBoltsCount[1] = 0;
+    this->_wheelBoltsCount[0] = 0;
+    this->_wheelBoltsCount[1] = 0;
     this->_gpsData = " ";
     this->_extraChar = "xxx";
     loggerInfo("ResponseModel", "Process finished - constructor");
@@ -31,8 +31,8 @@ ResponseModel::ResponseModel(string errorCode)
 
 ResponseModel::ResponseModel()
 {
-    this->_whellBoltsCount[0] = 0;
-    this->_whellBoltsCount[1] = 0;
+    this->_wheelBoltsCount[0] = 0;
+    this->_wheelBoltsCount[1] = 0;
     this->_gpsData = " ";
     this->_extraChar = "xxx";
 }
@@ -41,8 +41,8 @@ string ResponseModel::toString()
 {
     loggerInfo("ResponseModel.tostring", "Process started");
     string response;
-    response += to_string(this->_whellBoltsCount[0]);
-    response += to_string(this->_whellBoltsCount[1]);
+    response += to_string(this->_wheelBoltsCount[0]);
+    response += to_string(this->_wheelBoltsCount[1]);
     response += this->_status;
     response += this->_errorCode;
     response += this->_extraChar;
@@ -67,9 +67,9 @@ string ResponseModel::getErrorCode()
     return this->_errorCode;
 }
 
-char *ResponseModel::getWhellBoltsCount()
+char *ResponseModel::getWheelBoltsCount()
 {
-    return this->_whellBoltsCount;
+    return this->_wheelBoltsCount;
 }
 
 string ResponseModel::getGpsData()
