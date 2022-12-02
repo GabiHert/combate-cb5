@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "utils/utils.h"
 #include "interfaces/system-interface.h"
-#include "config/config.h"
 
 void loggerInfo(string event, string details, string message)
 {
@@ -24,8 +23,8 @@ void loggerError(string event, string details, string error)
     if (_error.length() == 0)
         _error = " ";
 
-    // Serial.println("ERROR - :: -  event: " + _event + " |  details: " + _details + " | error: " + _error);
-    //  Serial.println("");
+    Serial.println("ERROR - :: -  event: " + _event + " |  details: " + _details + " | error: " + _error);
+    Serial.println("");
 };
 
 void loggerWarn(string event, string details, string warn)
