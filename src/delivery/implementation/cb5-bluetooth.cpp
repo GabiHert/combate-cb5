@@ -8,6 +8,7 @@
 #include "BluetoothSerial.h"
 #include "types/error-or-boolean.h"
 #include "infra/validation/gprmc-protocol-validation.h"
+#include <preferences.h>
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -18,22 +19,22 @@ void CB5::execute()
     this->_display->print("AGUARDANDO IHM.", 0, 0);
     this->_display->printCentered(this->_cb.getId(), 0, 1);
 
-    if (_app.avaliable())
+    if (this->_app->available())
     {
         loggerInfo("CB5.execute", "Process started", "Serial info. available");
 
-        string request = _app.readstring();
+        string request = this->_app->readString();
 
         ResponseModel responseModel = _requestMiddleware.execute(request);
 
         string responseString = responseModel.toString();
-        _app.write(responseString);
+        this->_app->write(responseString);
 
         string separator;
         for (int i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
             separator += "-";
 
-        _app.write(separator);
+        this->_app->write(separator);
 
         loggerInfo("CB5.execute", "Process finished");
 
@@ -160,8 +161,13 @@ void CB5::_initGps()
     }
 }
 
-void CB5::setup()
+void CB5::setup(Preferences *preferences)
 {
+    preferences->begin(CONFIG_PROJECT_NAME);
+    preferences->putString("DEVICE_NAME", CONFIG_DEFAULT_DEVICE_NAME);
+
+    this->_app = new App(preferences);
+
     this->_sys = new ISystem();
     this->_display = new IDisplay();
     Timer timer;
@@ -174,7 +180,7 @@ void CB5::setup()
 
     loggerInfo("CB5.setup", "Process started");
 
-    this->_cb = Cb(&this->_app, this->_sys, this->_display);
+    this->_cb = Cb(this->_app, this->_sys, this->_display);
 
     this->_scanConnectedApplicators();
 
@@ -182,7 +188,7 @@ void CB5::setup()
 
     this->_initGps();
 
-    _app.start();
+    this->_app->start();
 
     this->_display->clear();
     this->_display->printCentered("BLUETOOTH:", 0, 0);

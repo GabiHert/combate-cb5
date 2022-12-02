@@ -3,6 +3,8 @@
 #define APP_H
 #include "BluetoothSerial.h"
 #include <string.h>
+#include <Preferences.h>
+
 using namespace std;
 class App
 {
@@ -11,14 +13,15 @@ private:
     BluetoothSerial serialBT;
 
 public:
-    App();
+    App(Preferences *preferences);
     void start();
     int read();
     void write(string response);
-    string readstring();
+    string readString();
     string getDeviceName();
+    void setDeviceName(string deviceName);
 
-    int avaliable();
+    int available();
 };
 
 #endif // APP_H

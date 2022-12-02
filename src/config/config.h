@@ -2,11 +2,15 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 #include <string.h>
+#include <preferences.h>
+
 using namespace std;
 
 #define CONFIG_SERIAL_BAUD_RATE 115200
 #define CONFIG_GPS_MAX_SETUP_VALID_DATA_RETRIES 99
-#define CONFIG_DEVICE_NAME "CB5_DEV"
+#define CONFIG_DEFAULT_DEVICE_NAME "CB5_DEV"
+#define CONFIG_PREFERENCES_DEVICE_NAME_KEY "DEVICE_NAME"
+#define CONFIG_PROJECT_NAME "CB5"
 
 #define CONFIG_DISPLAY_COLUMNS_LENGTH 16
 

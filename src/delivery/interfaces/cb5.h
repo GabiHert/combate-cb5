@@ -12,7 +12,7 @@ class CB5
 {
 private:
     IDisplay *_display;
-    App _app;
+    App *_app;
     Cb _cb;
     IGps _gps;
     RequestMiddleware _requestMiddleware;
@@ -25,7 +25,7 @@ private:
 public:
     CB5(){};
     void execute();
-    void setup();
+    void setup(Preferences *preferences);
 };
 
 #endif

@@ -4,9 +4,9 @@
 #include "config/config.h"
 #include <string.h>
 
-App::App()
+App::App(Preferences *preferences)
 {
-    this->deviceName = CONFIG_DEVICE_NAME;
+    this->deviceName = arduinoStringToStdString(preferences->getString(CONFIG_PREFERENCES_DEVICE_NAME_KEY));
 }
 
 void App::start()
@@ -25,16 +25,16 @@ int App::read()
     return serial;
 };
 
-string App::readstring()
+string App::readString()
 {
-    loggerInfo("App.readstring", "Process started");
+    loggerInfo("App.readString", "Process started");
     string serial = arduinoStringToStdString(this->serialBT.readString());
 
-    loggerInfo("App.readstring", "Process finished", "serial: " + serial);
+    loggerInfo("App.readString", "Process finished", "serial: " + serial);
     return serial;
 };
 
-int App::avaliable()
+int App::available()
 {
     int avaliable = this->serialBT.available();
     return avaliable;
@@ -51,3 +51,4 @@ void App::write(string response)
 };
 
 string App::getDeviceName() { return this->deviceName; }
+void App::setDeviceName(string deviceName) { this->deviceName = deviceName; }

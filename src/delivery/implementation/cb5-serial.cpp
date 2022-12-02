@@ -11,7 +11,7 @@
 using namespace std;
 #include "exceptions/validation-error.h"
 
-App app(CONFIG_DEVICE_NAME);
+App app(CONFIG_DEFAULT_DEVICE_NAME);
 Cb cb(&app);
 
 RequestMiddleware requestMiddleware(cb);

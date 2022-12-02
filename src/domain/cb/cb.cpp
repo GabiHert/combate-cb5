@@ -85,11 +85,10 @@ ErrorOrBool Cb::dose(char amount)
                 }
             }
 
-            // logger("DEBUG-> " + to_string(count) + " " + to_string(connectedApplicators));
             if (count == connectedApplicators)
                 result = true;
 
-            if (this->_app->avaliable())
+            if (this->_app->available())
             {
                 ResponseDto responseDto(this->_status, this->_wheelBoltsCount, this->_location);
                 ResponseModel responseModel(responseDto);
