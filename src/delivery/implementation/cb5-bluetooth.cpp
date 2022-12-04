@@ -17,7 +17,7 @@
 void CB5::execute()
 {
     this->_display->print("AGUARDANDO IHM.", 0, 0);
-    this->_display->printCentered(this->_cb.getId(), 0, 1);
+    this->_display->printCentered(this->_cb->getId(), 0, 1);
 
     if (this->_app->available())
     {
@@ -47,26 +47,26 @@ void CB5::_scanConnectedApplicators()
     loggerInfo("CB5._scanConnectedApplicators", "Process started");
     do
     {
-        _cb.updateConnectedApplicators();
-        if (_cb.getApplicators().isError())
+        this->_cb->updateConnectedApplicators();
+        if (this->_cb->getApplicators().isError())
         {
             this->_display->clear();
-            this->_display->print(_cb.getApplicators().getError().description, 0, 0);
-            this->_display->print(_cb.getApplicators().getError().errorCode, 0, 1);
+            this->_display->print(this->_cb->getApplicators().getError().description, 0, 0);
+            this->_display->print(this->_cb->getApplicators().getError().errorCode, 0, 1);
             this->_timer.setTimer(1000);
             this->_timer.wait();
         }
-    } while (_cb.getApplicators().isError());
+    } while (this->_cb->getApplicators().isError());
 
     this->_display->clear();
     this->_display->print("   DOSADORES    ", 0, 0);
-    this->_display->print("CONECTADOS -> " + to_string(_cb.getConnectedApplicators()), 0, 1);
+    this->_display->print("CONECTADOS -> " + to_string(this->_cb->getConnectedApplicators()), 0, 1);
     this->_timer.setTimer(1000);
     this->_timer.wait();
 
-    string applicator1Connected = _cb.getApplicators().getBoolVector()[0] ? "S" : "N";
-    string applicator2Connected = _cb.getApplicators().getBoolVector()[1] ? "S" : "N";
-    string applicator3Connected = _cb.getApplicators().getBoolVector()[2] ? "S" : "N";
+    string applicator1Connected = this->_cb->getApplicators().getBoolVector()[0] ? "S" : "N";
+    string applicator2Connected = this->_cb->getApplicators().getBoolVector()[1] ? "S" : "N";
+    string applicator3Connected = this->_cb->getApplicators().getBoolVector()[2] ? "S" : "N";
 
     this->_display->clear();
     this->_display->print("   DOSADORES    ", 0, 0);
@@ -163,12 +163,14 @@ void CB5::_initGps()
 
 void CB5::setup(Preferences *preferences)
 {
+    this->_sys = new ISystem();
+    loggerInfo("CB5.setup", "Process started");
+
     preferences->begin(CONFIG_PROJECT_NAME);
     preferences->putString("DEVICE_NAME", CONFIG_DEFAULT_DEVICE_NAME);
 
     this->_app = new App(preferences);
 
-    this->_sys = new ISystem();
     this->_display = new IDisplay();
     Timer timer;
 
@@ -178,13 +180,11 @@ void CB5::setup(Preferences *preferences)
     this->_timer.setTimer(1000);
     this->_timer.wait();
 
-    loggerInfo("CB5.setup", "Process started");
-
-    this->_cb = Cb(this->_app, this->_sys, this->_display);
+    this->_cb = new Cb(this->_app, this->_sys, this->_display);
 
     this->_scanConnectedApplicators();
 
-    this->_requestMiddleware = RequestMiddleware(&this->_cb, &this->_gps, this->_display);
+    this->_requestMiddleware = RequestMiddleware(this->_cb, &this->_gps, this->_display);
 
     this->_initGps();
 
@@ -192,7 +192,7 @@ void CB5::setup(Preferences *preferences)
 
     this->_display->clear();
     this->_display->printCentered("BLUETOOTH:", 0, 0);
-    this->_display->printCentered(_cb.getId(), 0, 1);
+    this->_display->printCentered(this->_cb->getId(), 0, 1);
     this->_timer.setTimer(1500);
     this->_timer.wait();
     this->_display->clear();

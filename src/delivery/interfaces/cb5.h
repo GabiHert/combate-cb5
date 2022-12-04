@@ -13,7 +13,7 @@ class CB5
 private:
     IDisplay *_display;
     App *_app;
-    Cb _cb;
+    Cb *_cb;
     IGps _gps;
     RequestMiddleware _requestMiddleware;
     ISystem *_sys;

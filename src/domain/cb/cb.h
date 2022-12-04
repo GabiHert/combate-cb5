@@ -12,7 +12,7 @@
 #include "types/error-or-boolean-vector.h"
 #include "types/error-or-boolean.h"
 #include "types/error-or-int.h"
-
+#include <vector>
 class Cb
 {
 private:
@@ -21,7 +21,7 @@ private:
     string _id;
     string _status;
     RequestModel requestModel;
-    PoisonApplicator _poisonApplicator[CONFIG_POISON_APPLICATORS];
+    vector<PoisonApplicator *> _poisonApplicators;
     IDisplay *_display;
     char _wheelBoltsCount[2];
     string _location;
@@ -38,7 +38,7 @@ public:
     int getConnectedApplicators();
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
-    PoisonApplicator *getPoisonApplicator();
+    vector<PoisonApplicator *>getPoisonApplicator();
     string getLocation() { return this->_location; };
     void setLocation(string location) { this->_location = location; };
     char getWheelBoltsCountDecimal();

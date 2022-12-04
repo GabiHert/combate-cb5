@@ -36,10 +36,7 @@ ErrorOrBool Cb::dose(char amount)
                 continue;
             }
 
-            if (this->_poisonApplicator[i].readSensor())
-            {
-                this->_poisonApplicator[i].spin();
-            }
+            this->_poisonApplicators[i]->spin();
         }
 
         bool result = false;
@@ -51,6 +48,10 @@ ErrorOrBool Cb::dose(char amount)
             if (timer.timedOut())
             {
                 loggerError("Cb.dose", "Process error", "Time out");
+
+                for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+                    this->_poisonApplicators.at(i)->stop();
+
                 return ErrorOrBool(EXCEPTIONS().DOSE_PROCESS_TIME_OUT);
             }
 
@@ -69,13 +70,13 @@ ErrorOrBool Cb::dose(char amount)
                 if (!tasksDone[i])
                 {
                     loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " in process");
-                    tasksDone[i] = this->_poisonApplicator[i].readSensor();
+                    tasksDone[i] = this->_poisonApplicators[i]->readSensor();
                 }
 
                 if (tasksDone[i])
                 {
                     loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " finished");
-                    this->_poisonApplicator[i].stop();
+                    this->_poisonApplicators[i]->stop();
 
                     this->_display->clear();
                     this->_display->print(" DOSE REALIZADA", 0, 0);
@@ -114,9 +115,9 @@ ErrorOrBoolVector Cb::getApplicators()
     return this->_applicators;
 }
 
-PoisonApplicator *Cb::getPoisonApplicator()
+vector<PoisonApplicator *> Cb::getPoisonApplicator()
 {
-    return this->_poisonApplicator;
+    return this->_poisonApplicators;
 };
 
 char Cb::getWheelBoltsCountDecimal()
@@ -157,6 +158,7 @@ int Cb::getConnectedApplicators()
 
 Cb::Cb(App *app, ISystem *sys, IDisplay *display)
 {
+    this->_poisonApplicators = vector<PoisonApplicator *>(CONFIG_POISON_APPLICATORS);
     this->_connectedApplicators = 0;
     this->_location = "NO_DATA";
     this->_sys = sys;
@@ -165,9 +167,9 @@ Cb::Cb(App *app, ISystem *sys, IDisplay *display)
     this->_id = app->getDeviceName();
     this->_wheelBoltsCount[0] = 0;
     this->_wheelBoltsCount[1] = 0;
-    this->_poisonApplicator[0] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
-    this->_poisonApplicator[1] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
-    this->_poisonApplicator[2] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
+    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
+    this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
+    this->_poisonApplicators[2] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
     this->updateConnectedApplicators();
     this->_display = display;
 };
@@ -179,9 +181,9 @@ Cb::Cb()
     this->_location = "NO_DATA";
     this->_wheelBoltsCount[0] = 0;
     this->_wheelBoltsCount[1] = 0;
-    this->_poisonApplicator[0] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
-    this->_poisonApplicator[0] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
-    this->_poisonApplicator[0] = PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
+    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
+    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
+    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
     this->updateConnectedApplicators();
 };
 

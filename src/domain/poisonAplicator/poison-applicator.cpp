@@ -36,8 +36,8 @@ void PoisonApplicator::spin()
 {
 
     loggerInfo("PoisonApplicator.spin", "Process started, _motorPort: " + to_string(this->_motorPort));
-    this->_sys->setPort(this->_motorPort, 1);
-    loggerInfo("PoisonApplicator.readSensor", "Process finished", " _motorPort: HIGH");
+    this->_sys->setPort(this->_motorPort, HIGH);
+    loggerInfo("PoisonApplicator.spin", "Process finished");
 };
 
 bool PoisonApplicator::readSensor()
@@ -52,7 +52,7 @@ void PoisonApplicator::stop()
 {
 
     loggerInfo("PoisonApplicator.stop", "Process started", "_motorPort: " + to_string(this->_motorPort));
-    this->_sys->setPort(this->_motorPort, 0);
+    this->_sys->setPort(this->_motorPort, LOW);
     loggerInfo("PoisonApplicator.stop", "Process finished");
 }
 
