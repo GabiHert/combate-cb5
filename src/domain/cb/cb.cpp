@@ -190,6 +190,7 @@ Cb::Cb()
 ErrorOrInt Cb::updateConnectedApplicators()
 {
     loggerInfo("Cb.updateConnectedApplicators", "Process started");
+    this->_connectedApplicators = 0;
     vector<bool> applicatorsConnection = vector<bool>(CONFIG_POISON_APPLICATORS);
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {
