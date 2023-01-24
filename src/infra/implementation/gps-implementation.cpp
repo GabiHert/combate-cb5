@@ -16,6 +16,7 @@ ErrorOrString IGps::_getData(Timer *timer)
     char startHeaderCount = 0;
     int gpsData;
     bool dataTransferStarted = false;
+    // todo: fazer o flush (limpar o buffer)
 
     while (gpsData != CONFIG_PROTOCOL_LF || !dataTransferStarted)
     {
@@ -28,7 +29,6 @@ ErrorOrString IGps::_getData(Timer *timer)
 
         if (gpsSerial.available() > 0)
         {
-
             gpsData = gpsSerial.read();
 
             if (gpsData == '$' && dataTransferStarted)

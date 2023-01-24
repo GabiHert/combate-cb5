@@ -194,7 +194,7 @@ ErrorOrInt Cb::updateConnectedApplicators()
     vector<bool> applicatorsConnection = vector<bool>(CONFIG_POISON_APPLICATORS);
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {
-        if (this->_sys->readDigitalPort(CONFIG().PORT_GPIO_SENSOR_CONNECTED_APPLICATORS[i]) > 0)
+        if (this->_sys->readDigitalPort(CONFIG().PORT_GPIO_SENSOR_CONNECTED_APPLICATORS[i]) == 0)
         {
             loggerInfo("Cb.updateConnectedApplicators", "Applicator found");
 

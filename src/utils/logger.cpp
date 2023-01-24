@@ -9,8 +9,8 @@ void loggerInfo(string event, string details, string message)
 
     if (_message.length() == 0)
         _message = " ";
-    // Serial.println("INFO - :: -  event: " + _event + " |  details: " + _details + " | message: " + _message);
-    // Serial.println("");
+    Serial.println("INFO - :: -  event: " + _event + " |  details: " + _details + " | message: " + _message);
+    Serial.println("");
 };
 
 void loggerError(string event, string details, string error)
