@@ -1,4 +1,4 @@
-#include "interfaces/gps-interface.h"
+#include "infra/gps/gps-interface.h"
 #include <SoftwareSerial.h>
 #include "utils/utils.h"
 #include "config/config.h"

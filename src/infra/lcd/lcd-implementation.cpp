@@ -1,4 +1,4 @@
-#include "interfaces/lcd-interface.h"
+#include "infra/lcd/lcd-interface.h"
 #include "utils/utils.h"
 #include "config/config.h"
 #include <Arduino.h>

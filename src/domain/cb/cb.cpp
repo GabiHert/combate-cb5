@@ -9,13 +9,11 @@
 ErrorOrBool Cb::dose(char amount)
 {
     loggerInfo("Cb.dose", "Process started");
-    // this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
+    this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
     int connectedApplicators = 0;
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         if (this->_applicators.getBoolVector()[i])
             connectedApplicators++;
-
-    logger("DEBUG-> " + to_string(connectedApplicators));
 
     for (char dose = 0; dose < amount; dose++)
     {
@@ -41,6 +39,9 @@ ErrorOrBool Cb::dose(char amount)
 
         bool result = false;
         Timer timer;
+        timer.setTimer(200);
+        timer.wait();
+
         timer.setTimer(CONFIG_DOSE_APPLICATION_TIMEOUT);
 
         while (!result)
@@ -77,24 +78,12 @@ ErrorOrBool Cb::dose(char amount)
                 {
                     loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " finished");
                     this->_poisonApplicators[i]->stop();
-
-                    this->_display->clear();
-                    this->_display->print(" DOSE REALIZADA", 0, 0);
-                    this->_display->print("  DOSADOR -> " + to_string(i), 0, 1);
-
                     count++;
                 }
             }
 
             if (count == connectedApplicators)
                 result = true;
-
-            if (this->_app->available())
-            {
-                ResponseDto responseDto(this->_status, this->_wheelBoltsCount, this->_location);
-                ResponseModel responseModel(responseDto);
-                this->_app->write(responseModel.toString());
-            }
         }
 
         this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
