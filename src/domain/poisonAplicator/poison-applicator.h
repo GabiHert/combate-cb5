@@ -1,7 +1,7 @@
 #ifndef POISON_APPLICATOR_H
 #define POISON_APPLICATOR_H
 #include <Arduino.h>
-#include <interfaces/system-interface.h>
+#include "infra/system/system-interface.h"
 
 class PoisonApplicator
 {

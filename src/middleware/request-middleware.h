@@ -2,12 +2,12 @@
 #define REQUEST_MIDDLEWARE_H
 #include "domain/cb/cb.h"
 #include "middleware/validation/request-validation-middleware.h"
-#include "interfaces/lcd-interface.h"
+#include "infra/lcd/lcd-interface.h"
 #include "controller/request-controller.h"
 #include "domain/dto/response-dto.h"
 #include <Arduino.h>
 #include "domain/model/response-model.h"
-#include "interfaces/gps-interface.h"
+#include "infra/gps/gps-interface.h"
 
 class RequestMiddleware
 {

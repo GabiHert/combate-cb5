@@ -4,11 +4,11 @@
 #define CB_H
 
 #include "domain/model/request-model.h"
-#include "interfaces/lcd-interface.h"
+#include "infra/lcd/lcd-interface.h"
 #include "domain/poisonAplicator/poison-applicator.h"
 #include "config/config.h"
 #include "infra/server/app.h"
-#include "interfaces/system-interface.h"
+#include "infra/system/system-interface.h"
 #include "types/error-or-boolean-vector.h"
 #include "types/error-or-boolean.h"
 #include "types/error-or-int.h"

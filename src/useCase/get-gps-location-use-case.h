@@ -1,9 +1,9 @@
 #ifndef GET_GPS_LOCATION_USE_CASE_H
 #define GET_GPS_LOCATION_USE_CASE_H
-#include "interfaces/gps-interface.h"
+#include "infra/gps/gps-interface.h"
 #include "types/error-or-string.h"
 #include "domain/cb/cb.h"
-#include "interfaces/lcd-interface.h"
+#include "infra/lcd/lcd-interface.h"
 
 class GetGpsLocationUseCase
 {

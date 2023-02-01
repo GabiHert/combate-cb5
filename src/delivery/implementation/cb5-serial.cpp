@@ -5,7 +5,7 @@
 #include "domain/cb/cb.h"
 #include "middleware/request-middleware.h"
 #include "config/config.h"
-#include "interfaces/system-interface.h"
+#include "infra/system/system-interface.h"
 #include <string.h>
 #include "domain/builder/check-sum-builder.h"
 using namespace std;

@@ -9,7 +9,7 @@
 #include "domain/dto/response-dto.h"
 #include "domain/dto/request-dto.h"
 #include "types/error-or-response-dto.h"
-#include "interfaces/gps-interface.h"
+#include "infra/gps/gps-interface.h"
 class RequestController
 {
 private:

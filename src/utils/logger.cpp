@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "utils/utils.h"
-#include "interfaces/system-interface.h"
+#include "infra/system/system-interface.h"
 #include "config/config.h"
 
 void loggerInfo(string event, string details, string message)

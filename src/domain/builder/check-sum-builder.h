@@ -2,7 +2,7 @@
 #ifndef CHECKSUM_BUILDER_H
 #define CHECKSUM_BUILDER_H
 #include <string>
-#include "interfaces/system-interface.h"
+#include "infra/system/system-interface.h"
 using namespace std;
 class CheckSumBuilder
 {

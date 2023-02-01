@@ -2,7 +2,7 @@
 #define TURN_ALARM_SIREN_ON_USE_CASE_H
 #include "domain/cb/cb.h"
 #include "types/error-or-boolean.h"
-#include "interfaces/lcd-interface.h"
+#include "infra/lcd/lcd-interface.h"
 
 class TurnAlarmSirenOnUseCase
 {
