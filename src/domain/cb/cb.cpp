@@ -10,6 +10,11 @@ ErrorOrBool Cb::dose(char amount)
 {
     loggerInfo("Cb.dose", "Process started");
     this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
+
+    ResponseDto responseDto = ResponseDto(*this);
+    ResponseModel responseModel = ResponseModel(responseDto);
+    this->_app->write(responseModel.toString());
+
     int connectedApplicators = 0;
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         if (this->_applicators.getBoolVector()[i])
@@ -33,7 +38,6 @@ ErrorOrBool Cb::dose(char amount)
                 loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
                 continue;
             }
-
             this->_poisonApplicators[i]->spin();
         }
 
@@ -53,6 +57,7 @@ ErrorOrBool Cb::dose(char amount)
                 for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
                     this->_poisonApplicators.at(i)->stop();
 
+                this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
                 return ErrorOrBool(EXCEPTIONS().DOSE_PROCESS_TIME_OUT);
             }
 
@@ -85,10 +90,9 @@ ErrorOrBool Cb::dose(char amount)
             if (count == connectedApplicators)
                 result = true;
         }
-
-        this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     }
 
+    this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     loggerInfo("Cb.dose", "Process finished");
     return ErrorOrBool(true);
 };
@@ -183,7 +187,7 @@ ErrorOrInt Cb::updateConnectedApplicators()
     vector<bool> applicatorsConnection = vector<bool>(CONFIG_POISON_APPLICATORS);
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {
-        if (this->_sys->readDigitalPort(CONFIG().PORT_GPIO_SENSOR_CONNECTED_APPLICATORS[i]) == 0)
+        if (!this->_sys->readDigitalPort(CONFIG().PORT_GPIO_SENSOR_CONNECTED_APPLICATORS[i]))
         {
             loggerInfo("Cb.updateConnectedApplicators", "Applicator found");
 
@@ -207,4 +211,11 @@ ErrorOrInt Cb::updateConnectedApplicators()
 
     loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(this->_connectedApplicators));
     return ErrorOrInt(this->_connectedApplicators);
+}
+
+void Cb::clearStatus()
+{
+    loggerInfo("Cb.clearStatus", "Process started");
+    this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
+    loggerInfo("Cb.clearStatus", "Process finished");
 }

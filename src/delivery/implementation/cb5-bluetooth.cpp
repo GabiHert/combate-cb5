@@ -21,6 +21,7 @@ void CB5::execute()
 
     if (this->_app->available())
     {
+        this->_cb->clearStatus();
         loggerInfo("CB5.execute", "Process started", "Serial info. available");
 
         string request = this->_app->readString();

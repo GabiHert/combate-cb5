@@ -38,7 +38,7 @@ public:
     int getConnectedApplicators();
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
-    vector<PoisonApplicator *>getPoisonApplicator();
+    vector<PoisonApplicator *> getPoisonApplicator();
     string getLocation() { return this->_location; };
     void setLocation(string location) { this->_location = location; };
     char getWheelBoltsCountDecimal();
@@ -47,5 +47,6 @@ public:
     void addWheelBoltsCount();
     void clearWheelBoltsCount();
     ErrorOrInt updateConnectedApplicators();
+    void clearStatus();
 };
 #endif // CB_H
