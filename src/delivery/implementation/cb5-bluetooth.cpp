@@ -142,6 +142,11 @@ void CB5::_initGps()
             }
             else
             {
+                for (int i = 0; i < errorOrString.getString().length() && errorOrString.getString().length() >= 16; i += 32)
+                {
+                    this->_lcd->print(errorOrString.getString(), 0, 0);
+                }
+
                 if (this->_gps->gprmcProtocolValidation.isDataReliable(errorOrString.getString()))
                 {
                     this->_lcd->clear();

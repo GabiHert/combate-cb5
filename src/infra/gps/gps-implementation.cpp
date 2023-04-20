@@ -212,3 +212,9 @@ ErrorOrBool IGps::setup()
 
     return ErrorOrBool(true);
 };
+
+ErrorOrBool testSetup(Timer *timer)
+{
+    gpsSerial.begin(CONFIG_GPS_SERIAL_BAUD_RATE, SERIAL_8N2, CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
+    timer->setTimer(1000)->wait();
+}

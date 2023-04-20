@@ -10,6 +10,8 @@ void ILcd::print(string message, uint8_t column, uint8_t line)
 {
     setCursor(column, line);
     print(message);
+    if (message.length() > 16 & !line)
+        print(message.substr(16), 0, line + 1);
 }
 
 void ILcd::printCentered(string message, uint8_t column, uint8_t line)
