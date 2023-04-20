@@ -1,8 +1,9 @@
 #include "utils/utils.h"
 
-void Timer::setTimer(unsigned long ms)
+Timer *Timer::setTimer(unsigned long ms)
 {
     this->end = millis() + ms;
+    return this;
 };
 
 void Timer::wait()

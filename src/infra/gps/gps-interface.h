@@ -1,6 +1,7 @@
 
 #ifndef IGPS_H
 #define IGPS_H
+#include "infra/lcd/lcd-interface.h"
 #include <string>
 #include "types/error-or-string.h"
 #include "types/error-or-boolean.h"
@@ -10,10 +11,13 @@ using namespace std;
 class IGps
 {
 private:
-        ErrorOrString _getData(Timer *timer);
+    ILcd *_lcd;
+    Timer *timer;
+    ErrorOrString _getData(Timer *timer);
 
 public:
     IGps(){};
+    IGps(ILcd *lcd, Timer *timer);
     GprmcProtocolValidation gprmcProtocolValidation;
     ErrorOrString getData(int timeOut = CONFIG_GPS_TIMEOUT);
     ErrorOrBool setup();

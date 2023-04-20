@@ -6,11 +6,11 @@
 
 using namespace std;
 
-RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, IDisplay *display)
+RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd)
 {
-  this->display = display;
+  this->lcd = lcd;
   this->cb = cb;
-  this->requestController = RequestController(cb, gps, display);
+  this->requestController = RequestController(cb, gps, lcd);
 };
 
 ResponseModel RequestMiddleware::execute(string request)
@@ -23,9 +23,9 @@ ResponseModel RequestMiddleware::execute(string request)
   if (erroOrBool.isError())
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + erroOrBool.getError().description);
-    this->display->clear();
-    this->display->print(erroOrBool.getError().errorCode, 0, 0);
-    this->display->print(erroOrBool.getError().description, 0, 1);
+    this->lcd->clear();
+    this->lcd->print(erroOrBool.getError().errorCode, 0, 0);
+    this->lcd->print(erroOrBool.getError().description, 0, 1);
     timer.setTimer(1000);
     timer.wait();
 
@@ -41,9 +41,9 @@ ResponseModel RequestMiddleware::execute(string request)
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.getError().description);
 
-    this->display->clear();
-    this->display->print(errorOrResponseDto.getError().errorCode, 0, 0);
-    this->display->print(errorOrResponseDto.getError().description, 0, 1);
+    this->lcd->clear();
+    this->lcd->print(errorOrResponseDto.getError().errorCode, 0, 0);
+    this->lcd->print(errorOrResponseDto.getError().description, 0, 1);
     timer.setTimer(1000);
     timer.wait();
 

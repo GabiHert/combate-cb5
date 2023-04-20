@@ -2,9 +2,9 @@
 #include "exceptions/exceptions.h"
 #include "useCase/dose-use-case.h"
 
-DoseUseCase::DoseUseCase(Cb *cb, IDisplay *display)
+DoseUseCase::DoseUseCase(Cb *cb, ILcd *lcd)
 {
-    this->display = display;
+    this->lcd = lcd;
     this->cb = cb;
 };
 
@@ -24,9 +24,9 @@ ErrorOrBool DoseUseCase::execute(char amount)
 
     loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
 
-    this->display->clear();
-    this->display->print("INICIO DOSAGEM", 0, 0);
-    this->display->print(to_string(amount) + " DOSES", 0, 1);
+    this->lcd->clear();
+    this->lcd->print("INICIO DOSAGEM", 0, 0);
+    this->lcd->print(to_string(amount) + " DOSES", 0, 1);
     ErrorOrBool errorOrBool = this->cb->dose(amount);
     if (errorOrBool.isError())
     {
@@ -34,8 +34,8 @@ ErrorOrBool DoseUseCase::execute(char amount)
         return ErrorOrBool(errorOrBool.getError());
     }
 
-    this->display->clear();
-    this->display->print("DOSAGEM FINALIZADA", 0, 0);
+    this->lcd->clear();
+    this->lcd->print("DOSAGEM FINALIZADA", 0, 0);
 
     loggerInfo("DoseUseCase", "Process finished");
 

@@ -11,13 +11,13 @@
 class CB5
 {
 private:
-    IDisplay *_display;
+    ILcd *_lcd;
     App *_app;
     Cb *_cb;
-    IGps _gps;
+    IGps *_gps;
     RequestMiddleware _requestMiddleware;
     ISystem *_sys;
-    Timer _timer;
+    Timer *_timer;
 
     void _scanConnectedApplicators();
     void _initGps();

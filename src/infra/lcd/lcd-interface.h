@@ -1,15 +1,15 @@
 
 
-#ifndef IDisplay_H
-#define IDisplay_H
+#ifndef Ilcd_H
+#define Ilcd_H
 #include <LiquidCrystal_I2C.h>
 #include <string>
 using namespace std;
-class IDisplay
+class ILcd
 {
 private:
 public:
-    IDisplay();
+    ILcd();
     void print(string message);
     void print(string message, uint8_t column, uint8_t line);
     void printCentered(string message);
@@ -17,4 +17,4 @@ public:
     void setCursor(uint8_t column, uint8_t line);
     void clear();
 };
-#endif // IDisplay_H
+#endif // Ilcd_H

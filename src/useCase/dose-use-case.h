@@ -7,11 +7,11 @@
 class DoseUseCase
 {
 private:
-    IDisplay *display;
+    ILcd *lcd;
     Cb *cb;
 
 public:
-    DoseUseCase(Cb *cb, IDisplay *display);
+    DoseUseCase(Cb *cb, ILcd *lcd);
     DoseUseCase(){};
     ErrorOrBool execute(char amount);
 };

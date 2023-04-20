@@ -22,14 +22,14 @@ private:
     string _status;
     RequestModel requestModel;
     vector<PoisonApplicator *> _poisonApplicators;
-    IDisplay *_display;
+    ILcd *_lcd;
     char _wheelBoltsCount[2];
     string _location;
     ErrorOrBoolVector _applicators;
     int _connectedApplicators;
 
 public:
-    Cb(App *app, ISystem *sys, IDisplay *display);
+    Cb(App *app, ISystem *sys, ILcd *lcd);
     Cb();
 
     ErrorOrBool dose(char amount);
