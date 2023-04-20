@@ -15,7 +15,7 @@ private:
     App *_app;
     Cb *_cb;
     IGps *_gps;
-    RequestMiddleware _requestMiddleware;
+    RequestMiddleware *_requestMiddleware;
     ISystem *_sys;
     Timer *_timer;
 
