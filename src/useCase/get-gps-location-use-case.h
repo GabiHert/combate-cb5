@@ -10,12 +10,12 @@ class GetGpsLocationUseCase
 
 private:
     IGps *gps;
-    IDisplay *display;
+    ILcd *lcd;
     Cb *cb;
 
 public:
     GetGpsLocationUseCase() {}
-    GetGpsLocationUseCase(IGps *gps, Cb *cb, IDisplay *display);
+    GetGpsLocationUseCase(IGps *gps, Cb *cb, ILcd *lcd);
     ErrorOrString execute();
 };
 

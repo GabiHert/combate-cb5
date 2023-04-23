@@ -24,9 +24,7 @@ ErrorOrBool Cb::dose(char amount)
     {
         loggerInfo("Cb.dose", "Starting dose: " + to_string(amount));
 
-        this->_display->clear();
-        this->_display->print("  INICIO DOSE", 0, 0);
-        this->_display->printCentered(to_string(dose + 1) + "/" + to_string(amount), 0, 1);
+        this->_lcd->setDoseStatus(dose + 1, amount);
 
         loggerInfo("Cb.dose", "Starting all applicators");
 
@@ -149,7 +147,7 @@ int Cb::getConnectedApplicators()
     return this->_connectedApplicators;
 }
 
-Cb::Cb(App *app, ISystem *sys, IDisplay *display)
+Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
 {
     this->_poisonApplicators = vector<PoisonApplicator *>(CONFIG_POISON_APPLICATORS);
     this->_connectedApplicators = 0;
@@ -164,7 +162,7 @@ Cb::Cb(App *app, ISystem *sys, IDisplay *display)
     this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
     this->_poisonApplicators[2] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
     this->updateConnectedApplicators();
-    this->_display = display;
+    this->_lcd = lcd;
 };
 
 Cb::Cb()

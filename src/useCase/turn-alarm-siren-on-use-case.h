@@ -8,10 +8,10 @@ class TurnAlarmSirenOnUseCase
 {
 private:
     Cb *cb;
-    IDisplay *display;
+    ILcd *lcd;
 
 public:
-    TurnAlarmSirenOnUseCase(Cb *cb,IDisplay *display);
+    TurnAlarmSirenOnUseCase(Cb *cb,ILcd *lcd);
     TurnAlarmSirenOnUseCase(){};
     ErrorOrBool execute();
 };

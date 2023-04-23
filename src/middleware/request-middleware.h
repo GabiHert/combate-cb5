@@ -12,14 +12,14 @@
 class RequestMiddleware
 {
 private:
-    IDisplay *display;
+    ILcd *lcd;
     Cb *cb;
     RequestController requestController;
     RequestValidationMiddleware requestValidationMiddleware;
 
 public:
     RequestMiddleware(){};
-    RequestMiddleware(Cb *cb, IGps *gps, IDisplay *display);
+    RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd);
     ResponseModel execute(string request);
 };
 

@@ -101,10 +101,10 @@ void CB5::setup()
 
     loggerInfo("Setup", "Process started");
 
-    cb.display.setCursor(0, 0);
-    cb.display.print("Nome Bluetooth: ");
-    cb.display.setCursor(0, 1);
-    cb.display.print(cb.getId());
+    cb.lcd.setCursor(0, 0);
+    cb.lcd.print("Nome Bluetooth: ");
+    cb.lcd.setCursor(0, 1);
+    cb.lcd.print(cb.getId());
 
     loggerInfo("Setup", "Process finished");
 };

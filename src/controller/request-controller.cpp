@@ -6,21 +6,21 @@
 #include "useCase/clear-wheel-bolts-counter-use-case.h"
 #include "types/error-or-string.h"
 
-RequestController::RequestController(Cb *cb, IGps *gps, IDisplay *display)
+RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd)
 {
     this->cb = cb;
 
-    this->display = display;
+    this->lcd = lcd;
 
     loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb->getId());
 
-    this->doseUseCase = DoseUseCase(cb, this->display);
+    this->doseUseCase = DoseUseCase(cb, this->lcd);
 
-    this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(cb, this->display);
+    this->turnAlarmSirenOnUseCase = TurnAlarmSirenOnUseCase(cb, this->lcd);
 
     this->clearWheelBoltsCounterUseCase = ClearWheelBoltsCounterUseCase(cb);
 
-    this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb, this->display);
+    this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb, this->lcd);
 };
 
 RequestController::RequestController(){};

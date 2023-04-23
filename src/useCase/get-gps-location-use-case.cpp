@@ -2,9 +2,9 @@
 #include "useCase/get-gps-location-use-case.h"
 #include "utils/utils.h"
 
-GetGpsLocationUseCase::GetGpsLocationUseCase(IGps *gps, Cb *cb, IDisplay *display)
+GetGpsLocationUseCase::GetGpsLocationUseCase(IGps *gps, Cb *cb, ILcd *lcd)
 {
-    this->display = display;
+    this->lcd = lcd;
     this->cb = cb;
     this->gps = gps;
 }
@@ -13,9 +13,7 @@ ErrorOrString GetGpsLocationUseCase::execute()
 
     loggerInfo("GetGpsUseCase.execute", "Process started");
 
-    this->display->clear();
-    this->display->print("CONSULTANDO LOC.", 0, 0);
-    this->display->print("GPS. -> AGUARDE.", 0, 1);
+    this->lcd->setGpsStatus(true);
 
     ErrorOrString errorOrString = this->gps->getData();
 
@@ -30,6 +28,8 @@ ErrorOrString GetGpsLocationUseCase::execute()
 
     result = result.substr(7);
     result = result.replace(result.length() - 3, 1, "");
+
+    this->lcd->setGpsStatus(false);
 
     loggerInfo("GetGpsUseCase.execute", "Process finished", result);
 
