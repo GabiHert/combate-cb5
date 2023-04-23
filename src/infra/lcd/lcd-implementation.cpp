@@ -8,12 +8,19 @@ LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
 
 void ILcd::print(string message, uint8_t column, uint8_t line)
 {
+    this->_shouldClear = true;
     setCursor(column, line);
     print(message);
     if (message.length() > 16 & !line)
         print(message.substr(16), 0, line + 1);
 }
-
+void ILcd::_print(string message, uint8_t column, uint8_t line)
+{
+    setCursor(column, line);
+    print(message);
+    if (message.length() > 16 & !line)
+        print(message.substr(16), 0, line + 1);
+}
 void ILcd::printCentered(string message, uint8_t column, uint8_t line)
 {
     print(centerString(message, CONFIG_lcd_COLUMNS_LENGTH), column, line);
@@ -33,6 +40,7 @@ void ILcd::print(string message)
 
 void ILcd::clear()
 {
+    this->_shouldClear = false;
     loggerInfo("Lcd.clear", "Process started");
     lcd.clear();
     loggerInfo("Lcd.clear", "Process finished");
@@ -57,11 +65,11 @@ void ILcd::setGpsStatus(bool status)
     loggerInfo("Lcd.setGpsStatus", "Process started");
     if (status)
     {
-        print("GPS", 0, 0);
+        _print("GPS", 0, 0);
     }
     else
     {
-        print("   ", 0, 0);
+        _print("   ", 0, 0);
     }
     loggerInfo("Lcd.setGpsStatus", "Process finished");
 };
@@ -69,6 +77,26 @@ void ILcd::setGpsStatus(bool status)
 void ILcd::setDoseStatus(int done, int target)
 {
     loggerInfo("Lcd.setDoseStatus", "Process started");
-    print(centerString(to_string(done) + "/" + to_string(target), 12), 8, 0);
+    _print(centerString(to_string(done) + "/" + to_string(target), 5), 11, 0);
     loggerInfo("Lcd.setDoseStatus", "Process finished");
 };
+
+void ILcd::setCBName(string name)
+{
+    loggerInfo("Lcd.setDoseStatus", "Process started");
+    _print(centerString(name, CONFIG_lcd_COLUMNS_LENGTH), 0, 1);
+    loggerInfo("Lcd.setDoseStatus", "Process finished");
+};
+
+void ILcd::smartClear()
+{
+    if (this->_shouldClear)
+        this->clear();
+}
+
+void ILcd::setVersion(string version)
+{
+    loggerInfo("Lcd.setVersion", "Process started");
+    _print(centerString(version, 5), 5, 0);
+    loggerInfo("Lcd.setVersion", "Process finished");
+}

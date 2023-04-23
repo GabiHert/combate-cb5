@@ -8,6 +8,9 @@ using namespace std;
 class ILcd
 {
 private:
+    bool _shouldClear;
+    void _print(string message, uint8_t column, uint8_t line);
+
 public:
     ILcd();
     void print(string message);
@@ -18,5 +21,9 @@ public:
     void clear();
     void setGpsStatus(bool active);
     void setDoseStatus(int done, int target);
+    void setCBName(string name);
+    void setVersion(string version);
+
+    void smartClear();
 };
 #endif // Ilcd_H

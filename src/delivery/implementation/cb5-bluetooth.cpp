@@ -16,10 +16,6 @@
 
 void CB5::execute()
 {
-    this->_lcd->clear();
-    this->_lcd->setGpsStatus(false);
-    this->_lcd->setDoseStatus(0, 0);
-    this->_lcd->printCentered(this->_cb->getId(), 0, 1);
 
     if (this->_app->available())
     {
@@ -40,8 +36,11 @@ void CB5::execute()
         this->_app->write(separator);
 
         loggerInfo("CB5.execute", "Process finished");
-
-        this->_lcd->clear();
+        this->_lcd->smartClear();
+        this->_lcd->setGpsStatus(false);
+        this->_lcd->setDoseStatus(0, 0);
+        this->_lcd->setCBName(this->_cb->getId());
+        this->_lcd->setVersion(CONFIG_CB5_SOFTWARE_VERSION);
     }
 };
 
@@ -58,7 +57,7 @@ void CB5::_scanConnectedApplicators()
             this->_lcd->print(this->_cb->getApplicators().getError().errorCode, 0, 1);
             this->_timer->setTimer(1000)->wait();
         }
-    } while (true); //(this->_cb->getApplicators().isError());
+    } while (this->_cb->getApplicators().isError());
 
     this->_lcd->clear();
     this->_lcd->print("   DOSADORES    ", 0, 0);
@@ -70,7 +69,7 @@ void CB5::_scanConnectedApplicators()
     string applicator3Connected = this->_cb->getApplicators().getBoolVector()[2] ? " 3 " : "";
 
     this->_lcd->clear();
-    this->_lcd->print("   DOSADORES    ", 0, 0);
+    this->_lcd->printCentered("DOSADOR(ES)", 0, 0);
     this->_lcd->printCentered(applicator1Connected + applicator2Connected + applicator3Connected, 0, 1);
     this->_timer->setTimer(2000)->wait();
 
@@ -133,8 +132,8 @@ void CB5::setup(Preferences *preferences)
     this->_gps = new IGps(this->_lcd, this->_timer);
     this->_cb = new Cb(this->_app, this->_sys, this->_lcd);
 
-    // this->_initGps();
-    //  this->_scanConnectedApplicators();
+    this->_initGps();
+    this->_scanConnectedApplicators();
 
     this->_requestMiddleware = new RequestMiddleware(this->_cb, this->_gps, this->_lcd);
 
@@ -145,6 +144,10 @@ void CB5::setup(Preferences *preferences)
     this->_lcd->printCentered(this->_cb->getId(), 0, 1);
     this->_timer->setTimer(1500)->wait();
     this->_lcd->clear();
+    this->_lcd->setGpsStatus(false);
+    this->_lcd->setDoseStatus(0, 0);
+    this->_lcd->setCBName(this->_cb->getId());
+    this->_lcd->setVersion(CONFIG_CB5_SOFTWARE_VERSION);
 
     loggerInfo("CB5.setup", "Process finished");
 };
