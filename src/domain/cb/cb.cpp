@@ -24,9 +24,7 @@ ErrorOrBool Cb::dose(char amount)
     {
         loggerInfo("Cb.dose", "Starting dose: " + to_string(amount));
 
-        this->_lcd->clear();
-        this->_lcd->print("  INICIO DOSE", 0, 0);
-        this->_lcd->printCentered(to_string(dose + 1) + "/" + to_string(amount), 0, 1);
+        this->_lcd->setDoseStatus(dose + 1, amount);
 
         loggerInfo("Cb.dose", "Starting all applicators");
 

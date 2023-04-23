@@ -48,7 +48,27 @@ void ILcd::setCursor(uint8_t column, uint8_t line)
 ILcd::ILcd()
 {
     loggerInfo("Lcd", "Constructor");
-
     lcd.init();
     lcd.backlight();
 }
+
+void ILcd::setGpsStatus(bool status)
+{
+    loggerInfo("Lcd.setGpsStatus", "Process started");
+    if (status)
+    {
+        print("GPS", 0, 0);
+    }
+    else
+    {
+        print("   ", 0, 0);
+    }
+    loggerInfo("Lcd.setGpsStatus", "Process finished");
+};
+
+void ILcd::setDoseStatus(int done, int target)
+{
+    loggerInfo("Lcd.setDoseStatus", "Process started");
+    print(centerString(to_string(done) + "/" + to_string(target), 12), 8, 0);
+    loggerInfo("Lcd.setDoseStatus", "Process finished");
+};

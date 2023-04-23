@@ -24,9 +24,6 @@ ErrorOrBool DoseUseCase::execute(char amount)
 
     loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
 
-    this->lcd->clear();
-    this->lcd->print("INICIO DOSAGEM", 0, 0);
-    this->lcd->print(to_string(amount) + " DOSES", 0, 1);
     ErrorOrBool errorOrBool = this->cb->dose(amount);
     if (errorOrBool.isError())
     {
@@ -34,8 +31,7 @@ ErrorOrBool DoseUseCase::execute(char amount)
         return ErrorOrBool(errorOrBool.getError());
     }
 
-    this->lcd->clear();
-    this->lcd->print("DOSAGEM FINALIZADA", 0, 0);
+    this->lcd->setDoseStatus(0, 0);
 
     loggerInfo("DoseUseCase", "Process finished");
 

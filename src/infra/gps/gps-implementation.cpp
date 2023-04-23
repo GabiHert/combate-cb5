@@ -23,7 +23,10 @@ ErrorOrString IGps::_getData(Timer *timer)
     char startHeaderCount = 0;
     int gpsData;
     bool dataTransferStarted = false;
-    // todo: fazer o flush (limpar o buffer)
+    while (gpsSerial.available())
+    {
+        gpsSerial.read();
+    }
 
     while (gpsData != CONFIG_PROTOCOL_LF || !dataTransferStarted)
     {
@@ -76,6 +79,7 @@ ErrorOrString IGps::_getData(Timer *timer)
             }
         }
     }
+    loggerInfo("IGps._getData", "Process finished", data);
 
     return ErrorOrString(data);
 }
@@ -112,47 +116,54 @@ ErrorOrBool IGps::setup()
 
     loggerInfo("IGps.setup", "set baud 19200");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS baud 19200", 0, 0);
-    this->_lcd->printCentered("interno", 0, 1);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("BAUD 19200 I", 0, 1);
     gpsSerial.begin(CONFIG_GPS_SERIAL_BAUD_RATE, SERIAL_8N2, CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
     this->timer->setTimer(1000)->wait();
 
     loggerInfo("IGps.setup", "set 10hz");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS 10Hz [1]", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("10Hz [1]", 0, 1);
+
     for (i = 0; i < 14; i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_SET_10HZ_1[i]);
 
     loggerInfo("IGps.setup", "set baud 9600");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS baud 9600", 0, 0);
-    this->_lcd->printCentered("interno", 0, 1);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("BAUD 9600 I", 0, 1);
+
     gpsSerial.begin(9600, SERIAL_8N2, CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
     this->timer->setTimer(3000)->wait();
 
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS 10Hz", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("10Hz [2]", 0, 1);
     loggerInfo("IGps.setup", "set 10hz");
     for (i = 0; i < 14; i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_SET_10HZ_1[i]);
     this->timer->setTimer(3000)->wait();
 
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS GLL OFF", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("GLL OFF", 0, 1);
     loggerInfo("IGps.setup", "disable GLL");
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_GLL.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_GLL.at(i));
     this->timer->setTimer(1000)->wait();
 
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS GSV OFF", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("GSV OFF", 0, 1);
     loggerInfo("IGps.setup", "disable GSV");
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_GSV.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_GSV.at(i));
     this->timer->setTimer(1000)->wait();
 
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS GSA OFF", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("GSA OFF", 0, 1);
     loggerInfo("IGps.setup", "disable GSA");
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_GSA.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_GSA.at(i));
@@ -160,29 +171,32 @@ ErrorOrBool IGps::setup()
 
     loggerInfo("IGps.setup", "disable GGA");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS GGA OFF", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("GGA OFF", 0, 1);
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_GGA.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_GGA.at(i));
     this->timer->setTimer(1000)->wait();
 
     loggerInfo("IGps.setup", "disable VTG");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS VGT OFF", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("VGT OFF", 0, 1);
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_VTG.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_VTG.at(i));
     this->timer->setTimer(1000)->wait();
 
     loggerInfo("IGps.setup", "disable ZDA");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS ZDA OFF", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("ZDA OFF", 0, 1);
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_ZDA.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_ZDA.at(i));
     this->timer->setTimer(1000)->wait();
 
     loggerInfo("IGps.setup", "set baud 19200");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS baud 19200", 0, 0);
-    this->_lcd->printCentered("externo", 0, 1);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("BAUD 19200 E", 0, 1);
 
     for (i = 0; i < CONFIG().UBLOX_SETUP_SET_SERIAL_BAUD_19200.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_SET_SERIAL_BAUD_19200.at(i));
@@ -190,31 +204,20 @@ ErrorOrBool IGps::setup()
 
     loggerInfo("IGps.setup", "begin baud 19200");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS baud 19200", 0, 0);
-    this->_lcd->printCentered("interno", 0, 1);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("BAUD 19200 I", 0, 1);
     gpsSerial.begin(CONFIG_GPS_SERIAL_BAUD_RATE, SERIAL_8N2, CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
     this->timer->setTimer(1000)->wait();
 
     loggerInfo("IGps.setup", "set 10hz");
     this->_lcd->clear();
-    this->_lcd->printCentered("GPS 10Hz [2]", 0, 0);
+    this->_lcd->printCentered("SET GPS", 0, 0);
+    this->_lcd->printCentered("10Hz [3]", 0, 1);
     for (i = 0; i < 16; i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_SET_10HZ[i]);
     this->timer->setTimer(3000)->wait();
 
-    ErrorOrString errorOrString = this->getData(CONFIG_GPS_SETUP_TIMEOUT);
-    if (errorOrString.isError())
-    {
-        loggerError("IGps.setup", "Process error");
-        return ErrorOrBool(errorOrString.getError());
-    }
     loggerInfo("IGps.setup", "Process finished");
 
     return ErrorOrBool(true);
 };
-
-ErrorOrBool testSetup(Timer *timer)
-{
-    gpsSerial.begin(CONFIG_GPS_SERIAL_BAUD_RATE, SERIAL_8N2, CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
-    timer->setTimer(1000)->wait();
-}

@@ -16,7 +16,9 @@
 
 void CB5::execute()
 {
-    this->_lcd->print("AGUARDANDO IHM.", 0, 0);
+    this->_lcd->clear();
+    this->_lcd->setGpsStatus(false);
+    this->_lcd->setDoseStatus(0, 0);
     this->_lcd->printCentered(this->_cb->getId(), 0, 1);
 
     if (this->_app->available())
@@ -56,7 +58,7 @@ void CB5::_scanConnectedApplicators()
             this->_lcd->print(this->_cb->getApplicators().getError().errorCode, 0, 1);
             this->_timer->setTimer(1000)->wait();
         }
-    } while (this->_cb->getApplicators().isError());
+    } while (true); //(this->_cb->getApplicators().isError());
 
     this->_lcd->clear();
     this->_lcd->print("   DOSADORES    ", 0, 0);
@@ -86,52 +88,8 @@ void CB5::_initGps()
         this->_lcd->print("GPS. -> AGUARDE.", 0, 1);
 
         ErrorOrBool errorOrBool = _gps->setup();
-        int retries = 0;
-        for (retries; retries < CONFIG_GPS_MAX_SETUP_RETRIES; retries++)
+        for (int retries = 0; retries <= CONFIG_GPS_MAX_SETUP_VALID_DATA_RETRIES; retries++)
         {
-            if (errorOrBool.isError())
-            {
-                this->_lcd->clear();
-                this->_lcd->print(errorOrBool.getError().description, 0, 0);
-                this->_lcd->print(errorOrBool.getError().errorCode, 0, 1);
-
-                this->_timer->setTimer(1500);
-                this->_timer->wait();
-
-                this->_lcd->clear();
-                this->_lcd->print("    AGUARDE     ", 0, 0);
-                this->_lcd->print(to_string(CONFIG_GPS_SETUP_RETRY_INTERVAL / 1000) + " SEGUNDOS", 0, 1);
-
-                this->_timer->setTimer(CONFIG_GPS_SETUP_RETRY_INTERVAL);
-                this->_timer->wait();
-
-                this->_lcd->clear();
-                this->_lcd->printCentered("SETUP", 0, 0);
-                this->_lcd->print("GPS. -> AGUARDE.", 0, 1);
-                if (!_gps->getData().isError())
-                {
-                    errorOrBool = ErrorOrBool(true);
-                }
-            }
-            else
-            {
-
-                this->_lcd->clear();
-                this->_lcd->printCentered("SETUP", 0, 0);
-                this->_lcd->print("GPS. -> OK!", 0, 1);
-
-                this->_timer->setTimer(1500);
-                this->_timer->wait();
-                break;
-            }
-        }
-
-        retries = 0;
-        for (retries; retries <= CONFIG_GPS_MAX_SETUP_VALID_DATA_RETRIES; retries++)
-        {
-            this->_lcd->clear();
-            this->_lcd->print("VERIFICANDO DADOS", 0, 0);
-            this->_lcd->print("GPS. -> AGUARDE. ", 0, 1);
 
             ErrorOrString errorOrString = this->_gps->getData();
             if (errorOrString.isError())
@@ -142,31 +100,19 @@ void CB5::_initGps()
             }
             else
             {
-                for (int i = 0; i < errorOrString.getString().length() && errorOrString.getString().length() >= 16; i += 32)
-                {
-                    this->_lcd->print(errorOrString.getString(), 0, 0);
-                }
-
                 if (this->_gps->gprmcProtocolValidation.isDataReliable(errorOrString.getString()))
                 {
                     this->_lcd->clear();
-                    this->_lcd->print("VERIFICANDO DADOS", 0, 0);
-                    this->_lcd->print("GPS. -> OK!", 0, 1);
+                    this->_lcd->printCentered("SINAL GPS", 0, 0);
+                    this->_lcd->printCentered("OK", 0, 1);
                     this->_timer->setTimer(1000)->wait();
                     valid = true;
                     break;
                 }
 
                 this->_lcd->clear();
-                this->_lcd->print("VERIFICANDO DADOS", 0, 0);
-                this->_lcd->print("GPS. -> N OK!", 0, 1);
-
-                this->_timer->setTimer(1500)->wait();
-
-                this->_lcd->clear();
-                this->_lcd->print("[" + to_string(retries) + "] RETENTANDO", 0, 0);
-                this->_lcd->print(to_string(CONFIG_GPS_SETUP_RETRY_INTERVAL / 1000) + " SEGUNDOS", 0, 1);
-
+                this->_lcd->printCentered("SEM SINAL GPS", 0, 0);
+                this->_lcd->printCentered("[" + to_string(retries) + "]", 0, 1);
                 this->_timer->setTimer(CONFIG_GPS_SETUP_RETRY_INTERVAL)->wait();
             }
         }
@@ -187,14 +133,8 @@ void CB5::setup(Preferences *preferences)
     this->_gps = new IGps(this->_lcd, this->_timer);
     this->_cb = new Cb(this->_app, this->_sys, this->_lcd);
 
-    this->_lcd->clear();
-    this->_lcd->print("INICIANDO CB", 0, 0);
-    this->_lcd->print("   AGUARDE...   ", 0, 1);
-    this->_timer->setTimer(1000);
-    this->_timer->wait();
-
-    this->_initGps();
-    this->_scanConnectedApplicators();
+    // this->_initGps();
+    //  this->_scanConnectedApplicators();
 
     this->_requestMiddleware = new RequestMiddleware(this->_cb, this->_gps, this->_lcd);
 

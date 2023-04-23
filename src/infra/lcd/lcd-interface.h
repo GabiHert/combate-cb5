@@ -16,5 +16,7 @@ public:
     void printCentered(string message, uint8_t column, uint8_t line);
     void setCursor(uint8_t column, uint8_t line);
     void clear();
+    void setGpsStatus(bool active);
+    void setDoseStatus(int done, int target);
 };
 #endif // Ilcd_H

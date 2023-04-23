@@ -13,9 +13,7 @@ ErrorOrString GetGpsLocationUseCase::execute()
 
     loggerInfo("GetGpsUseCase.execute", "Process started");
 
-    this->lcd->clear();
-    this->lcd->print("CONSULTANDO LOC.", 0, 0);
-    this->lcd->print("GPS. -> AGUARDE.", 0, 1);
+    this->lcd->setGpsStatus(true);
 
     ErrorOrString errorOrString = this->gps->getData();
 
@@ -30,6 +28,8 @@ ErrorOrString GetGpsLocationUseCase::execute()
 
     result = result.substr(7);
     result = result.replace(result.length() - 3, 1, "");
+
+    this->lcd->setGpsStatus(false);
 
     loggerInfo("GetGpsUseCase.execute", "Process finished", result);
 
