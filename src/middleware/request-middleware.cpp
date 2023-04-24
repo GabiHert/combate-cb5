@@ -6,17 +6,16 @@
 
 using namespace std;
 
-RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd)
+RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd,Timer *timer)
 {
   this->lcd = lcd;
   this->cb = cb;
   this->requestController = RequestController(cb, gps, lcd);
+  this->timer = timer;
 };
 
 ResponseModel RequestMiddleware::execute(string request)
 {
-  Timer timer;
-
   loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->getId());
 
   ErrorOrBool erroOrBool = requestValidationMiddleware.validate(request);
@@ -26,8 +25,7 @@ ResponseModel RequestMiddleware::execute(string request)
     this->lcd->clear();
     this->lcd->print(erroOrBool.getError().errorCode, 0, 0);
     this->lcd->print(erroOrBool.getError().description, 0, 1);
-    timer.setTimer(1000);
-    timer.wait();
+    this->timer->setTimer(1500)->wait();
 
     ResponseModel responseModel(erroOrBool.getError().errorCode);
 
@@ -44,8 +42,8 @@ ResponseModel RequestMiddleware::execute(string request)
     this->lcd->clear();
     this->lcd->print(errorOrResponseDto.getError().errorCode, 0, 0);
     this->lcd->print(errorOrResponseDto.getError().description, 0, 1);
-    timer.setTimer(1000);
-    timer.wait();
+    this->timer->setTimer(1500)->wait();
+
 
     ResponseModel responseModel(errorOrResponseDto.getError().errorCode);
 

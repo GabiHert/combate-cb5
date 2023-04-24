@@ -14,6 +14,7 @@ class RequestMiddleware
 private:
     ILcd *lcd;
     Cb *cb;
+    Timer *timer;
     RequestController requestController;
     RequestValidationMiddleware requestValidationMiddleware;
 

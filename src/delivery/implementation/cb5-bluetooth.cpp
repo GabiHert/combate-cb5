@@ -131,11 +131,11 @@ void CB5::setup(Preferences *preferences)
     this->_timer = new Timer();
     this->_gps = new IGps(this->_lcd, this->_timer);
     this->_cb = new Cb(this->_app, this->_sys, this->_lcd);
+    this->_requestMiddleware = new RequestMiddleware(this->_cb, this->_gps, this->_lcd,this->_timer);
 
     this->_initGps();
     this->_scanConnectedApplicators();
 
-    this->_requestMiddleware = new RequestMiddleware(this->_cb, this->_gps, this->_lcd);
 
     this->_app->start();
 
