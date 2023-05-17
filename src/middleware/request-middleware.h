@@ -20,7 +20,7 @@ private:
 
 public:
     RequestMiddleware(){};
-    RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd);
+    RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd, Timer *timer);
     ResponseModel execute(string request);
 };
 
