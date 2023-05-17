@@ -13,7 +13,13 @@ ErrorOrBool Cb::dose(char amount)
 
     ResponseDto responseDto = ResponseDto(*this);
     ResponseModel responseModel = ResponseModel(responseDto);
-    this->_app->write(responseModel.toString());
+    string responseString = responseModel.toString();
+    string separator;
+    for (int i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
+        separator += "-";
+
+    this->_app->write(responseString);
+    this->_app->write(separator);
 
     int connectedApplicators = 0;
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
