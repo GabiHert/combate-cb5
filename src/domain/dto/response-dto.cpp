@@ -10,8 +10,7 @@ ResponseDto::ResponseDto(Cb cb)
     this->_initializer = "&";
     this->_status = cb.getStatus();
     this->setErrorCode("000");
-    this->_wheelBoltsCount[0] = cb.getWheelBoltsCountDecimal();
-    this->_wheelBoltsCount[1] = cb.getWheelBoltsCountUnit();
+
     this->_gpsData = cb.getLocation();
     loggerInfo("ResponseDto", "wheelBoltsCount assigned", to_string(this->_wheelBoltsCount[0]) + to_string(this->_wheelBoltsCount[1]));
 
@@ -54,8 +53,7 @@ ResponseDto::ResponseDto(Cb cb, string errorCode)
 
     this->_initializer = "&";
     this->setErrorCode(errorCode);
-    this->_wheelBoltsCount[0] = cb.getWheelBoltsCountDecimal();
-    this->_wheelBoltsCount[1] = cb.getWheelBoltsCountUnit();
+
     this->_gpsData = cb.getLocation();
     loggerInfo("ResponseDto", "Process finished - constructor");
 }

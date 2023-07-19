@@ -1,17 +1,19 @@
 #include "utils/utils.h"
 #include "domain/dto/request-dto.h"
 #include "config/config.h"
+#include "exceptions/exceptions.h"
 #include "domain/cb/cb.h"
 #include "controller/request-controller.h"
 #include "types/error-or-string.h"
+#include <preferences.h>
 
-RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd)
+RequestController::RequestController(Preferences *preferences, Cb *cb, IGps *gps, ILcd *lcd)
 {
     this->cb = cb;
 
     this->lcd = lcd;
 
-    loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb->getId());
+    this->renameUseCase = RenameUseCase(preferences, cb);
 
     this->doseUseCase = DoseUseCase(cb, this->lcd);
 
@@ -28,18 +30,38 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
     RequestModel requestModel(requestDto);
     this->cb->setRequestModel(requestModel);
 
-    bool doseRequest = requestModel.getDose() != CONFIG_PROTOCOL_DO_NOT_DOSE;
+    bool doseRequest = requestModel.getRequestType() == CONFIG_PROTOCOL_DOSE_REQUEST_TYPE;
+    bool renameRequest = requestModel.getRequestType() == CONFIG_PROTOCOL_RENAME_REQUEST_TYPE;
+    bool setupRequest = requestModel.getRequestType() == CONFIG_PROTOCOL_SETUP_REQUEST_TYPE;
 
-    if (doseRequest)
+    ErrorOrInt errorOrInt = this->cb->updateConnectedApplicators();
+    if (errorOrInt.isError())
+    {
+        loggerError("DoseUseCase", "Process error", "could not update connected applicators");
+        return ErrorOrResponseDto(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
+    }
+
+    if (doseRequest && requestModel.getDose() != CONFIG_PROTOCOL_DO_NOT_DOSE)
     {
         loggerInfo("RequestController.execute", "Dose request detected");
-        ErrorOrBool errorOrBool = this->doseUseCase.execute(requestModel.getDose());
+        ErrorOrBool errorOrBool = this->doseUseCase.execute(requestModel.getDose(), requestDto.getApplicators());
         if (errorOrBool.isError())
         {
             loggerError("requestController.execute", "Process error", "error: " + errorOrBool.getError().description);
             return ErrorOrResponseDto(errorOrBool.getError());
         }
     };
+
+    if (renameRequest)
+    {
+        loggerInfo("RequestController.execute", "Rename request detected");
+        ErrorOrBool errorOrBool = this->renameUseCase.execute(requestModel.getName());
+        if (errorOrBool.isError())
+        {
+            loggerError("requestController.execute", "Process error", "error: " + errorOrBool.getError().description);
+            return ErrorOrResponseDto(errorOrBool.getError());
+        }
+    }
 
     ErrorOrString errorOrString = this->getGpsLocationUseCase.execute();
 

@@ -29,12 +29,6 @@ void CB5::execute()
         string responseString = responseModel.toString();
         this->_app->write(responseString);
 
-        string separator;
-        for (int i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
-            separator += "-";
-
-        this->_app->write(separator);
-
         loggerInfo("CB5.execute", "Process finished");
         this->_lcd->smartClear();
         this->_lcd->setGpsStatus(false);
@@ -50,23 +44,23 @@ void CB5::_scanConnectedApplicators()
     do
     {
         this->_cb->updateConnectedApplicators();
-        if (this->_cb->getApplicators().isError())
+        if (this->_cb->getConnectedApplicators().isError())
         {
             this->_lcd->clear();
-            this->_lcd->print(this->_cb->getApplicators().getError().description, 0, 0);
-            this->_lcd->print(this->_cb->getApplicators().getError().errorCode, 0, 1);
+            this->_lcd->print(this->_cb->getConnectedApplicators().getError().description, 0, 0);
+            this->_lcd->print(this->_cb->getConnectedApplicators().getError().errorCode, 0, 1);
             this->_timer->setTimer(1000)->wait();
         }
-    } while (this->_cb->getApplicators().isError());
+    } while (this->_cb->getConnectedApplicators().isError());
 
     this->_lcd->clear();
     this->_lcd->print("   DOSADORES    ", 0, 0);
-    this->_lcd->print("CONECTADOS -> " + to_string(this->_cb->getConnectedApplicators()), 0, 1);
+    this->_lcd->print("CONECTADOS -> " + to_string(this->_cb->getConnectedApplicatorsAmount()), 0, 1);
     this->_timer->setTimer(2000)->wait();
 
-    string applicator1Connected = this->_cb->getApplicators().getBoolVector()[0] ? " 1 " : "";
-    string applicator2Connected = this->_cb->getApplicators().getBoolVector()[1] ? " 2 " : "";
-    string applicator3Connected = this->_cb->getApplicators().getBoolVector()[2] ? " 3 " : "";
+    string applicator1Connected = this->_cb->getConnectedApplicators().getBoolVector()[0] ? " 1 " : "";
+    string applicator2Connected = this->_cb->getConnectedApplicators().getBoolVector()[1] ? " 2 " : "";
+    string applicator3Connected = this->_cb->getConnectedApplicators().getBoolVector()[2] ? " 3 " : "";
 
     this->_lcd->clear();
     this->_lcd->printCentered("DOSADOR(ES)", 0, 0);
@@ -131,7 +125,7 @@ void CB5::setup(Preferences *preferences)
     this->_timer = new Timer();
     this->_gps = new IGps(this->_lcd, this->_timer);
     this->_cb = new Cb(this->_app, this->_sys, this->_lcd);
-    this->_requestMiddleware = new RequestMiddleware(this->_cb, this->_gps, this->_lcd, this->_timer);
+    this->_requestMiddleware = new RequestMiddleware(preferences, this->_cb, this->_gps, this->_lcd, this->_timer);
 
     this->_initGps();
     this->_scanConnectedApplicators();

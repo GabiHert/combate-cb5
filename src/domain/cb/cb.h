@@ -25,27 +25,24 @@ private:
     ILcd *_lcd;
     char _wheelBoltsCount[2];
     string _location;
-    ErrorOrBoolVector _applicators;
-    int _connectedApplicators;
+    ErrorOrBoolVector _connectedApplicators;
+    int _connectedApplicatorsAmount;
 
 public:
     Cb(App *app, ISystem *sys, ILcd *lcd);
     Cb();
 
-    ErrorOrBool dose(char amount);
+    ErrorOrBool dose(char amount, vector<bool> applicators);
     string getId();
+    void setId(string id);
     string getStatus();
-    int getConnectedApplicators();
+    int getConnectedApplicatorsAmount();
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
     vector<PoisonApplicator *> getPoisonApplicator();
     string getLocation() { return this->_location; };
     void setLocation(string location) { this->_location = location; };
-    char getWheelBoltsCountDecimal();
-    char getWheelBoltsCountUnit();
-    ErrorOrBoolVector getApplicators();
-    void addWheelBoltsCount();
-    void clearWheelBoltsCount();
+    ErrorOrBoolVector getConnectedApplicators();
     ErrorOrInt updateConnectedApplicators();
     void clearStatus();
 };

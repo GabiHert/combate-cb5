@@ -6,7 +6,7 @@
 #include "domain/dto/response-dto.h"
 #include "exceptions/exceptions.h"
 
-ErrorOrBool Cb::dose(char amount)
+ErrorOrBool Cb::dose(char amount, vector<bool> applicators)
 {
     loggerInfo("Cb.dose", "Process started");
     this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
@@ -14,17 +14,13 @@ ErrorOrBool Cb::dose(char amount)
     ResponseDto responseDto = ResponseDto(*this);
     ResponseModel responseModel = ResponseModel(responseDto);
     string responseString = responseModel.toString();
-    string separator;
-    for (int i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
-        separator += "-";
 
     this->_app->write(responseString);
-    this->_app->write(separator);
 
-    int connectedApplicators = 0;
+    int applicatorsToDose = 0;
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
-        if (this->_applicators.getBoolVector()[i])
-            connectedApplicators++;
+        if (applicators[i])
+            applicatorsToDose++;
 
     for (char dose = 0; dose < amount; dose++)
     {
@@ -36,8 +32,8 @@ ErrorOrBool Cb::dose(char amount)
 
         for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         {
-            bool isApplicatorConnected = this->_applicators.getBoolVector()[i];
-            if (!isApplicatorConnected)
+            bool shouldDose = applicators[i];
+            if (!shouldDose)
             {
                 loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
                 continue;
@@ -70,8 +66,8 @@ ErrorOrBool Cb::dose(char amount)
             int count = 0;
             for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
             {
-                bool isApplicatorConnected = this->_applicators.getBoolVector()[i];
-                if (!isApplicatorConnected)
+                bool shouldDose = applicators[i];
+                if (!shouldDose)
                 {
                     loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
                     continue;
@@ -91,7 +87,7 @@ ErrorOrBool Cb::dose(char amount)
                 }
             }
 
-            if (count == connectedApplicators)
+            if (count == applicatorsToDose)
                 result = true;
         }
     }
@@ -106,37 +102,24 @@ string Cb::getId()
     return this->_id;
 };
 
-string Cb::getStatus() { return this->_status; };
-ErrorOrBoolVector Cb::getApplicators()
+void Cb::setId(string id)
 {
-    return this->_applicators;
+    this->_id = id;
+}
+string Cb::getStatus()
+{
+    return this->_status;
+};
+
+ErrorOrBoolVector Cb::getConnectedApplicators()
+{
+    return this->_connectedApplicators;
 }
 
 vector<PoisonApplicator *> Cb::getPoisonApplicator()
 {
     return this->_poisonApplicators;
 };
-
-char Cb::getWheelBoltsCountDecimal()
-{
-    return this->_wheelBoltsCount[0];
-};
-char Cb::getWheelBoltsCountUnit()
-{
-    return this->_wheelBoltsCount[1];
-};
-
-void Cb::clearWheelBoltsCount()
-{
-    this->_wheelBoltsCount[0] = 0;
-    this->_wheelBoltsCount[1] = 0;
-};
-
-void Cb::addWheelBoltsCount()
-{
-    // TODO: Implemetar logica
-    //  add somente ate 99
-}
 
 void Cb::setRequestModel(RequestModel requestModel)
 {
@@ -148,15 +131,15 @@ RequestModel Cb::getRequestModel()
     return this->requestModel;
 };
 
-int Cb::getConnectedApplicators()
+int Cb::getConnectedApplicatorsAmount()
 {
-    return this->_connectedApplicators;
+    return this->_connectedApplicatorsAmount;
 }
 
 Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
 {
     this->_poisonApplicators = vector<PoisonApplicator *>(CONFIG_POISON_APPLICATORS);
-    this->_connectedApplicators = 0;
+    this->_connectedApplicatorsAmount = 0;
     this->_location = "NO_DATA";
     this->_sys = sys;
     this->_app = app;
@@ -173,7 +156,7 @@ Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
 
 Cb::Cb()
 {
-    this->_connectedApplicators = 0;
+    this->_connectedApplicatorsAmount = 0;
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->_location = "NO_DATA";
     this->_wheelBoltsCount[0] = 0;
@@ -187,7 +170,7 @@ Cb::Cb()
 ErrorOrInt Cb::updateConnectedApplicators()
 {
     loggerInfo("Cb.updateConnectedApplicators", "Process started");
-    this->_connectedApplicators = 0;
+    this->_connectedApplicatorsAmount = 0;
     vector<bool> applicatorsConnection = vector<bool>(CONFIG_POISON_APPLICATORS);
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {
@@ -195,7 +178,7 @@ ErrorOrInt Cb::updateConnectedApplicators()
         {
             loggerInfo("Cb.updateConnectedApplicators", "Applicator found");
 
-            this->_connectedApplicators++;
+            this->_connectedApplicatorsAmount++;
             applicatorsConnection.at(i) = true;
         }
         else
@@ -205,16 +188,16 @@ ErrorOrInt Cb::updateConnectedApplicators()
             applicatorsConnection.at(i) = false;
         }
     }
-    if (!this->_connectedApplicators)
+    if (!this->_connectedApplicatorsAmount)
     {
-        loggerError("Cb.updateConnectedApplicators", "Process error", "applicators: " + to_string(this->_connectedApplicators));
-        this->_applicators = ErrorOrBoolVector(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
+        loggerError("Cb.updateConnectedApplicators", "Process error", "applicators: " + to_string(this->_connectedApplicatorsAmount));
+        this->_connectedApplicators = ErrorOrBoolVector(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
         return ErrorOrInt(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
     }
-    this->_applicators = ErrorOrBoolVector(applicatorsConnection);
+    this->_connectedApplicators = ErrorOrBoolVector(applicatorsConnection);
 
-    loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(this->_connectedApplicators));
-    return ErrorOrInt(this->_connectedApplicators);
+    loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(this->_connectedApplicatorsAmount));
+    return ErrorOrInt(this->_connectedApplicatorsAmount);
 }
 
 void Cb::clearStatus()

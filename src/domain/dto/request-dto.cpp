@@ -7,14 +7,20 @@ using namespace std;
 
 RequestDto::RequestDto(string request)
 {
-    this->_alarmSiren = request[3];
-    this->_dose = request[4];
-    this->_wheelBoltsCounter = request[5];
-};
+    this->_requestType = request[4];
+    switch (this->_requestType)
+    {
+    case CONFIG_PROTOCOL_DOSE_REQUEST_TYPE:
+        this->_dose = request[5];
+        this->_applicators.push_back(request[6] == '1');
+        this->_applicators.push_back(request[7] == '1');
+        this->_applicators.push_back(request[8] == '1');
+        break;
 
-char RequestDto::getAlarmSiren()
-{
-    return this->_alarmSiren;
+    case CONFIG_PROTOCOL_RENAME_REQUEST_TYPE:
+        this->_name = request.substr(5, 8);
+        break;
+    }
 };
 
 char RequestDto::getDose()
@@ -22,7 +28,17 @@ char RequestDto::getDose()
     return this->_dose;
 };
 
-char RequestDto::getWheelBoltsCounter()
+char RequestDto::getRequestType()
 {
-    return this->_wheelBoltsCounter;
-}
+    return this->_requestType;
+};
+
+vector<bool> RequestDto::getApplicators()
+{
+    return this->_applicators;
+};
+
+string RequestDto::getName()
+{
+    return this->_name;
+};

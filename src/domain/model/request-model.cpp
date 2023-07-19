@@ -4,14 +4,15 @@
 
 RequestModel::RequestModel(RequestDto requestDto)
 {
-    this->_alarmSiren = requestDto.getAlarmSiren();
+    this->_name = requestDto.getName();
+    this->_requestType = requestDto.getRequestType();
     this->_dose = requestDto.getDose();
-    this->_wheelBoltsCounter = requestDto.getWheelBoltsCounter();
+    this->_applicators = requestDto.getApplicators();
 };
 
-char RequestModel::getAlarmSiren()
+vector<bool> RequestModel::getConnectedApplicators()
 {
-    return this->_alarmSiren;
+    return this->_applicators;
 };
 
 char RequestModel::getDose()
@@ -19,7 +20,12 @@ char RequestModel::getDose()
     return this->_dose;
 };
 
-char RequestModel::getWheelBoltsCounter()
+char RequestModel::getRequestType()
 {
-    return this->_wheelBoltsCounter;
+    return this->_requestType;
+};
+
+string RequestModel::getName()
+{
+    return this->_name;
 };

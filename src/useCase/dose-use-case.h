@@ -13,7 +13,7 @@ private:
 public:
     DoseUseCase(Cb *cb, ILcd *lcd);
     DoseUseCase(){};
-    ErrorOrBool execute(char amount);
+    ErrorOrBool execute(char amount, vector<bool> applicators);
 };
 
 #endif

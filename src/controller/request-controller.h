@@ -3,6 +3,7 @@
 #include "domain/cb/cb.h"
 #include <Arduino.h>
 #include "useCase/dose-use-case.h"
+#include "useCase/rename-use-case.h"
 #include "useCase/get-gps-location-use-case.h"
 #include "domain/dto/response-dto.h"
 #include "domain/dto/request-dto.h"
@@ -15,9 +16,10 @@ private:
     ILcd *lcd;
     DoseUseCase doseUseCase;
     GetGpsLocationUseCase getGpsLocationUseCase;
+    RenameUseCase renameUseCase;
 
 public:
-    RequestController(Cb *cb, IGps *gps, ILcd *lcd);
+    RequestController(Preferences *preferences, Cb *cb, IGps *gps, ILcd *lcd);
     RequestController();
 
     ErrorOrResponseDto execute(RequestDto requestDto);

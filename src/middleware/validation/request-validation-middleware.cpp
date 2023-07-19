@@ -52,49 +52,66 @@ bool RequestValidationMiddleware::validateProtocol(string request)
     unsigned char requestLength = request.length();
     if (requestLength != CONFIG_PROTOCOL_STRING_LENGTH)
     {
-
         loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request length is different from protocol; requestLength: " + to_string(requestLength));
-
         return false;
     };
 
     if (request[requestLastIndex] != CONFIG_PROTOCOL_LF)
     {
-
         loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request Line feed is different from protocol; linefeed : " + request[requestLastIndex]);
-
         return false;
     };
 
     if (request[requestLastIndex - 1] != CONFIG_PROTOCOL_CR)
     {
-
         loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request Carriage Return is different from protocol; carriageReturn : " + request[requestLastIndex - 1]);
-
         return false;
     };
 
     string requestIdentifier = request.substr(CONFIG_PROTOCOL_IDENTIFIER_START_INDEX, CONFIG_PROTOCOL_IDENTIFIER_END_INDEX);
-
-    for (int requestCharacterIndex = 0; requestCharacterIndex <= requestLastIndex - 2; requestCharacterIndex++)
+    if (requestIdentifier != "INF5" && requestIdentifier != "INF1" && requestIdentifier != "INF0")
     {
-        string protocolAllowedElementValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES[requestCharacterIndex];
-        unsigned char protocolAllowedElementValueLength = protocolAllowedElementValues.length() - 1;
+        loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "invalid request identifier");
+        return false;
+    }
+
+    char requestType = request[4];
+
+    if (requestIdentifier == "INF5")
+    {
+        if (CONFIG().PROTOCOL_ALLOWED_REQUEST_TYPES.find(requestType) == CONFIG().PROTOCOL_ALLOWED_REQUEST_TYPES.npos)
+        {
+            loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "invalid requestType");
+            return false;
+        }
+    }
+
+    auto allowedValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES_R;
+
+    switch (requestType)
+    {
+    case 'R':
+        allowedValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES_R;
+        break;
+    case 'D':
+        allowedValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES_D;
+        break;
+    case 'S':
+        allowedValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES_S;
+        break;
+
+    default:
+        allowedValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES_V4;
+        break;
+    }
+
+    for (int requestCharacterIndex = 4; requestCharacterIndex <= requestLastIndex - 2; requestCharacterIndex++)
+    {
+        string protocolAllowedElementValues = allowedValues[requestCharacterIndex - 4];
 
         if (CONFIG_PROTOCOL_ANY_VALUE_VALID != protocolAllowedElementValues)
         {
-            bool present = false;
-
-            for (int allowedElementIndex = 0; allowedElementIndex <= protocolAllowedElementValueLength; allowedElementIndex++)
-            {
-                if (request[requestCharacterIndex] == protocolAllowedElementValues[allowedElementIndex])
-                {
-                    present = true;
-                    break;
-                };
-            };
-
-            if (!present)
+            if (protocolAllowedElementValues.find(request[requestCharacterIndex]) == protocolAllowedElementValues.npos)
             {
                 loggerWarn("RequestValidationMiddleware.validateProtocol", "Process warn", "request: " + request + "; charactereValue: " + request[requestCharacterIndex] + "; allowedValues: " + protocolAllowedElementValues);
                 loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "request " + to_string(request[requestCharacterIndex]) + " character at index " + to_string(requestCharacterIndex) + " does not match the protocol allowed values;");

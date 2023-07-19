@@ -7,17 +7,22 @@
 class RequestModel
 {
 private:
-    char _alarmSiren;
     char _dose;
-    char _wheelBoltsCounter;
+    char _requestType;
+    string _name;
+    vector<bool> _applicators;
 
 public:
     RequestModel(RequestDto requestDto);
     RequestModel() {}
 
-    char getAlarmSiren();
     char getDose();
-    char getWheelBoltsCounter();
+
+    char getRequestType();
+
+    string getName();
+
+    vector<bool> getConnectedApplicators();
 };
 
 #endif // REQUEST_MODEL_H

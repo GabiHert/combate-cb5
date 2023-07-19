@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include "domain/model/response-model.h"
 #include "infra/gps/gps-interface.h"
+#include <preferences.h>
 
 class RequestMiddleware
 {
@@ -15,12 +16,13 @@ private:
     ILcd *lcd;
     Cb *cb;
     Timer *timer;
-    RequestController requestController;
+    RequestController _requestController;
     RequestValidationMiddleware requestValidationMiddleware;
+    string parseV4ToV5(string request);
 
 public:
     RequestMiddleware(){};
-    RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd, Timer *timer);
+    RequestMiddleware(Preferences *preferences, Cb *cb, IGps *gps, ILcd *lcd, Timer *timer);
     ResponseModel execute(string request);
 };
 

@@ -8,8 +8,17 @@ DoseUseCase::DoseUseCase(Cb *cb, ILcd *lcd)
     this->cb = cb;
 };
 
-ErrorOrBool DoseUseCase::execute(char amount)
+ErrorOrBool DoseUseCase::execute(char amount, vector<bool> applicators)
 {
+
+    for (int i = 0; i < applicators.size(); i++)
+    {
+        if (applicators.at(i) != this->cb->getConnectedApplicators().getBoolVector().at(i))
+        {
+            loggerError("DoseUseCase", "Process error", "applicator not found");
+            return ErrorOrBool(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
+        }
+    }
 
     amount = asciiCharToNumber(amount);
 
@@ -24,7 +33,7 @@ ErrorOrBool DoseUseCase::execute(char amount)
 
     loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
 
-    ErrorOrBool errorOrBool = this->cb->dose(amount);
+    ErrorOrBool errorOrBool = this->cb->dose(amount, applicators);
     if (errorOrBool.isError())
     {
         loggerError("doseUseCase.execute", "Process error", "error: " + errorOrBool.getError().description);
