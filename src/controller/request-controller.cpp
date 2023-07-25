@@ -30,26 +30,26 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
 
     bool doseRequest = requestModel.getDose() != CONFIG_PROTOCOL_DO_NOT_DOSE;
 
+    ErrorOrString errorOrString = this->getGpsLocationUseCase.execute();
+    if (errorOrString.isError())
+    {
+        loggerError("requestController.execute", "Process error", "error: " + errorOrString.getError()->description);
+        return ErrorOrResponseDto(*errorOrString.getError());
+    }
+    this->cb->setLocation(errorOrString.getString());
+
     if (doseRequest)
     {
         loggerInfo("RequestController.execute", "Dose request detected");
-        ErrorOrBool errorOrBool = this->doseUseCase.execute(requestModel.getDose());
-        if (errorOrBool.isError())
+        pair<bool, ERROR_TYPE *> errorOrBool = this->doseUseCase.execute(requestModel.getDose());
+        if (errorOrBool.second != nullptr)
         {
-            loggerError("requestController.execute", "Process error", "error: " + errorOrBool.getError().description);
-            return ErrorOrResponseDto(errorOrBool.getError());
+            loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
+            ResponseDto responseDto(*cb, errorOrBool.second->errorCode);
+            return ErrorOrResponseDto(responseDto);
         }
     };
 
-    ErrorOrString errorOrString = this->getGpsLocationUseCase.execute();
-
-    if (errorOrString.isError())
-    {
-        loggerError("requestController.execute", "Process error", "error: " + errorOrString.getError().description);
-        return ErrorOrResponseDto(errorOrString.getError());
-    }
-
-    this->cb->setLocation(errorOrString.getString());
     ResponseDto responseDto(*this->cb);
     loggerInfo("RequestController.execute", "Process finished", " gpsData: " + string(responseDto.getGpsData()));
     return ErrorOrResponseDto(responseDto);

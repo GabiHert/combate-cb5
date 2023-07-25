@@ -10,8 +10,8 @@ public:
     GprmcProtocolValidation(){};
     bool validateStartHeader(string data);
     bool validateEndHeader(string data);
-    bool validateStartHeader(char charactere, int position);
-    bool validateEndHeader(char charactere, int position);
+    bool validateStartHeader(char charactere, unsigned char position);
+    bool validateEndHeader(char charactere, unsigned char position);
     bool validate(string data);
     bool isDataReliable(string data);
 };

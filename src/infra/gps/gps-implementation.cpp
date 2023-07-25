@@ -4,7 +4,7 @@
 #include "config/config.h"
 #include <Arduino.h>
 #include <string.h>
-#include "exceptions/exceptions.h"
+#include "exceptions/error-type.h"
 using namespace std;
 
 HardwareSerial gpsSerial(2);
@@ -34,7 +34,7 @@ ErrorOrString IGps::_getData(Timer *timer)
         if (timer->timedOut())
         {
             loggerError("IGps.getData", "Process error", "Gps timed out");
-            return ErrorOrString(EXCEPTIONS().GPS_TIME_OUT);
+            return ErrorOrString(ERROR_TYPES().GPS_TIME_OUT);
         }
 
         if (gpsSerial.available() > 0)
@@ -43,8 +43,6 @@ ErrorOrString IGps::_getData(Timer *timer)
 
             if (gpsData == '$' && dataTransferStarted)
             {
-                loggerWarn("IGps.getData", "Process warn", "data reset");
-
                 startHeaderCount = 0;
                 dataTransferStarted = false;
                 data = "";
@@ -63,8 +61,6 @@ ErrorOrString IGps::_getData(Timer *timer)
                 }
                 else
                 {
-                    loggerWarn("IGps.getData", "Process warn", "data reset " + gpsData);
-
                     startHeaderCount = 0;
                     dataTransferStarted = false;
                     data = "";
@@ -96,7 +92,7 @@ ErrorOrString IGps::getData(int timeOut)
         errorOrString = this->_getData(timer);
         if (errorOrString.isError())
         {
-            loggerError("IGps.getData", "Process error", errorOrString.getError().description);
+            loggerError("IGps.getData", "Process error", errorOrString.getError()->description);
 
             return errorOrString;
         }
@@ -108,11 +104,11 @@ ErrorOrString IGps::getData(int timeOut)
     return errorOrString;
 };
 
-ErrorOrBool IGps::setup()
+pair<bool, ERROR_TYPE *> IGps::setup()
 {
     loggerInfo("IGps.setup", "Process started");
 
-    int i = 0;
+    unsigned char i = 0;
 
     loggerInfo("IGps.setup", "set baud 19200");
     this->_lcd->clear();
@@ -219,5 +215,5 @@ ErrorOrBool IGps::setup()
 
     loggerInfo("IGps.setup", "Process finished");
 
-    return ErrorOrBool(true);
+    return make_pair(true, nullptr);
 };

@@ -15,10 +15,10 @@ void ISystem::setupPort(unsigned char pin, unsigned char mode)
     pinMode(pin, mode);
 };
 
-int ISystem::readDigitalPort(unsigned char pin)
+bool ISystem::readDigitalPort(unsigned char pin)
 {
     loggerInfo("ISystem.readDigitalPort", "Process started", "pin: " + to_string(pin));
-    int result = digitalRead(pin);
+    bool result = digitalRead(pin) > 0;
     loggerInfo("ISystem.readDigitalPort", "Process finished", "result: " + to_string(result));
 
     return result;
@@ -39,9 +39,9 @@ string ISystem::serialRead()
     return arduinoStringToStdString(Serial.readString());
 };
 
-int ISystem::serialAvailable()
+bool ISystem::serialAvailable()
 {
-    return Serial.available();
+    return Serial.available() > 0;
 }
 
 ISystem::ISystem()

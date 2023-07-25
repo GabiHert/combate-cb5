@@ -4,9 +4,9 @@
 #include "config/config.h"
 #include "domain/model/response-model.h"
 #include "domain/dto/response-dto.h"
-#include "exceptions/exceptions.h"
+#include "exceptions/error-type.h"
 
-ErrorOrBool Cb::dose(char amount)
+pair<bool, ERROR_TYPE *> Cb::dose(char amount)
 {
     loggerInfo("Cb.dose", "Process started");
     this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
@@ -15,14 +15,14 @@ ErrorOrBool Cb::dose(char amount)
     ResponseModel responseModel = ResponseModel(responseDto);
     string responseString = responseModel.toString();
     string separator;
-    for (int i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
+    for (unsigned char i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
         separator += "-";
 
     this->_app->write(responseString);
     this->_app->write(separator);
 
-    int connectedApplicators = 0;
-    for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+    unsigned char connectedApplicators = 0;
+    for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         if (this->_applicators.getBoolVector()[i])
             connectedApplicators++;
 
@@ -34,7 +34,7 @@ ErrorOrBool Cb::dose(char amount)
 
         loggerInfo("Cb.dose", "Starting all applicators");
 
-        for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+        for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         {
             bool isApplicatorConnected = this->_applicators.getBoolVector()[i];
             if (!isApplicatorConnected)
@@ -58,17 +58,17 @@ ErrorOrBool Cb::dose(char amount)
             {
                 loggerError("Cb.dose", "Process error", "Time out");
 
-                for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+                for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
                     this->_poisonApplicators.at(i)->stop();
 
                 this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
-                return ErrorOrBool(EXCEPTIONS().DOSE_PROCESS_TIME_OUT);
+                return make_pair(false, ERROR_TYPES().DOSE_PROCESS_TIME_OUT);
             }
 
             vector<bool> tasksDone = vector<bool>(CONFIG_POISON_APPLICATORS);
 
-            int count = 0;
-            for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+            unsigned char count = 0;
+            for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
             {
                 bool isApplicatorConnected = this->_applicators.getBoolVector()[i];
                 if (!isApplicatorConnected)
@@ -98,7 +98,7 @@ ErrorOrBool Cb::dose(char amount)
 
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     loggerInfo("Cb.dose", "Process finished");
-    return ErrorOrBool(true);
+    return make_pair(true, nullptr);
 };
 
 string Cb::getId()
@@ -117,27 +117,6 @@ vector<PoisonApplicator *> Cb::getPoisonApplicator()
     return this->_poisonApplicators;
 };
 
-char Cb::getWheelBoltsCountDecimal()
-{
-    return this->_wheelBoltsCount[0];
-};
-char Cb::getWheelBoltsCountUnit()
-{
-    return this->_wheelBoltsCount[1];
-};
-
-void Cb::clearWheelBoltsCount()
-{
-    this->_wheelBoltsCount[0] = 0;
-    this->_wheelBoltsCount[1] = 0;
-};
-
-void Cb::addWheelBoltsCount()
-{
-    // TODO: Implemetar logica
-    //  add somente ate 99
-}
-
 void Cb::setRequestModel(RequestModel requestModel)
 {
     this->requestModel = requestModel;
@@ -148,7 +127,7 @@ RequestModel Cb::getRequestModel()
     return this->requestModel;
 };
 
-int Cb::getConnectedApplicators()
+unsigned char Cb::getConnectedApplicators()
 {
     return this->_connectedApplicators;
 }
@@ -162,8 +141,7 @@ Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
     this->_app = app;
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->_id = app->getDeviceName();
-    this->_wheelBoltsCount[0] = 0;
-    this->_wheelBoltsCount[1] = 0;
+
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
     this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
     this->_poisonApplicators[2] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
@@ -176,8 +154,6 @@ Cb::Cb()
     this->_connectedApplicators = 0;
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->_location = "NO_DATA";
-    this->_wheelBoltsCount[0] = 0;
-    this->_wheelBoltsCount[1] = 0;
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1);
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2);
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3);
@@ -189,7 +165,7 @@ ErrorOrInt Cb::updateConnectedApplicators()
     loggerInfo("Cb.updateConnectedApplicators", "Process started");
     this->_connectedApplicators = 0;
     vector<bool> applicatorsConnection = vector<bool>(CONFIG_POISON_APPLICATORS);
-    for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+    for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {
         if (!this->_sys->readDigitalPort(CONFIG().PORT_GPIO_SENSOR_CONNECTED_APPLICATORS[i]))
         {
@@ -208,8 +184,8 @@ ErrorOrInt Cb::updateConnectedApplicators()
     if (!this->_connectedApplicators)
     {
         loggerError("Cb.updateConnectedApplicators", "Process error", "applicators: " + to_string(this->_connectedApplicators));
-        this->_applicators = ErrorOrBoolVector(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
-        return ErrorOrInt(EXCEPTIONS().NO_APPLICATORS_FOUND_ERROR);
+        this->_applicators = ErrorOrBoolVector(*ERROR_TYPES().NO_APPLICATORS_FOUND_ERROR);
+        return ErrorOrInt(*ERROR_TYPES().NO_APPLICATORS_FOUND_ERROR);
     }
     this->_applicators = ErrorOrBoolVector(applicatorsConnection);
 

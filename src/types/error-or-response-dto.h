@@ -13,7 +13,27 @@ private:
 public:
     ErrorOrResponseDto(){};
     ErrorOrResponseDto(ERROR_TYPE error) : _error(error), _isError(true){};
-    ErrorOrResponseDto(ResponseDto responseDto) : _responseDto(responseDto), _isError(false){};
+    ErrorOrResponseDto(ResponseDto responseDto) : _responseDto(responseDto)
+    {
+        if (responseDto.getStatus() == CONFIG_PROTOCOL_STATUS_ERROR)
+        {
+
+            for (unsigned char i = 0; i < ERROR_TYPE_MAPPED_ERRORS_AMOUNT; i++)
+            {
+                if (ERROR_TYPES().ERROR_TYPES_ARRAY[i].errorCode == responseDto.getErrorCode())
+                {
+                    this->_error = ERROR_TYPES().ERROR_TYPES_ARRAY[i];
+                    continue;
+                }
+            }
+
+            this->_isError = true;
+        }
+        else
+        {
+            this->_isError = false;
+        }
+    };
 
     bool isError() { return this->_isError; };
     ResponseDto getResponseDto() { return this->_responseDto; };

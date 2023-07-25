@@ -1,6 +1,7 @@
 #ifndef ERROR_OR_BOOL_H
 #define ERROR_OR_BOOL_H
 #include "exceptions/error-type.h"
+#include <iostream>
 
 class ErrorOrBool
 {

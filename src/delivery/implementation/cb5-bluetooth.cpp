@@ -6,7 +6,7 @@
 #include "middleware/request-middleware.h"
 #include "utils/utils.h"
 #include "BluetoothSerial.h"
-#include "types/error-or-boolean.h"
+#include <iostream>
 #include "infra/validation/gprmc-protocol-validation.h"
 #include <preferences.h>
 
@@ -30,7 +30,7 @@ void CB5::execute()
         this->_app->write(responseString);
 
         string separator;
-        for (int i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
+        for (char i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
             separator += "-";
 
         this->_app->write(separator);
@@ -86,16 +86,16 @@ void CB5::_initGps()
         this->_lcd->printCentered("SETUP", 0, 0);
         this->_lcd->print("GPS. -> AGUARDE.", 0, 1);
 
-        ErrorOrBool errorOrBool = _gps->setup();
-        for (int retries = 0; retries <= CONFIG_GPS_MAX_SETUP_VALID_DATA_RETRIES; retries++)
+        pair<bool, ERROR_TYPE *> errorOrBool = _gps->setup();
+        for (unsigned char retries = 0; retries <= CONFIG_GPS_MAX_SETUP_VALID_DATA_RETRIES; retries++)
         {
 
             ErrorOrString errorOrString = this->_gps->getData();
             if (errorOrString.isError())
             {
                 this->_lcd->clear();
-                this->_lcd->print(errorOrString.getError().description, 0, 0);
-                this->_lcd->print(errorOrString.getError().errorCode, 0, 1);
+                this->_lcd->print(errorOrString.getError()->description, 0, 0);
+                this->_lcd->print(errorOrString.getError()->errorCode, 0, 1);
             }
             else
             {

@@ -9,7 +9,6 @@ class RequestModel
 private:
     char _alarmSiren;
     char _dose;
-    char _wheelBoltsCounter;
 
 public:
     RequestModel(RequestDto requestDto);
@@ -17,7 +16,6 @@ public:
 
     char getAlarmSiren();
     char getDose();
-    char getWheelBoltsCounter();
 };
 
 #endif // REQUEST_MODEL_H

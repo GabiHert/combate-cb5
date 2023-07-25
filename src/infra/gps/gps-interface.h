@@ -4,7 +4,7 @@
 #include "infra/lcd/lcd-interface.h"
 #include <string>
 #include "types/error-or-string.h"
-#include "types/error-or-boolean.h"
+#include <iostream>
 #include "utils/utils.h"
 #include "config/config.h"
 using namespace std;
@@ -20,7 +20,7 @@ public:
     IGps(ILcd *lcd, Timer *timer);
     GprmcProtocolValidation gprmcProtocolValidation;
     ErrorOrString getData(int timeOut = CONFIG_GPS_TIMEOUT);
-    ErrorOrBool setup();
+    pair<bool, ERROR_TYPE *> setup();
 };
 
 #endif // IGPS_H

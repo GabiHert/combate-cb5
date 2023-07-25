@@ -1,5 +1,5 @@
 #include "utils/utils.h"
-#include "exceptions/exceptions.h"
+#include "exceptions/error-type.h"
 #include "useCase/dose-use-case.h"
 
 DoseUseCase::DoseUseCase(Cb *cb, ILcd *lcd)
@@ -8,7 +8,7 @@ DoseUseCase::DoseUseCase(Cb *cb, ILcd *lcd)
     this->cb = cb;
 };
 
-ErrorOrBool DoseUseCase::execute(char amount)
+pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount)
 {
 
     amount = asciiCharToNumber(amount);
@@ -19,21 +19,21 @@ ErrorOrBool DoseUseCase::execute(char amount)
     if (amount == -1)
     {
         loggerError("DoseUseCase", "Process error", "amount could not be parsed to number");
-        return ErrorOrBool(EXCEPTIONS().PARSE_ERROR);
+        return make_pair(false, ERROR_TYPES().PARSE_ERROR);
     }
 
     loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
 
-    ErrorOrBool errorOrBool = this->cb->dose(amount);
-    if (errorOrBool.isError())
+    pair<bool, ERROR_TYPE *> boolOrError = this->cb->dose(amount);
+    if (boolOrError.second != nullptr)
     {
-        loggerError("doseUseCase.execute", "Process error", "error: " + errorOrBool.getError().description);
-        return ErrorOrBool(errorOrBool.getError());
+        loggerError("doseUseCase.execute", "Process error", "error: " + boolOrError.second->description);
+        return make_pair(false, boolOrError.second);
     }
 
     this->lcd->setDoseStatus(0, 0);
 
     loggerInfo("DoseUseCase", "Process finished");
 
-    return ErrorOrBool(true);
+    return make_pair(true, nullptr);
 };

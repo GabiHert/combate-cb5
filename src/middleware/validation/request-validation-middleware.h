@@ -4,7 +4,8 @@
 #include <Arduino.h>
 #include "domain/builder/check-sum-builder.h"
 #include <string.h>
-#include "types/error-or-boolean.h"
+#include <iostream>
+#include "exceptions/error-type.h"
 using namespace std;
 
 class RequestValidationMiddleware
@@ -15,7 +16,7 @@ private:
     bool validateCheckSum(string request);
 
 public:
-    ErrorOrBool validate(string request);
+    pair<bool, ERROR_TYPE *> validate(string request);
     RequestValidationMiddleware();
 };
 

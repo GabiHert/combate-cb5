@@ -7,7 +7,6 @@ using namespace std;
 // LOGGER
 void loggerInfo(string event, string details, string message = " ");
 void loggerError(string event, string details, string message = " ");
-void loggerWarn(string event, string details, string message = " ");
 void logger(string message);
 
 // PARSER

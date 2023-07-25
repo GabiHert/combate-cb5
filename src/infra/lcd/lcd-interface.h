@@ -20,7 +20,7 @@ public:
     void setCursor(uint8_t column, uint8_t line);
     void clear();
     void setGpsStatus(bool active);
-    void setDoseStatus(int done, int target);
+    void setDoseStatus(unsigned char done, unsigned char target);
     void setCBName(string name);
     void setVersion(string version);
 

@@ -74,7 +74,7 @@ void ILcd::setGpsStatus(bool status)
     loggerInfo("Lcd.setGpsStatus", "Process finished");
 };
 
-void ILcd::setDoseStatus(int done, int target)
+void ILcd::setDoseStatus(unsigned char done, unsigned char target)
 {
     loggerInfo("Lcd.setDoseStatus", "Process started");
     _print(centerString(to_string(done) + "/" + to_string(target), 5), 11, 0);

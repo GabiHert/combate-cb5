@@ -2,10 +2,10 @@
 #include "utils/utils.h"
 #include "domain/builder/check-sum-builder.h"
 #include "config/config.h"
-#include "exceptions/exceptions.h"
+#include "exceptions/error-type.h"
 
 RequestValidationMiddleware::RequestValidationMiddleware(){};
-ErrorOrBool RequestValidationMiddleware::validate(string request)
+pair<bool, ERROR_TYPE *> RequestValidationMiddleware::validate(string request)
 {
 
     loggerInfo("RequestValidationMiddleware.validate", "Process started", "request: " + request);
@@ -16,10 +16,10 @@ ErrorOrBool RequestValidationMiddleware::validate(string request)
     if (!isRequestValid)
     {
         loggerError("requestValidationMiddleware.validate", "Process error - first throw", "Invalid request");
-        return ErrorOrBool(EXCEPTIONS().VALIDATION_ERROR);
+        return make_pair(false, ERROR_TYPES().VALIDATION_ERROR);
     }
     loggerInfo("RequestValidationMiddleware.validate", "Process finished", "isRequestValid: " + to_string(isRequestValid));
-    return ErrorOrBool(isRequestValid);
+    return make_pair(isRequestValid, nullptr);
 };
 
 bool RequestValidationMiddleware::validateCheckSum(string request)
@@ -76,7 +76,7 @@ bool RequestValidationMiddleware::validateProtocol(string request)
 
     string requestIdentifier = request.substr(CONFIG_PROTOCOL_IDENTIFIER_START_INDEX, CONFIG_PROTOCOL_IDENTIFIER_END_INDEX);
 
-    for (int requestCharacterIndex = 0; requestCharacterIndex <= requestLastIndex - 2; requestCharacterIndex++)
+    for (unsigned char requestCharacterIndex = 0; requestCharacterIndex <= requestLastIndex - 2; requestCharacterIndex++)
     {
         string protocolAllowedElementValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES[requestCharacterIndex];
         unsigned char protocolAllowedElementValueLength = protocolAllowedElementValues.length() - 1;
@@ -85,7 +85,7 @@ bool RequestValidationMiddleware::validateProtocol(string request)
         {
             bool present = false;
 
-            for (int allowedElementIndex = 0; allowedElementIndex <= protocolAllowedElementValueLength; allowedElementIndex++)
+            for (unsigned char allowedElementIndex = 0; allowedElementIndex <= protocolAllowedElementValueLength; allowedElementIndex++)
             {
                 if (request[requestCharacterIndex] == protocolAllowedElementValues[allowedElementIndex])
                 {
@@ -96,7 +96,6 @@ bool RequestValidationMiddleware::validateProtocol(string request)
 
             if (!present)
             {
-                loggerWarn("RequestValidationMiddleware.validateProtocol", "Process warn", "request: " + request + "; charactereValue: " + request[requestCharacterIndex] + "; allowedValues: " + protocolAllowedElementValues);
                 loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "request " + to_string(request[requestCharacterIndex]) + " character at index " + to_string(requestCharacterIndex) + " does not match the protocol allowed values;");
                 return false;
             };

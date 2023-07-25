@@ -8,7 +8,7 @@ int CheckSumBuilder::build(string data)
 
     unsigned char dataLastIndex = data.length();
     int sum = 0;
-    for (int i = 0; i < dataLastIndex; i++)
+    for (unsigned char i = 0; i < dataLastIndex; i++)
     {
         sum += (int)data[i];
     };

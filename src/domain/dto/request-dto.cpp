@@ -9,7 +9,6 @@ RequestDto::RequestDto(string request)
 {
     this->_alarmSiren = request[3];
     this->_dose = request[4];
-    this->_wheelBoltsCounter = request[5];
 };
 
 char RequestDto::getAlarmSiren()
@@ -21,8 +20,3 @@ char RequestDto::getDose()
 {
     return this->_dose;
 };
-
-char RequestDto::getWheelBoltsCounter()
-{
-    return this->_wheelBoltsCounter;
-}

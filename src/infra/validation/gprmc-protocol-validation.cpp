@@ -5,7 +5,7 @@
 bool GprmcProtocolValidation::validateStartHeader(string data)
 {
     string startHeader = CONFIG_GPS_START_HEADER;
-    for (int i = 0; i < startHeader.length(); i++)
+    for (unsigned char i = 0; i < startHeader.length(); i++)
     {
         if (!this->validateStartHeader(data[i], i))
             return false;
@@ -14,14 +14,14 @@ bool GprmcProtocolValidation::validateStartHeader(string data)
     return true;
 }
 
-bool GprmcProtocolValidation::validateStartHeader(char charactere, int position)
+bool GprmcProtocolValidation::validateStartHeader(char charactere, unsigned char position)
 {
     if (string(CONFIG_GPS_START_HEADER).length() - 1 < position)
         return false;
     return CONFIG_GPS_START_HEADER[position] == charactere;
 }
 
-bool GprmcProtocolValidation::validateEndHeader(char c, int position)
+bool GprmcProtocolValidation::validateEndHeader(char c, unsigned char position)
 {
 
     switch (position)
@@ -50,7 +50,7 @@ bool GprmcProtocolValidation::validateEndHeader(char c, int position)
 
 bool GprmcProtocolValidation::validateEndHeader(string data)
 {
-    int startPosition = data.find("*") - 1;
+    unsigned char startPosition = data.find("*") - 1;
 
     if (this->validateEndHeader(data[startPosition], 0) &&
         this->validateEndHeader(data[startPosition + 1], 1) &&
@@ -77,8 +77,8 @@ bool GprmcProtocolValidation::isDataReliable(string data)
 {
     loggerInfo("GprmcProtocolValidation.isDataReliable", "Process started");
 
-    int field = 1;
-    for (int i = 0; i < data.length(); i++)
+    unsigned char field = 1;
+    for (unsigned char i = 0; i < data.length(); i++)
     {
 
         if (field > 3)

@@ -15,7 +15,6 @@ private:
     string _initializer;
     string _errorCode;
     string _status;
-    char _wheelBoltsCount[2];
     string _gpsData;
     string _checkSum;
     string _extraChar;
@@ -23,11 +22,11 @@ private:
 public:
     ResponseModel(ResponseDto responseDto);
     ResponseModel(string errorCode);
+    ResponseModel(ResponseDto responseDto, string errorCode);
     ResponseModel();
     string toString();
     string getInitializer();
     string getErrorCode();
-    char *getWheelBoltsCount();
     string getGpsData();
     void setErrorCode(string errorCode);
 };

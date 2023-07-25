@@ -19,7 +19,7 @@ ErrorOrString GetGpsLocationUseCase::execute()
 
     if (errorOrString.isError())
     {
-        loggerError("GetGpsUseCase.execute", "Process error", errorOrString.getError().description);
+        loggerError("GetGpsUseCase.execute", "Process error", errorOrString.getError()->description);
 
         return ErrorOrString(errorOrString.getError());
     }

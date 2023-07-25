@@ -10,11 +10,11 @@ public:
     ISystem();
     void setupPort(unsigned char pin, unsigned char mode);
     void setPort(unsigned char pin, unsigned char state);
-    int readDigitalPort(unsigned char pin);
+    bool readDigitalPort(unsigned char pin);
     void serialPrintln(string message);
     void serialPrint(string message);
     string serialRead();
-    int serialAvailable();
+    bool serialAvailable();
 };
 
 #endif

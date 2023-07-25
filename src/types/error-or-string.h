@@ -9,17 +9,17 @@ class ErrorOrString
 {
 private:
     string _string;
-    ERROR_TYPE _error;
+    ERROR_TYPE *_error;
     bool _isError;
 
 public:
     ErrorOrString(){};
-    ErrorOrString(ERROR_TYPE error) : _error(error), _isError(true){};
+    ErrorOrString(ERROR_TYPE *error) : _error(error), _isError(true){};
     ErrorOrString(string s) : _string(s), _isError(false){};
 
     bool isError() { return this->_isError; };
     string getString() { return this->_string; };
-    ERROR_TYPE getError() { return this->_error; }
+    ERROR_TYPE *getError() { return this->_error; }
 };
 
 #endif
