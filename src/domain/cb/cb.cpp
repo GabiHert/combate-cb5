@@ -23,7 +23,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount)
 
     unsigned char connectedApplicators = 0;
     for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
-        if (this->_applicators.getBoolVector()[i])
+        if (this->_applicators.first[i])
             connectedApplicators++;
 
     for (char dose = 0; dose < amount; dose++)
@@ -36,7 +36,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount)
 
         for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         {
-            bool isApplicatorConnected = this->_applicators.getBoolVector()[i];
+            bool isApplicatorConnected = this->_applicators.first[i];
             if (!isApplicatorConnected)
             {
                 loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
@@ -70,7 +70,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount)
             unsigned char count = 0;
             for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
             {
-                bool isApplicatorConnected = this->_applicators.getBoolVector()[i];
+                bool isApplicatorConnected = this->_applicators.first[i];
                 if (!isApplicatorConnected)
                 {
                     loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
@@ -107,7 +107,7 @@ string Cb::getId()
 };
 
 string Cb::getStatus() { return this->_status; };
-ErrorOrBoolVector Cb::getApplicators()
+pair<vector<bool>, ERROR_TYPE *> Cb::getApplicators()
 {
     return this->_applicators;
 }
@@ -160,7 +160,7 @@ Cb::Cb()
     this->updateConnectedApplicators();
 };
 
-ErrorOrInt Cb::updateConnectedApplicators()
+pair<int, ERROR_TYPE *> Cb::updateConnectedApplicators()
 {
     loggerInfo("Cb.updateConnectedApplicators", "Process started");
     this->_connectedApplicators = 0;
@@ -184,13 +184,13 @@ ErrorOrInt Cb::updateConnectedApplicators()
     if (!this->_connectedApplicators)
     {
         loggerError("Cb.updateConnectedApplicators", "Process error", "applicators: " + to_string(this->_connectedApplicators));
-        this->_applicators = ErrorOrBoolVector(*ERROR_TYPES().NO_APPLICATORS_FOUND_ERROR);
-        return ErrorOrInt(*ERROR_TYPES().NO_APPLICATORS_FOUND_ERROR);
+        this->_applicators = make_pair(vector<bool>(), ERROR_TYPES().NO_APPLICATORS_FOUND_ERROR);
+        return make_pair(0, ERROR_TYPES().NO_APPLICATORS_FOUND_ERROR);
     }
-    this->_applicators = ErrorOrBoolVector(applicatorsConnection);
+    this->_applicators = make_pair(applicatorsConnection, nullptr);
 
     loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(this->_connectedApplicators));
-    return ErrorOrInt(this->_connectedApplicators);
+    return make_pair(this->_connectedApplicators, nullptr);
 }
 
 void Cb::clearStatus()

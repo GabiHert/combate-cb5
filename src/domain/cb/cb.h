@@ -9,9 +9,8 @@
 #include "config/config.h"
 #include "infra/server/app.h"
 #include "infra/system/system-interface.h"
-#include "types/error-or-boolean-vector.h"
 #include <iostream>
-#include "types/error-or-int.h"
+#include "exceptions/error-type.h"
 #include <vector>
 class Cb
 {
@@ -24,7 +23,7 @@ private:
     vector<PoisonApplicator *> _poisonApplicators;
     ILcd *_lcd;
     string _location;
-    ErrorOrBoolVector _applicators;
+    pair<vector<bool>, ERROR_TYPE *> _applicators;
     unsigned char _connectedApplicators;
 
 public:
@@ -40,8 +39,8 @@ public:
     vector<PoisonApplicator *> getPoisonApplicator();
     string getLocation() { return this->_location; };
     void setLocation(string location) { this->_location = location; };
-    ErrorOrBoolVector getApplicators();
-    ErrorOrInt updateConnectedApplicators();
+    pair<vector<bool>, ERROR_TYPE *> getApplicators();
+    pair<int, ERROR_TYPE *> updateConnectedApplicators();
     void clearStatus();
 };
 #endif // CB_H

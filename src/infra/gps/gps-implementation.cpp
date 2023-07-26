@@ -15,10 +15,8 @@ IGps::IGps(ILcd *lcd, Timer *timer)
     this->timer = timer;
 }
 
-ErrorOrString IGps::_getData(Timer *timer)
+pair<string, ERROR_TYPE *> IGps::_getData(Timer *timer)
 {
-    // ErrorOrString errorOrString = ErrorOrString("$GPRMC,001220.00,A,3001.89425,S,05109.81024,W,0.374,,240719,,,N*75");
-    // return errorOrString;
     string data = "";
     char startHeaderCount = 0;
     int gpsData;
@@ -34,7 +32,7 @@ ErrorOrString IGps::_getData(Timer *timer)
         if (timer->timedOut())
         {
             loggerError("IGps.getData", "Process error", "Gps timed out");
-            return ErrorOrString(ERROR_TYPES().GPS_TIME_OUT);
+            return make_pair("", ERROR_TYPES().GPS_TIME_OUT);
         }
 
         if (gpsSerial.available() > 0)
@@ -77,29 +75,29 @@ ErrorOrString IGps::_getData(Timer *timer)
     }
     loggerInfo("IGps._getData", "Process finished", data);
 
-    return ErrorOrString(data);
+    return make_pair(data, nullptr);
 }
 
-ErrorOrString IGps::getData(int timeOut)
+pair<string, ERROR_TYPE *> IGps::getData(int timeOut)
 {
     loggerInfo("IGps.getData", "Process started");
 
     this->timer->setTimer(timeOut);
 
-    ErrorOrString errorOrString;
+    pair<string, ERROR_TYPE *> errorOrString;
     do
     {
         errorOrString = this->_getData(timer);
-        if (errorOrString.isError())
+        if (errorOrString.second != nullptr)
         {
-            loggerError("IGps.getData", "Process error", errorOrString.getError()->description);
+            loggerError("IGps.getData", "Process error", errorOrString.second->description);
 
             return errorOrString;
         }
 
-    } while (!this->gprmcProtocolValidation.validate(errorOrString.getString()));
+    } while (!this->gprmcProtocolValidation.validate(errorOrString.first));
 
-    loggerInfo("IGps.getData", "Process finished", errorOrString.getString());
+    loggerInfo("IGps.getData", "Process finished", errorOrString.first);
 
     return errorOrString;
 };

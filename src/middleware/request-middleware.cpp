@@ -2,7 +2,6 @@
 #include "utils/utils.h"
 #include "middleware/validation/request-validation-middleware.h"
 #include <string.h>
-#include "types/error-or-response-dto.h"
 
 using namespace std;
 
@@ -35,22 +34,22 @@ ResponseModel RequestMiddleware::execute(string request)
 
   RequestDto requestDto(request);
 
-  ErrorOrResponseDto errorOrResponseDto = requestController.execute(requestDto);
-  if (errorOrResponseDto.isError())
+  pair<ResponseDto, ERROR_TYPE *> errorOrResponseDto = requestController.execute(requestDto);
+  if (errorOrResponseDto.second != nullptr)
   {
-    loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.getError().description);
+    loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
 
     this->lcd->clear();
-    this->lcd->print(errorOrResponseDto.getError().errorCode, 0, 0);
-    this->lcd->print(errorOrResponseDto.getError().description, 0, 1);
+    this->lcd->print(errorOrResponseDto.second->errorCode, 0, 0);
+    this->lcd->print(errorOrResponseDto.second->description, 0, 1);
     this->timer->setTimer(1500)->wait();
 
-    ResponseModel responseModel(errorOrResponseDto.getResponseDto(), errorOrResponseDto.getError().errorCode);
+    ResponseModel responseModel(errorOrResponseDto.first, errorOrResponseDto.second->errorCode);
 
     return responseModel;
   }
 
-  ResponseModel responseModel(errorOrResponseDto.getResponseDto());
+  ResponseModel responseModel(errorOrResponseDto.first);
 
   loggerInfo("RequestMiddleware.execute", "Process finished");
 

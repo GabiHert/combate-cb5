@@ -3,7 +3,6 @@
 #include "config/config.h"
 #include "domain/cb/cb.h"
 #include "controller/request-controller.h"
-#include "types/error-or-string.h"
 
 RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd)
 {
@@ -20,7 +19,7 @@ RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd)
 
 RequestController::RequestController(){};
 
-ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
+pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto)
 {
 
     loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb->getId());
@@ -30,13 +29,13 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
 
     bool doseRequest = requestModel.getDose() != CONFIG_PROTOCOL_DO_NOT_DOSE;
 
-    ErrorOrString errorOrString = this->getGpsLocationUseCase.execute();
-    if (errorOrString.isError())
+    pair<string, ERROR_TYPE *> errorOrString = this->getGpsLocationUseCase.execute();
+    if (errorOrString.second != nullptr)
     {
-        loggerError("requestController.execute", "Process error", "error: " + errorOrString.getError()->description);
-        return ErrorOrResponseDto(*errorOrString.getError());
+        loggerError("requestController.execute", "Process error", "error: " + errorOrString.second->description);
+        return make_pair(ResponseDto(), errorOrString.second);
     }
-    this->cb->setLocation(errorOrString.getString());
+    this->cb->setLocation(errorOrString.first);
 
     if (doseRequest)
     {
@@ -46,11 +45,11 @@ ErrorOrResponseDto RequestController::execute(RequestDto requestDto)
         {
             loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
             ResponseDto responseDto(*cb, errorOrBool.second->errorCode);
-            return ErrorOrResponseDto(responseDto);
+            return make_pair(responseDto, nullptr);
         }
     };
 
     ResponseDto responseDto(*this->cb);
     loggerInfo("RequestController.execute", "Process finished", " gpsData: " + string(responseDto.getGpsData()));
-    return ErrorOrResponseDto(responseDto);
+    return make_pair(responseDto, nullptr);
 };

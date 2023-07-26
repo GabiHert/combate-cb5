@@ -50,23 +50,23 @@ void CB5::_scanConnectedApplicators()
     do
     {
         this->_cb->updateConnectedApplicators();
-        if (this->_cb->getApplicators().isError())
+        if (this->_cb->getApplicators().second != nullptr)
         {
             this->_lcd->clear();
-            this->_lcd->print(this->_cb->getApplicators().getError().description, 0, 0);
-            this->_lcd->print(this->_cb->getApplicators().getError().errorCode, 0, 1);
+            this->_lcd->print(this->_cb->getApplicators().second->description, 0, 0);
+            this->_lcd->print(this->_cb->getApplicators().second->errorCode, 0, 1);
             this->_timer->setTimer(1000)->wait();
         }
-    } while (this->_cb->getApplicators().isError());
+    } while (this->_cb->getApplicators().second);
 
     this->_lcd->clear();
     this->_lcd->print("   DOSADORES    ", 0, 0);
     this->_lcd->print("CONECTADOS -> " + to_string(this->_cb->getConnectedApplicators()), 0, 1);
     this->_timer->setTimer(2000)->wait();
 
-    string applicator1Connected = this->_cb->getApplicators().getBoolVector()[0] ? " 1 " : "";
-    string applicator2Connected = this->_cb->getApplicators().getBoolVector()[1] ? " 2 " : "";
-    string applicator3Connected = this->_cb->getApplicators().getBoolVector()[2] ? " 3 " : "";
+    string applicator1Connected = this->_cb->getApplicators().first[0] ? " 1 " : "";
+    string applicator2Connected = this->_cb->getApplicators().first[1] ? " 2 " : "";
+    string applicator3Connected = this->_cb->getApplicators().first[2] ? " 3 " : "";
 
     this->_lcd->clear();
     this->_lcd->printCentered("DOSADOR(ES)", 0, 0);
@@ -90,16 +90,16 @@ void CB5::_initGps()
         for (unsigned char retries = 0; retries <= CONFIG_GPS_MAX_SETUP_VALID_DATA_RETRIES; retries++)
         {
 
-            ErrorOrString errorOrString = this->_gps->getData();
-            if (errorOrString.isError())
+            pair<string, ERROR_TYPE *> errorOrString = this->_gps->getData();
+            if (errorOrString.second != nullptr)
             {
                 this->_lcd->clear();
-                this->_lcd->print(errorOrString.getError()->description, 0, 0);
-                this->_lcd->print(errorOrString.getError()->errorCode, 0, 1);
+                this->_lcd->print(errorOrString.second->description, 0, 0);
+                this->_lcd->print(errorOrString.second->errorCode, 0, 1);
             }
             else
             {
-                if (this->_gps->gprmcProtocolValidation.isDataReliable(errorOrString.getString()))
+                if (this->_gps->gprmcProtocolValidation.isDataReliable(errorOrString.first))
                 {
                     this->_lcd->clear();
                     this->_lcd->printCentered("SINAL GPS", 0, 0);

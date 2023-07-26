@@ -6,7 +6,6 @@
 #include "useCase/get-gps-location-use-case.h"
 #include "domain/dto/response-dto.h"
 #include "domain/dto/request-dto.h"
-#include "types/error-or-response-dto.h"
 #include "infra/gps/gps-interface.h"
 class RequestController
 {
@@ -20,6 +19,6 @@ public:
     RequestController(Cb *cb, IGps *gps, ILcd *lcd);
     RequestController();
 
-    ErrorOrResponseDto execute(RequestDto requestDto);
+    pair<ResponseDto, ERROR_TYPE *> execute(RequestDto requestDto);
 };
 #endif // REQUEST_CONTROLLER_H

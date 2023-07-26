@@ -8,23 +8,23 @@ GetGpsLocationUseCase::GetGpsLocationUseCase(IGps *gps, Cb *cb, ILcd *lcd)
     this->cb = cb;
     this->gps = gps;
 }
-ErrorOrString GetGpsLocationUseCase::execute()
+pair<string, ERROR_TYPE *> GetGpsLocationUseCase::execute()
 {
 
     loggerInfo("GetGpsUseCase.execute", "Process started");
 
     this->lcd->setGpsStatus(true);
 
-    ErrorOrString errorOrString = this->gps->getData();
+    pair<string, ERROR_TYPE *> errorOrString = this->gps->getData();
 
-    if (errorOrString.isError())
+    if (errorOrString.second != nullptr)
     {
-        loggerError("GetGpsUseCase.execute", "Process error", errorOrString.getError()->description);
+        loggerError("GetGpsUseCase.execute", "Process error", errorOrString.second->description);
 
-        return ErrorOrString(errorOrString.getError());
+        return errorOrString;
     }
 
-    string result = errorOrString.getString();
+    string result = errorOrString.first;
 
     result = result.substr(7);
     result = result.replace(result.length() - 3, 1, "");
@@ -33,5 +33,5 @@ ErrorOrString GetGpsLocationUseCase::execute()
 
     loggerInfo("GetGpsUseCase.execute", "Process finished", result);
 
-    return ErrorOrString(result);
+    return make_pair(result, nullptr);
 }
