@@ -4,8 +4,6 @@
 
 int CheckSumBuilder::build(string data)
 {
-    loggerInfo("CheckSumBuilder.build", "Process started", "data: " + data);
-
     unsigned char dataLastIndex = data.length();
     int sum = 0;
     for (unsigned char i = 0; i < dataLastIndex; i++)
@@ -14,8 +12,5 @@ int CheckSumBuilder::build(string data)
     };
 
     int CS = 256 - (sum % 256);
-
-    loggerInfo("CheckSumBuilder.build", "Process finished", " requestData: " + data + "; CheckSum: " + to_string(CS));
-
     return CS;
 };

@@ -18,7 +18,6 @@ pair<bool, ERROR_TYPE *> RequestValidationMiddleware::validate(string request)
         loggerError("requestValidationMiddleware.validate", "Process error - first throw", "Invalid request");
         return make_pair(false, ERROR_TYPES().VALIDATION_ERROR);
     }
-    loggerInfo("RequestValidationMiddleware.validate", "Process finished", "isRequestValid: " + to_string(isRequestValid));
     return make_pair(isRequestValid, nullptr);
 };
 
@@ -39,7 +38,6 @@ bool RequestValidationMiddleware::validateCheckSum(string request)
         return false;
     };
 
-    loggerInfo("RequestValidationMiddleware.validateCheckSum", "Process finished", "request: " + request);
     return true;
 };
 
@@ -102,6 +100,5 @@ bool RequestValidationMiddleware::validateProtocol(string request)
         };
     };
 
-    loggerInfo("RequestValidationMiddleware.validateProtocol", "Process finished");
     return true;
 };

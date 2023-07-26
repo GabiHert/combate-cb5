@@ -31,7 +31,5 @@ pair<string, ERROR_TYPE *> GetGpsLocationUseCase::execute()
 
     this->lcd->setGpsStatus(false);
 
-    loggerInfo("GetGpsUseCase.execute", "Process finished", result);
-
     return make_pair(result, nullptr);
 }

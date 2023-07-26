@@ -65,11 +65,7 @@ bool GprmcProtocolValidation::validateEndHeader(string data)
 
 bool GprmcProtocolValidation::validate(string data)
 {
-    loggerInfo("GprmcProtocolValidation.validate", "Process started", data);
-
     bool result = this->validateEndHeader(data) && this->validateStartHeader(data);
-
-    loggerInfo("GprmcProtocolValidation.validate", "Process finished", "result: " + to_string(result));
     return result;
 }
 
@@ -92,11 +88,8 @@ bool GprmcProtocolValidation::isDataReliable(string data)
         if (field == 3)
         {
             bool result = data[i + 1] == 'A';
-            loggerInfo("GprmcProtocolValidation.isDataReliable", "Process finished", "result: " + to_string(result));
-
             return result;
         }
     }
-    loggerInfo("GprmcProtocolValidation.isDataReliable", "Process finished", "result:  0");
     return false;
 }

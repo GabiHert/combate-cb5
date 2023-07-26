@@ -33,36 +33,28 @@ void ILcd::printCentered(string message)
 
 void ILcd::print(string message)
 {
-    loggerInfo("Lcd.print", "Process started", message);
     lcd.print(stdStringToArduinoString(message));
-    loggerInfo("Lcd.print", "Process finished");
 }
 
 void ILcd::clear()
 {
     this->_shouldClear = false;
-    loggerInfo("Lcd.clear", "Process started");
     lcd.clear();
-    loggerInfo("Lcd.clear", "Process finished");
 }
 
 void ILcd::setCursor(uint8_t column, uint8_t line)
 {
-    loggerInfo("Lcd.setCursor", "Process started");
     lcd.setCursor(column, line);
-    loggerInfo("Lcd.setCursor", "Process finished");
 }
 
 ILcd::ILcd()
 {
-    loggerInfo("Lcd", "Constructor");
     lcd.init();
     lcd.backlight();
 }
 
 void ILcd::setGpsStatus(bool status)
 {
-    loggerInfo("Lcd.setGpsStatus", "Process started");
     if (status)
     {
         _print("GPS", 0, 0);
@@ -71,21 +63,16 @@ void ILcd::setGpsStatus(bool status)
     {
         _print("   ", 0, 0);
     }
-    loggerInfo("Lcd.setGpsStatus", "Process finished");
 };
 
 void ILcd::setDoseStatus(unsigned char done, unsigned char target)
 {
-    loggerInfo("Lcd.setDoseStatus", "Process started");
     _print(centerString(to_string(done) + "/" + to_string(target), 5), 11, 0);
-    loggerInfo("Lcd.setDoseStatus", "Process finished");
 };
 
 void ILcd::setCBName(string name)
 {
-    loggerInfo("Lcd.setDoseStatus", "Process started");
     _print(centerString(name, CONFIG_lcd_COLUMNS_LENGTH), 0, 1);
-    loggerInfo("Lcd.setDoseStatus", "Process finished");
 };
 
 void ILcd::smartClear()
@@ -96,7 +83,5 @@ void ILcd::smartClear()
 
 void ILcd::setVersion(string version)
 {
-    loggerInfo("Lcd.setVersion", "Process started");
     _print(centerString(version, 5), 5, 0);
-    loggerInfo("Lcd.setVersion", "Process finished");
 }

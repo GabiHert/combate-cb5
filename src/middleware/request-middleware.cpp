@@ -51,7 +51,5 @@ ResponseModel RequestMiddleware::execute(string request)
 
   ResponseModel responseModel(errorOrResponseDto.first);
 
-  loggerInfo("RequestMiddleware.execute", "Process finished");
-
   return responseModel;
 }

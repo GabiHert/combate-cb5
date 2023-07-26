@@ -50,6 +50,5 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
     };
 
     ResponseDto responseDto(*this->cb);
-    loggerInfo("RequestController.execute", "Process finished", " gpsData: " + string(responseDto.getGpsData()));
     return make_pair(responseDto, nullptr);
 };

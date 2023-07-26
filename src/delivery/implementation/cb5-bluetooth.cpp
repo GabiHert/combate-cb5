@@ -72,8 +72,6 @@ void CB5::_scanConnectedApplicators()
     this->_lcd->printCentered("DOSADOR(ES)", 0, 0);
     this->_lcd->printCentered(applicator1Connected + applicator2Connected + applicator3Connected, 0, 1);
     this->_timer->setTimer(2000)->wait();
-
-    loggerInfo("CB5._scanConnectedApplicators", "Process finished");
 }
 
 void CB5::_initGps()
@@ -147,6 +145,4 @@ void CB5::setup(Preferences *preferences)
     this->_lcd->setDoseStatus(0, 0);
     this->_lcd->setCBName(this->_cb->getId());
     this->_lcd->setVersion(CONFIG_CB5_SOFTWARE_VERSION);
-
-    loggerInfo("CB5.setup", "Process finished");
 };

@@ -17,10 +17,7 @@ void ISystem::setupPort(unsigned char pin, unsigned char mode)
 
 bool ISystem::readDigitalPort(unsigned char pin)
 {
-    loggerInfo("ISystem.readDigitalPort", "Process started", "pin: " + to_string(pin));
     bool result = digitalRead(pin) > 0;
-    loggerInfo("ISystem.readDigitalPort", "Process finished", "result: " + to_string(result));
-
     return result;
 }
 

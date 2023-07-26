@@ -58,7 +58,6 @@ string ResponseModel::toString()
     response += CONFIG_PROTOCOL_CR;
     response += CONFIG_PROTOCOL_LF;
     response = this->_initializer + response;
-    loggerInfo("ResponseModel.tostring", "Process finished", "response: " + response);
 
     return response;
 }

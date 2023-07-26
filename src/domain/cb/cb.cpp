@@ -97,7 +97,6 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount)
     }
 
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
-    loggerInfo("Cb.dose", "Process finished");
     return make_pair(true, nullptr);
 };
 
@@ -189,13 +188,10 @@ pair<int, ERROR_TYPE *> Cb::updateConnectedApplicators()
     }
     this->_applicators = make_pair(applicatorsConnection, nullptr);
 
-    loggerInfo("Cb.updateConnectedApplicators", "Process finished", "applicators: " + to_string(this->_connectedApplicators));
     return make_pair(this->_connectedApplicators, nullptr);
 }
 
 void Cb::clearStatus()
 {
-    loggerInfo("Cb.clearStatus", "Process started");
     this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
-    loggerInfo("Cb.clearStatus", "Process finished");
 }

@@ -33,7 +33,5 @@ pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount)
 
     this->lcd->setDoseStatus(0, 0);
 
-    loggerInfo("DoseUseCase", "Process finished");
-
     return make_pair(true, nullptr);
 };

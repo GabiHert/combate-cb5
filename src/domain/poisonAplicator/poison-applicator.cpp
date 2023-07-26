@@ -23,37 +23,27 @@ PoisonApplicator::PoisonApplicator()
 
 void PoisonApplicator::calibrate()
 {
-    loggerInfo("PoisonApplicator.calibrate", "Process started", "motorPort: " + to_string(this->_motorPort));
     while (this->readSensor())
     {
         this->spin();
     }
     this->stop();
-    loggerInfo("PoisonApplicator.calibrate", "Process started");
 }
 
 void PoisonApplicator::spin()
 {
-
-    loggerInfo("PoisonApplicator.spin", "Process started, _motorPort: " + to_string(this->_motorPort));
     this->_sys->setPort(this->_motorPort, HIGH);
-    loggerInfo("PoisonApplicator.spin", "Process finished");
 };
 
 bool PoisonApplicator::readSensor()
 {
-    loggerInfo("PoisonApplicator.readSensor", "Process started");
     bool result = this->_sys->readDigitalPort(this->_sensorPort) ? true : false;
-    loggerInfo("PoisonApplicator.readSensor", "Process finished", " result: " + to_string(result));
     return result;
 };
 
 void PoisonApplicator::stop()
 {
-
-    loggerInfo("PoisonApplicator.stop", "Process started", "_motorPort: " + to_string(this->_motorPort));
     this->_sys->setPort(this->_motorPort, LOW);
-    loggerInfo("PoisonApplicator.stop", "Process finished");
 }
 
 unsigned char PoisonApplicator::getMotorPort() { return this->_motorPort; }

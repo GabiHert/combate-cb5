@@ -73,8 +73,6 @@ pair<string, ERROR_TYPE *> IGps::_getData(Timer *timer)
             }
         }
     }
-    loggerInfo("IGps._getData", "Process finished", data);
-
     return make_pair(data, nullptr);
 }
 
@@ -96,8 +94,6 @@ pair<string, ERROR_TYPE *> IGps::getData(int timeOut)
         }
 
     } while (!this->gprmcProtocolValidation.validate(errorOrString.first));
-
-    loggerInfo("IGps.getData", "Process finished", errorOrString.first);
 
     return errorOrString;
 };
@@ -210,8 +206,6 @@ pair<bool, ERROR_TYPE *> IGps::setup()
     for (i = 0; i < 16; i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_SET_10HZ[i]);
     this->timer->setTimer(3000)->wait();
-
-    loggerInfo("IGps.setup", "Process finished");
 
     return make_pair(true, nullptr);
 };
