@@ -49,6 +49,7 @@ void CB5::_scanConnectedApplicators()
     loggerInfo("CB5._scanConnectedApplicators", "Process started");
     do
     {
+        // todo:refactor
         this->_cb->updateConnectedApplicators();
         if (this->_cb->getApplicators().second != nullptr)
         {

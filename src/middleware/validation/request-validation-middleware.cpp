@@ -72,8 +72,6 @@ bool RequestValidationMiddleware::validateProtocol(string request)
         return false;
     };
 
-    string requestIdentifier = request.substr(CONFIG_PROTOCOL_IDENTIFIER_START_INDEX, CONFIG_PROTOCOL_IDENTIFIER_END_INDEX);
-
     for (unsigned char requestCharacterIndex = 0; requestCharacterIndex <= requestLastIndex - 2; requestCharacterIndex++)
     {
         string protocolAllowedElementValues = CONFIG().PROTOCOL_ALLOWED_ELEMENTS_VALUES[requestCharacterIndex];

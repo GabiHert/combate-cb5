@@ -5,11 +5,12 @@
 #include <string.h>
 using namespace std;
 
-PoisonApplicator::PoisonApplicator(ISystem *sys, unsigned char motorPort, unsigned char _sensorPort)
+PoisonApplicator::PoisonApplicator(ISystem *sys, unsigned char motorPort, unsigned char _sensorPort, unsigned char connectionSensorPort)
 {
     this->_sys = sys;
     this->_motorPort = motorPort;
     this->_sensorPort = _sensorPort;
+    this->_connectionSensorPort = connectionSensorPort;
 
     this->_sys->setupPort(this->_motorPort, OUTPUT);
     this->_sys->setupPort(this->_sensorPort, INPUT);
@@ -44,6 +45,11 @@ bool PoisonApplicator::readSensor()
 void PoisonApplicator::stop()
 {
     this->_sys->setPort(this->_motorPort, LOW);
+}
+
+bool PoisonApplicator::isConnected()
+{
+    this->_sys->readDigitalPort(this->_connectionSensorPort);
 }
 
 unsigned char PoisonApplicator::getMotorPort() { return this->_motorPort; }

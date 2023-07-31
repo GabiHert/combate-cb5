@@ -24,7 +24,7 @@ private:
     ILcd *_lcd;
     string _location;
     pair<vector<bool>, ERROR_TYPE *> _applicators;
-    unsigned char _connectedApplicators;
+    pair<vector<bool>, ERROR_TYPE *> _connectedApplicators;
 
 public:
     Cb(App *app, ISystem *sys, ILcd *lcd);
@@ -36,11 +36,9 @@ public:
     unsigned char getConnectedApplicators();
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
-    vector<PoisonApplicator *> getPoisonApplicator();
+    vector<PoisonApplicator *> getPoisonApplicators();
     string getLocation() { return this->_location; };
     void setLocation(string location) { this->_location = location; };
-    pair<vector<bool>, ERROR_TYPE *> getApplicators();
-    pair<int, ERROR_TYPE *> updateConnectedApplicators();
     void clearStatus();
 };
 #endif // CB_H

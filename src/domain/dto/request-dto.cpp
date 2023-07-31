@@ -7,16 +7,29 @@ using namespace std;
 
 RequestDto::RequestDto(string request)
 {
-    this->_alarmSiren = request[3];
     this->_dose = request[4];
 };
-
-char RequestDto::getAlarmSiren()
-{
-    return this->_alarmSiren;
-};
-
 char RequestDto::getDose()
 {
     return this->_dose;
 };
+string RequestDto::getNewId()
+{
+    return to_string(this->_newId[0]) + to_string(this->_newId[1]);
+}
+char RequestDto::getRequestType()
+{
+    return this->_requestType;
+}
+char RequestDto::getRightApplicator()
+{
+    return this->_rightApplicator;
+}
+char RequestDto::getCenterApplicator()
+{
+    return this->_centerApplicator;
+}
+char RequestDto::getLeftApplicator()
+{
+    return this->_leftApplicator;
+}

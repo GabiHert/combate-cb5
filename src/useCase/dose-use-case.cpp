@@ -8,7 +8,7 @@ DoseUseCase::DoseUseCase(Cb *cb, ILcd *lcd)
     this->cb = cb;
 };
 
-pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount)
+pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount, vector<bool> applicatorsToDose)
 {
 
     amount = asciiCharToNumber(amount);
@@ -20,6 +20,15 @@ pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount)
     {
         loggerError("DoseUseCase", "Process error", "amount could not be parsed to number");
         return make_pair(false, ERROR_TYPES().PARSE_ERROR);
+    }
+
+    for (int i = 0; i < applicatorsToDose.size(); i++)
+    {
+        if (applicatorsToDose.at(i) != this->cb->getPoisonApplicators().at(i)->isConnected())
+        {
+            loggerError("DoseUseCase", "Process error", "applicator not found");
+            return make_pair(false, ERROR_TYPES().NO_APPLICATORS_FOUND_ERROR);
+        }
     }
 
     loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
