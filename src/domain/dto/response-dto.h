@@ -9,22 +9,20 @@ class ResponseDto
 {
 private:
     CheckSumBuilder _checkSumBuilder;
-    string _initializer;
-    string _errorCode;
-    string _status;
+    char _initializer[2];
+    char _errorCode[3];
+    char _status;
     string _gpsData;
-    string _checkSum;
-    string _extraChar;
+    char _checkSum;
 
 public:
     ResponseDto(Cb cb);
-    ResponseDto(Cb cb, string errorCode);
+    ResponseDto(Cb cb, char *errorCode);
     ResponseDto(){};
-    string getInitializer();
-    string getErrorCode();
+    char *getInitializer();
+    char *getErrorCode();
     string getGpsData();
-    string getStatus();
-    void setErrorCode(string errorCode);
+    char getStatus();
 };
 
 #endif

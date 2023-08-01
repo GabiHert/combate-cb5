@@ -6,52 +6,40 @@ using namespace std;
 
 ResponseDto::ResponseDto(Cb cb)
 {
-    loggerInfo("ResponseDto", "Process started - constructor");
-    this->_initializer = "&";
+    this->_initializer[0] = '&';
+    this->_initializer[1] = '5';
     this->_status = cb.getStatus();
-    this->setErrorCode("000");
+    this->_errorCode[0] = '0';
+    this->_errorCode[1] = '0';
+    this->_errorCode[2] = '0';
     this->_gpsData = cb.getLocation();
-    loggerInfo("ResponseDto", "Process finished - constructor");
 };
 
-ResponseDto::ResponseDto(Cb cb, string errorCode)
+ResponseDto::ResponseDto(Cb cb, char *errorCode)
 {
-    logger(errorCode);
-    loggerInfo("ResponseDto", "Process started - constructor", "errorCode: " + errorCode);
-    this->_initializer = "&";
+    this->_initializer[0] = '&';
+    this->_initializer[1] = '5';
     this->_status = cb.getStatus();
-    this->setErrorCode(errorCode);
+    strncpy(this->_errorCode, errorCode, 3);
     this->_gpsData = cb.getLocation();
-    loggerInfo("ResponseDto", "Process finished - constructor");
 }
 
-string ResponseDto::getInitializer()
+char *ResponseDto::getInitializer()
 {
     return this->_initializer;
 }
 
-string ResponseDto::getErrorCode()
+char *ResponseDto::getErrorCode()
 {
     return this->_errorCode;
 }
-
 
 string ResponseDto::getGpsData()
 {
     return this->_gpsData;
 }
 
-string ResponseDto::getStatus()
+char ResponseDto::getStatus()
 {
     return this->_status;
-}
-
-void ResponseDto::setErrorCode(string errorCode)
-{
-    if (errorCode.length() != 3)
-    {
-        // throw error
-    }
-
-    this->_errorCode = errorCode;
 }

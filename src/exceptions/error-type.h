@@ -1,6 +1,6 @@
 #ifndef ERROR_TYPE_H
 #define ERROR_TYPE_H
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -9,9 +9,13 @@ class ERROR_TYPE
 {
 public:
     string description;
-    string errorCode;
+    char errorCode[3];
     ERROR_TYPE(){};
-    ERROR_TYPE(string _description, string _errorCode) : description(_description), errorCode(_errorCode){};
+    ERROR_TYPE(string description, string code)
+    {
+        strncpy(this->errorCode, errorCode, 3);
+        this->description = description;
+    };
 };
 
 #define ERROR_TYPE_MAPPED_ERRORS_AMOUNT 6
