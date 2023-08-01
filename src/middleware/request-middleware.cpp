@@ -44,12 +44,12 @@ ResponseModel RequestMiddleware::execute(string request)
     this->lcd->print(errorOrResponseDto.second->description, 0, 1);
     this->timer->setTimer(1500)->wait();
 
-    ResponseModel responseModel(errorOrResponseDto.first, errorOrResponseDto.second->errorCode);
+    ResponseModel responseModel(&errorOrResponseDto.first, errorOrResponseDto.second->errorCode);
 
     return responseModel;
   }
 
-  ResponseModel responseModel(errorOrResponseDto.first);
+  ResponseModel responseModel(&errorOrResponseDto.first);
 
   return responseModel;
 }

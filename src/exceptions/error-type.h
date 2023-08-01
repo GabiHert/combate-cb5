@@ -11,7 +11,7 @@ public:
     string description;
     char errorCode[3];
     ERROR_TYPE(){};
-    ERROR_TYPE(string description, string code)
+    ERROR_TYPE(string description, char *errorCode)
     {
         strncpy(this->errorCode, errorCode, 3);
         this->description = description;

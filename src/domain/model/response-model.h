@@ -12,23 +12,27 @@ class ResponseModel
 {
 private:
     CheckSumBuilder _checkSumBuilder;
-    string _initializer;
-    string _errorCode;
-    string _status;
+    char _initializer[2];
+    char _errorCode[3];
+    char _status;
     string _gpsData;
-    string _checkSum;
-    string _extraChar;
+    char _checkSum;
+    bool _leftApplicatorConnected;
+    bool _centerApplicatorConnected;
+    bool _rightApplicatorConnected;
 
 public:
-    ResponseModel(ResponseDto responseDto);
-    ResponseModel(string errorCode);
-    ResponseModel(ResponseDto responseDto, string errorCode);
+    ResponseModel(ResponseDto *responseDto);
+    ResponseModel(char *errorCode);
+    ResponseModel(ResponseDto *responseDto, char *errorCode);
     ResponseModel();
     string toString();
     string getInitializer();
     string getErrorCode();
     string getGpsData();
-    void setErrorCode(string errorCode);
+    bool getLeftApplicatorConnected();
+    bool getCenterApplicatorConnected();
+    bool getRightApplicatorConnected();
 };
 
 #endif

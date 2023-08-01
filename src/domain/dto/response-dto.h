@@ -8,21 +8,24 @@
 class ResponseDto
 {
 private:
-    CheckSumBuilder _checkSumBuilder;
-    char _initializer[2];
     char _errorCode[3];
     char _status;
     string _gpsData;
     char _checkSum;
+    bool _leftApplicatorConnected;
+    bool _centerApplicatorConnected;
+    bool _rightApplicatorConnected;
 
 public:
     ResponseDto(Cb cb);
     ResponseDto(Cb cb, char *errorCode);
     ResponseDto(){};
-    char *getInitializer();
     char *getErrorCode();
     string getGpsData();
     char getStatus();
+    bool getLeftApplicatorConnected();
+    bool getCenterApplicatorConnected();
+    bool getRightApplicatorConnected();
 };
 
 #endif

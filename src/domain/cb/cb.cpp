@@ -12,7 +12,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, vector<bool> applicatorsToDose)
     this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
 
     ResponseDto responseDto = ResponseDto(*this);
-    ResponseModel responseModel = ResponseModel(responseDto);
+    ResponseModel responseModel = ResponseModel(&responseDto);
     string responseString = responseModel.toString();
 
     unsigned char applicatorsToDoseAmount = 0;
