@@ -47,27 +47,27 @@ void CB5::execute()
 void CB5::_scanConnectedApplicators()
 {
     loggerInfo("CB5._scanConnectedApplicators", "Process started");
+    unsigned char connectedApplicators = 0;
     do
     {
-        // todo:refactor
-        this->_cb->updateConnectedApplicators();
-        if (this->_cb->getApplicators().second != nullptr)
+        for (unsigned char i = 0; i < this->_cb->getPoisonApplicators().size(); i++)
         {
-            this->_lcd->clear();
-            this->_lcd->print(this->_cb->getApplicators().second->description, 0, 0);
-            this->_lcd->print(this->_cb->getApplicators().second->errorCode, 0, 1);
-            this->_timer->setTimer(1000)->wait();
+            if (this->_cb->getPoisonApplicators().at(i)->isConnected())
+            {
+                connectedApplicators++;
+            }
         }
-    } while (this->_cb->getApplicators().second);
+
+    } while (!connectedApplicators);
 
     this->_lcd->clear();
     this->_lcd->print("   DOSADORES    ", 0, 0);
-    this->_lcd->print("CONECTADOS -> " + to_string(this->_cb->getConnectedApplicators()), 0, 1);
+    this->_lcd->print("CONECTADOS -> " + to_string(connectedApplicators), 0, 1);
     this->_timer->setTimer(2000)->wait();
 
-    string applicator1Connected = this->_cb->getApplicators().first[0] ? " 1 " : "";
-    string applicator2Connected = this->_cb->getApplicators().first[1] ? " 2 " : "";
-    string applicator3Connected = this->_cb->getApplicators().first[2] ? " 3 " : "";
+    string applicator1Connected = this->_cb->getPoisonApplicators()[0]->isConnected() ? " 1 " : "";
+    string applicator2Connected = this->_cb->getPoisonApplicators()[2]->isConnected() ? " 2 " : "";
+    string applicator3Connected = this->_cb->getPoisonApplicators()[3]->isConnected() ? " 3 " : "";
 
     this->_lcd->clear();
     this->_lcd->printCentered("DOSADOR(ES)", 0, 0);

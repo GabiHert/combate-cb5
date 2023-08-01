@@ -18,22 +18,19 @@ private:
     ISystem *_sys;
     App *_app;
     string _id;
-    string _status;
+    char _status;
     RequestModel requestModel;
     vector<PoisonApplicator *> _poisonApplicators;
     ILcd *_lcd;
     string _location;
-    pair<vector<bool>, ERROR_TYPE *> _applicators;
-    pair<vector<bool>, ERROR_TYPE *> _connectedApplicators;
 
 public:
     Cb(App *app, ISystem *sys, ILcd *lcd);
     Cb();
 
-    pair<bool, ERROR_TYPE *> dose(char amount);
+    pair<bool, ERROR_TYPE *> dose(char amount, vector<bool> applicatorsToDose);
     string getId();
-    string getStatus();
-    unsigned char getConnectedApplicators();
+    char getStatus();
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
     vector<PoisonApplicator *> getPoisonApplicators();

@@ -33,7 +33,7 @@ pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount, vector<bool> applicat
 
     loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
 
-    pair<bool, ERROR_TYPE *> boolOrError = this->cb->dose(amount);
+    pair<bool, ERROR_TYPE *> boolOrError = this->cb->dose(amount, applicatorsToDose);
     if (boolOrError.second != nullptr)
     {
         loggerError("doseUseCase.execute", "Process error", "error: " + boolOrError.second->description);

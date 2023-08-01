@@ -6,7 +6,7 @@
 #include "domain/dto/response-dto.h"
 #include "exceptions/error-type.h"
 
-pair<bool, ERROR_TYPE *> Cb::dose(char amount)
+pair<bool, ERROR_TYPE *> Cb::dose(char amount, vector<bool> applicatorsToDose)
 {
     loggerInfo("Cb.dose", "Process started");
     this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
@@ -15,10 +15,10 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount)
     ResponseModel responseModel = ResponseModel(responseDto);
     string responseString = responseModel.toString();
 
-    unsigned char connectedApplicators = 0;
+    unsigned char applicatorsToDoseAmount = 0;
     for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
-        if (this->_applicators.first[i])
-            connectedApplicators++;
+        if (applicatorsToDose[i])
+            applicatorsToDoseAmount++;
 
     for (char dose = 0; dose < amount; dose++)
     {
@@ -30,12 +30,12 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount)
 
         for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         {
-            bool isApplicatorConnected = this->_applicators.first[i];
-            if (!isApplicatorConnected)
+            if (!applicatorsToDose[i])
             {
                 loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
                 continue;
             }
+
             this->_poisonApplicators[i]->spin();
         }
 
@@ -64,8 +64,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount)
             unsigned char count = 0;
             for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
             {
-                bool isApplicatorConnected = this->_applicators.first[i];
-                if (!isApplicatorConnected)
+                if (!applicatorsToDose[i])
                 {
                     loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
                     continue;
@@ -85,7 +84,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount)
                 }
             }
 
-            if (count == connectedApplicators)
+            if (count == applicatorsToDoseAmount)
                 result = true;
         }
     }
@@ -99,7 +98,7 @@ string Cb::getId()
     return this->_id;
 };
 
-string Cb::getStatus()
+char Cb::getStatus()
 {
     return this->_status;
 };

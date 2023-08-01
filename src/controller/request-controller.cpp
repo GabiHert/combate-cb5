@@ -40,7 +40,10 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
     if (doseRequest)
     {
         loggerInfo("RequestController.execute", "Dose request detected");
-        pair<bool, ERROR_TYPE *> errorOrBool = this->doseUseCase.execute(requestModel.getDose());
+
+        vector<bool> applicators = {requestModel.getLeftApplicator(), requestModel.getCenterApplicator(), requestModel.getLeftApplicator()};
+
+        pair<bool, ERROR_TYPE *> errorOrBool = this->doseUseCase.execute(requestModel.getDose(), applicators);
         if (errorOrBool.second != nullptr)
         {
             loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
