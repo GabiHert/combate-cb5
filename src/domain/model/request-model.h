@@ -9,9 +9,9 @@ class RequestModel
 {
 private:
     char _requestType;
-    char _rightApplicator;
-    char _centerApplicator;
-    char _leftApplicator;
+    bool _rightApplicator;
+    bool _centerApplicator;
+    bool _leftApplicator;
     string _newId;
     char _dose;
 
@@ -22,9 +22,9 @@ public:
     string getNewId();
     char getDose();
     char getRequestType();
-    char getRightApplicator();
-    char getCenterApplicator();
-    char getLeftApplicator();
+    bool getRightApplicator();
+    bool getCenterApplicator();
+    bool getLeftApplicator();
 };
 
 #endif // REQUEST_MODEL_H

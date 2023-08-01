@@ -23,15 +23,15 @@ char RequestModel::getRequestType()
 {
     return this->_requestType;
 }
-char RequestModel::getRightApplicator()
+bool RequestModel::getRightApplicator()
 {
     return this->_rightApplicator;
 }
-char RequestModel::getCenterApplicator()
+bool RequestModel::getCenterApplicator()
 {
     return this->_centerApplicator;
 }
-char RequestModel::getLeftApplicator()
+bool RequestModel::getLeftApplicator()
 {
     return this->_leftApplicator;
 }
