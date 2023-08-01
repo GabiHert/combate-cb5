@@ -4,7 +4,7 @@
 #include "domain/cb/cb.h"
 #include "controller/request-controller.h"
 
-RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd)
+RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *preferences)
 {
     this->cb = cb;
 
@@ -15,6 +15,8 @@ RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd)
     this->doseUseCase = DoseUseCase(cb, this->lcd);
 
     this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb, this->lcd);
+
+    this->renameUseCase = RenameUseCase(lcd, cb, preferences);
 };
 
 RequestController::RequestController(){};

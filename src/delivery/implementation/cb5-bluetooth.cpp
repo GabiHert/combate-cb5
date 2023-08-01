@@ -123,14 +123,17 @@ void CB5::setup(Preferences *preferences)
     loggerInfo("CB5.setup", "Process started");
 
     preferences->begin(CONFIG_PROJECT_NAME);
-    preferences->putString("DEVICE_NAME", CONFIG_DEFAULT_DEVICE_NAME);
+    if (preferences->getString(CONFIG_PREFERENCES_DEVICE_NAME_KEY).length() == 0)
+    {
+        preferences->putString(CONFIG_PREFERENCES_DEVICE_NAME_KEY, CONFIG_DEFAULT_DEVICE_NAME);
+    }
 
     this->_app = new App(preferences);
     this->_lcd = new ILcd();
     this->_timer = new Timer();
     this->_gps = new IGps(this->_lcd, this->_timer);
     this->_cb = new Cb(this->_app, this->_sys, this->_lcd);
-    this->_requestMiddleware = new RequestMiddleware(this->_cb, this->_gps, this->_lcd, this->_timer);
+    this->_requestMiddleware = new RequestMiddleware(this->_cb, this->_gps, this->_lcd, this->_timer, preferences);
 
     this->_initGps();
     this->_scanConnectedApplicators();

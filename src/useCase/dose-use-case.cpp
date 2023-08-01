@@ -22,6 +22,9 @@ pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount, vector<bool> applicat
         return make_pair(false, ERROR_TYPES().PARSE_ERROR);
     }
 
+    loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
+
+
     for (int i = 0; i < applicatorsToDose.size(); i++)
     {
         if (applicatorsToDose.at(i) != this->cb->getPoisonApplicators().at(i)->isConnected())
@@ -31,7 +34,6 @@ pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount, vector<bool> applicat
         }
     }
 
-    loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
 
     pair<bool, ERROR_TYPE *> boolOrError = this->cb->dose(amount, applicatorsToDose);
     if (boolOrError.second != nullptr)

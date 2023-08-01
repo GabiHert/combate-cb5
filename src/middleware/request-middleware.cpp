@@ -5,11 +5,11 @@
 
 using namespace std;
 
-RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd, Timer *timer)
+RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd, Timer *timer, Preferences *preferences)
 {
   this->lcd = lcd;
   this->cb = cb;
-  this->requestController = RequestController(cb, gps, lcd);
+  this->requestController = RequestController(cb, gps, lcd, preferences);
   this->timer = timer;
 };
 
