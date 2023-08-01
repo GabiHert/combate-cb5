@@ -19,7 +19,7 @@ private:
     RenameUseCase renameUseCase;
 
 public:
-    RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *preferences);
+    RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *preferences, Timer *timer);
     RequestController();
 
     pair<ResponseDto, ERROR_TYPE *> execute(RequestDto requestDto);

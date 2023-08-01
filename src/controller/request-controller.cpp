@@ -4,19 +4,19 @@
 #include "domain/cb/cb.h"
 #include "controller/request-controller.h"
 
-RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *preferences)
+RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *preferences, Timer *timer)
 {
     this->cb = cb;
 
     this->lcd = lcd;
 
-    loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb->getId());
+    loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb->id);
 
     this->doseUseCase = DoseUseCase(cb, this->lcd);
 
     this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb, this->lcd);
 
-    this->renameUseCase = RenameUseCase(lcd, cb, preferences);
+    this->renameUseCase = RenameUseCase(lcd, cb, preferences, timer);
 };
 
 RequestController::RequestController(){};
@@ -24,12 +24,13 @@ RequestController::RequestController(){};
 pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto)
 {
 
-    loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb->getId());
+    loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb->id);
 
     RequestModel requestModel(requestDto);
     this->cb->setRequestModel(requestModel);
 
     bool doseRequest = requestModel.getDose() != CONFIG_PROTOCOL_DO_NOT_DOSE;
+    bool renameRequest = requestModel.getNewId() != 0;
 
     pair<string, ERROR_TYPE *> errorOrString = this->getGpsLocationUseCase.execute();
     if (errorOrString.second != nullptr)
@@ -38,6 +39,18 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
         return make_pair(ResponseDto(), errorOrString.second);
     }
     this->cb->setLocation(errorOrString.first);
+
+    if (renameRequest)
+    {
+        loggerInfo("RequestController.execute", "Rename request detected");
+        pair<bool, ERROR_TYPE *> errorOrBool = this->renameUseCase.execute(requestModel.getNewId());
+        if (errorOrBool.second != nullptr)
+        {
+            loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
+            ResponseDto responseDto(*cb, errorOrBool.second->errorCode);
+            return make_pair(responseDto, nullptr);
+        }
+    }
 
     if (doseRequest)
     {

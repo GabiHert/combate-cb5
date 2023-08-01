@@ -9,14 +9,14 @@ RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd, Timer *timer,
 {
   this->lcd = lcd;
   this->cb = cb;
-  this->requestController = RequestController(cb, gps, lcd, preferences);
+  this->requestController = RequestController(cb, gps, lcd, preferences, timer);
   this->timer = timer;
 };
 
 ResponseModel RequestMiddleware::execute(string request)
 {
   logger(request);
-  loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->getId());
+  loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->id);
 
   pair<bool, ERROR_TYPE *> errorOrBool = requestValidationMiddleware.validate(request);
   if (errorOrBool.second != nullptr)

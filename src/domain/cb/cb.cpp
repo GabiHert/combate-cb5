@@ -9,7 +9,7 @@
 pair<bool, ERROR_TYPE *> Cb::dose(char amount, vector<bool> applicatorsToDose)
 {
     loggerInfo("Cb.dose", "Process started");
-    this->_status = CONFIG_PROTOCOL_STATUS_BUSY;
+    this->status = CONFIG_PROTOCOL_STATUS_BUSY;
 
     ResponseDto responseDto = ResponseDto(*this);
     ResponseModel responseModel = ResponseModel(&responseDto);
@@ -55,7 +55,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, vector<bool> applicatorsToDose)
                 for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
                     this->_poisonApplicators.at(i)->stop();
 
-                this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
+                this->status = CONFIG_PROTOCOL_STATUS_ERROR;
                 return make_pair(false, ERROR_TYPES().DOSE_PROCESS_TIME_OUT);
             }
 
@@ -89,18 +89,8 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, vector<bool> applicatorsToDose)
         }
     }
 
-    this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
+    this->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     return make_pair(true, nullptr);
-};
-
-string Cb::getId()
-{
-    return this->_id;
-};
-
-char Cb::getStatus()
-{
-    return this->_status;
 };
 
 vector<PoisonApplicator *> Cb::getPoisonApplicators()
@@ -124,8 +114,8 @@ Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
     this->_location = "NO_DATA";
     this->_sys = sys;
     this->_app = app;
-    this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
-    this->_id = app->getDeviceName();
+    this->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
+    this->id = app->getDeviceName();
 
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_1);
     this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_2);
@@ -135,14 +125,9 @@ Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
 
 Cb::Cb()
 {
-    this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
+    this->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->_location = "NO_DATA";
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_1);
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_2);
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_3);
 };
-
-void Cb::clearStatus()
-{
-    this->_status = CONFIG_PROTOCOL_STATUS_STAND_BY;
-}

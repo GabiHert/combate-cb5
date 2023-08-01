@@ -6,7 +6,7 @@ using namespace std;
 
 ResponseDto::ResponseDto(Cb cb)
 {
-    this->_status = cb.getStatus();
+    this->_status = cb.status;
     this->_errorCode[0] = '0';
     this->_errorCode[1] = '0';
     this->_errorCode[2] = '0';
@@ -18,7 +18,7 @@ ResponseDto::ResponseDto(Cb cb)
 
 ResponseDto::ResponseDto(Cb cb, char *errorCode)
 {
-    this->_status = cb.getStatus();
+    this->_status = cb.status;
     strncpy(this->_errorCode, errorCode, 3);
     this->_gpsData = cb.getLocation();
     this->_leftApplicatorConnected = cb.getPoisonApplicators().at(0)->isConnected();

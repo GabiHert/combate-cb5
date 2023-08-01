@@ -19,7 +19,7 @@ void CB5::execute()
 
     if (this->_app->available())
     {
-        this->_cb->clearStatus();
+        this->_cb->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
         loggerInfo("CB5.execute", "Process started", "Serial info. available");
 
         string request = this->_app->readString();
@@ -39,7 +39,7 @@ void CB5::execute()
         this->_lcd->smartClear();
         this->_lcd->setGpsStatus(false);
         this->_lcd->setDoseStatus(0, 0);
-        this->_lcd->setCBName(this->_cb->getId());
+        this->_lcd->setCBName(this->_cb->id);
         this->_lcd->setVersion(CONFIG_CB5_SOFTWARE_VERSION);
     }
 };
@@ -141,12 +141,8 @@ void CB5::setup(Preferences *preferences)
     this->_app->start();
 
     this->_lcd->clear();
-    this->_lcd->printCentered("BLUETOOTH:", 0, 0);
-    this->_lcd->printCentered(this->_cb->getId(), 0, 1);
-    this->_timer->setTimer(1500)->wait();
-    this->_lcd->clear();
     this->_lcd->setGpsStatus(false);
     this->_lcd->setDoseStatus(0, 0);
-    this->_lcd->setCBName(this->_cb->getId());
+    this->_lcd->setCBName(this->_cb->id);
     this->_lcd->setVersion(CONFIG_CB5_SOFTWARE_VERSION);
 };

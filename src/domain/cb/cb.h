@@ -17,25 +17,24 @@ class Cb
 private:
     ISystem *_sys;
     App *_app;
-    string _id;
-    char _status;
     RequestModel requestModel;
     vector<PoisonApplicator *> _poisonApplicators;
     ILcd *_lcd;
     string _location;
 
 public:
+    char status;
+    string id;
+
     Cb(App *app, ISystem *sys, ILcd *lcd);
     Cb();
 
     pair<bool, ERROR_TYPE *> dose(char amount, vector<bool> applicatorsToDose);
-    string getId();
-    char getStatus();
+
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
     vector<PoisonApplicator *> getPoisonApplicators();
     string getLocation() { return this->_location; };
     void setLocation(string location) { this->_location = location; };
-    void clearStatus();
 };
 #endif // CB_H

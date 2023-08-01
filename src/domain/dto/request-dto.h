@@ -11,13 +11,13 @@ private:
     char _rightApplicator;
     char _centerApplicator;
     char _leftApplicator;
-    char _newId[2];
+    char _newId;
     char _dose;
 
 public:
     RequestDto(string request);
     RequestDto(){};
-    string getNewId();
+    char getNewId();
     char getDose();
     char getRequestType();
     char getRightApplicator();
