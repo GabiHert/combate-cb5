@@ -7,7 +7,13 @@ using namespace std;
 
 RequestDto::RequestDto(string request)
 {
-    this->_dose = request[4];
+    this->_requestType = request[4];
+    this->_dose = request[5];
+    this->_leftApplicator = request[6];
+    this->_centerApplicator = request[7];
+    this->_rightApplicator = request[8];
+    this->_newId[0] = request[9];
+    this->_newId[1] = request[10];
 };
 char RequestDto::getDose()
 {
