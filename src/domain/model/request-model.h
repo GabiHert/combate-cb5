@@ -8,7 +8,6 @@
 class RequestModel
 {
 private:
-    char _requestType;
     bool _rightApplicator;
     bool _centerApplicator;
     bool _leftApplicator;
@@ -21,7 +20,6 @@ public:
 
     char getNewId();
     char getDose();
-    char getRequestType();
     bool getRightApplicator();
     bool getCenterApplicator();
     bool getLeftApplicator();

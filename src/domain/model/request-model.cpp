@@ -4,7 +4,6 @@
 
 RequestModel::RequestModel(RequestDto requestDto)
 {
-    this->_requestType = requestDto.getRequestType();
     this->_dose = requestDto.getDose();
     this->_leftApplicator = requestDto.getLeftApplicator();
     this->_centerApplicator = requestDto.getCenterApplicator();
@@ -18,10 +17,6 @@ char RequestModel::getDose()
 char RequestModel::getNewId()
 {
     return this->_newId;
-}
-char RequestModel::getRequestType()
-{
-    return this->_requestType;
 }
 bool RequestModel::getRightApplicator()
 {

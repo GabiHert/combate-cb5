@@ -7,7 +7,6 @@ using namespace std;
 class RequestDto
 {
 private:
-    char _requestType;
     char _rightApplicator;
     char _centerApplicator;
     char _leftApplicator;
@@ -19,7 +18,6 @@ public:
     RequestDto(){};
     char getNewId();
     char getDose();
-    char getRequestType();
     char getRightApplicator();
     char getCenterApplicator();
     char getLeftApplicator();
