@@ -3,7 +3,7 @@
 #include "utils/utils.h"
 #include "config/config.h"
 
-RenameUseCase::RenameUseCase(ILcd *lcd, Cb *cb, Preferences *preferences,Timer *timer)
+RenameUseCase::RenameUseCase(ILcd *lcd, Cb *cb, Preferences *preferences, Timer *timer)
 {
     this->_lcd = lcd;
     this->_timer = timer;
@@ -11,11 +11,11 @@ RenameUseCase::RenameUseCase(ILcd *lcd, Cb *cb, Preferences *preferences,Timer *
     this->_preferences = preferences;
 };
 
-pair<bool, ERROR_TYPE *> RenameUseCase::execute(char newId)
+pair<bool, ERROR_TYPE *> RenameUseCase::execute(char *newId)
 {
-    loggerInfo("RenameUsCase", "Process started", "newId: " + to_string(newId));
+    loggerInfo("RenameUsCase", "Process started", "newId: " + newId[0] + newId[1]);
 
-    string newName = "CB5_" + to_string(newId);
+    string newName = "CB5_" + to_string(newId[0] + newId[1]);
 
     this->_preferences->putString(CONFIG_PREFERENCES_DEVICE_NAME_KEY, stdStringToArduinoString(newName));
 

@@ -11,14 +11,14 @@ private:
     bool _rightApplicator;
     bool _centerApplicator;
     bool _leftApplicator;
-    char _newId;
+    char *_newId;
     char _dose;
 
 public:
     RequestModel(RequestDto requestDto);
     RequestModel() {}
 
-    char getNewId();
+    char *getNewId();
     char getDose();
     bool getRightApplicator();
     bool getCenterApplicator();

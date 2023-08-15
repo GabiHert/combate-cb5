@@ -22,7 +22,7 @@ public:
     RenameUseCase(){};
     RenameUseCase(ILcd *lcd, Cb *cb, Preferences *preferences, Timer *timer);
 
-    pair<bool, ERROR_TYPE *> execute(char newId);
+    pair<bool, ERROR_TYPE *> execute(char *newId);
 };
 
 #endif

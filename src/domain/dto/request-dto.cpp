@@ -11,13 +11,14 @@ RequestDto::RequestDto(string request)
     this->_leftApplicator = request[5];
     this->_centerApplicator = request[6];
     this->_rightApplicator = request[7];
-    this->_newId = request[8];
+    this->_newId[0] = request[8];
+    this->_newId[1] = request[9];
 };
 char RequestDto::getDose()
 {
     return this->_dose;
 };
-char RequestDto::getNewId()
+char *RequestDto::getNewId()
 {
     return this->_newId;
 }

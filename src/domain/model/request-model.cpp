@@ -14,7 +14,7 @@ char RequestModel::getDose()
 {
     return this->_dose;
 };
-char RequestModel::getNewId()
+char *RequestModel::getNewId()
 {
     return this->_newId;
 }

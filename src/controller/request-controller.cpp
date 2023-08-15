@@ -30,7 +30,8 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
     this->cb->setRequestModel(requestModel);
 
     bool doseRequest = requestModel.getDose() != CONFIG_PROTOCOL_DO_NOT_DOSE;
-    bool renameRequest = requestModel.getNewId() != 0;
+    bool renameRequest = requestModel.getNewId()[0] != CONFIG_PROTOCOL_DO_NOT_RENAME &&
+                         requestModel.getNewId()[1] != CONFIG_PROTOCOL_DO_NOT_RENAME;
 
     pair<string, ERROR_TYPE *> errorOrString = this->getGpsLocationUseCase.execute();
     if (errorOrString.second != nullptr)

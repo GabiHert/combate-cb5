@@ -21,6 +21,7 @@ ResponseModel RequestMiddleware::execute(string request)
   pair<bool, ERROR_TYPE *> errorOrBool = requestValidationMiddleware.validate(request);
   if (errorOrBool.second != nullptr)
   {
+    // todo: validateSimpleV4 -> if true, changes request to simple V5. else return error
     loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
     this->lcd->clear();
     this->lcd->print(errorOrBool.second->errorCode, 0, 0);

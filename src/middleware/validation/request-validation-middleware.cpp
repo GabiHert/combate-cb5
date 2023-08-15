@@ -20,6 +20,11 @@ pair<bool, ERROR_TYPE *> RequestValidationMiddleware::validate(string request)
     }
     return make_pair(isRequestValid, nullptr);
 };
+// todo: simpleV4 validation
+//  bool RequestValidationMiddleware::validateSimpleV4(string request)
+//  {
+//      return request == "INF....."
+//  };
 
 bool RequestValidationMiddleware::validateCheckSum(string request)
 {
