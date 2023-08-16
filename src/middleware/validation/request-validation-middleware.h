@@ -17,6 +17,7 @@ private:
 
 public:
     pair<bool, ERROR_TYPE *> validate(string request);
+    bool validateSimpleV4(string request);
     RequestValidationMiddleware();
 };
 

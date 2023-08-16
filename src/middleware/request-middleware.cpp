@@ -21,16 +21,26 @@ ResponseModel RequestMiddleware::execute(string request)
   pair<bool, ERROR_TYPE *> errorOrBool = requestValidationMiddleware.validate(request);
   if (errorOrBool.second != nullptr)
   {
-    // todo: validateSimpleV4 -> if true, changes request to simple V5. else return error
-    loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
-    this->lcd->clear();
-    this->lcd->print(errorOrBool.second->errorCode, 0, 0);
-    this->lcd->print(errorOrBool.second->description, 0, 1);
-    this->timer->setTimer(1500)->wait();
+    if (requestValidationMiddleware.validateSimpleV4(request))
+    {
+      // Parse to simple V5 request
+      char cs = 217;
+      request = "INF5N000NNx";
+      request += cs;
+      request += "\r\n";
+    }
+    else
+    {
+      loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
+      this->lcd->clear();
+      this->lcd->print(errorOrBool.second->errorCode, 0, 0);
+      this->lcd->print(errorOrBool.second->description, 0, 1);
+      this->timer->setTimer(1500)->wait();
 
-    ResponseModel responseModel(errorOrBool.second->errorCode);
+      ResponseModel responseModel(errorOrBool.second->errorCode);
 
-    return responseModel;
+      return responseModel;
+    }
   }
 
   RequestDto requestDto(request);
