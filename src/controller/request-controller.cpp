@@ -10,8 +10,6 @@ RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *
 
     this->lcd = lcd;
 
-    loggerInfo("RequestController", "CONSTRUCTOR", "cbId: " + this->cb->id);
-
     this->doseUseCase = DoseUseCase(cb, this->lcd);
 
     this->getGpsLocationUseCase = GetGpsLocationUseCase(gps, cb, this->lcd);

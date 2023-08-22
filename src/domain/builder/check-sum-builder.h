@@ -9,6 +9,6 @@ class CheckSumBuilder
 
 public:
     CheckSumBuilder(){};
-    int build(string request);
+    char build(string request);
 };
 #endif // CHECKSUM_BUILDER_H

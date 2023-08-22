@@ -38,7 +38,7 @@ bool RequestValidationMiddleware::validateCheckSum(string request)
 
     int calculatedCS = checkSumBuilder.build(requestData);
 
-    int receivedCS = (int)request[13];
+    int receivedCS = (int)request[CONFIG_PROTOCOL_STRING_LENGTH - 3];
 
     if (receivedCS != calculatedCS)
     {
@@ -58,7 +58,6 @@ bool RequestValidationMiddleware::validateProtocol(string request)
     unsigned char requestLength = request.length();
     if (requestLength != CONFIG_PROTOCOL_STRING_LENGTH)
     {
-
         loggerError("RequestValidationMiddleware.validateProtocol", "Process error", "error: request length is different from protocol; requestLength: " + to_string(requestLength));
 
         return false;

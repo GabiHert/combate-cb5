@@ -2,7 +2,7 @@
 #include "utils/utils.h"
 #include "infra/system/system-interface.h"
 
-int CheckSumBuilder::build(string data)
+char CheckSumBuilder::build(string data)
 {
     unsigned char dataLastIndex = data.length();
     int sum = 0;
@@ -11,6 +11,11 @@ int CheckSumBuilder::build(string data)
         sum += (int)data[i];
     };
 
-    int CS = 256 - (sum % 256);
+    char CS = 256 - (sum % 256);
+    if (CS > 127)
+    {
+        CS = 127 - (CS - 127);
+    }
+
     return CS;
 };

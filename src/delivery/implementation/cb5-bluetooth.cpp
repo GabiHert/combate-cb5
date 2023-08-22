@@ -66,8 +66,8 @@ void CB5::_scanConnectedApplicators()
     this->_timer->setTimer(2000)->wait();
 
     string applicator1Connected = this->_cb->getPoisonApplicators()[0]->isConnected() ? " 1 " : "";
-    string applicator2Connected = this->_cb->getPoisonApplicators()[2]->isConnected() ? " 2 " : "";
-    string applicator3Connected = this->_cb->getPoisonApplicators()[3]->isConnected() ? " 3 " : "";
+    string applicator2Connected = this->_cb->getPoisonApplicators()[1]->isConnected() ? " 2 " : "";
+    string applicator3Connected = this->_cb->getPoisonApplicators()[2]->isConnected() ? " 3 " : "";
 
     this->_lcd->clear();
     this->_lcd->printCentered("DOSADOR(ES)", 0, 0);

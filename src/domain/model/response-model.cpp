@@ -2,8 +2,7 @@
 #include "utils/utils.h"
 ResponseModel::ResponseModel(ResponseDto *responseDto)
 {
-    this->_initializer[0] = '&';
-    this->_initializer[1] = '5';
+
     this->_status = responseDto->getStatus();
     strncpy(this->_errorCode, responseDto->getErrorCode(), 3);
     this->_gpsData = responseDto->getGpsData();
@@ -11,17 +10,13 @@ ResponseModel::ResponseModel(ResponseDto *responseDto)
 
 ResponseModel::ResponseModel(char *errorCode)
 {
-
-    this->_initializer[0] = '&';
-    this->_initializer[1] = '5';
     this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
     strncpy(this->_errorCode, errorCode, 3);
 }
 
 ResponseModel::ResponseModel(ResponseDto *responseDto, char *errorCode)
 {
-    this->_initializer[0] = '&';
-    this->_initializer[1] = '5';
+
     this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
     strncpy(this->_errorCode, errorCode, 3);
     this->_gpsData = responseDto->getGpsData();
@@ -34,9 +29,11 @@ ResponseModel::ResponseModel()
 string ResponseModel::toString()
 {
     loggerInfo("ResponseModel.tostring", "Process started");
-    string response;
+    string response = "";
     response += this->_status;
-    response += this->_errorCode;
+    response += this->_errorCode[0];
+    response += this->_errorCode[1];
+    response += this->_errorCode[2];
     response += this->_leftApplicatorConnected ? '1' : '0';
     response += this->_centerApplicatorConnected ? '1' : '0';
     response += this->_rightApplicatorConnected ? '1' : '0';
@@ -46,14 +43,10 @@ string ResponseModel::toString()
     response += CONFIG_PROTOCOL_CR;
     response += CONFIG_PROTOCOL_LF;
 
-    response = this->_initializer + response;
+    response = CONFIG_PROTOCOL_RESPONSE_HEADER + response;
 
+    loggerInfo("ResponseModel.tostring", "Process finished", response);
     return response;
-}
-
-string ResponseModel::getInitializer()
-{
-    return this->_initializer;
 }
 
 string ResponseModel::getErrorCode()

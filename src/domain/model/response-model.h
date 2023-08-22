@@ -12,7 +12,6 @@ class ResponseModel
 {
 private:
     CheckSumBuilder _checkSumBuilder;
-    char _initializer[2];
     char _errorCode[3];
     char _status;
     string _gpsData;
@@ -27,7 +26,6 @@ public:
     ResponseModel(ResponseDto *responseDto, char *errorCode);
     ResponseModel();
     string toString();
-    string getInitializer();
     string getErrorCode();
     string getGpsData();
     bool getLeftApplicatorConnected();

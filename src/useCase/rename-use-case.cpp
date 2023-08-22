@@ -15,7 +15,9 @@ pair<bool, ERROR_TYPE *> RenameUseCase::execute(char *newId)
 {
     loggerInfo("RenameUsCase", "Process started", "newId: " + newId[0] + newId[1]);
 
-    string newName = "CB5_" + to_string(newId[0] + newId[1]);
+    string newName = "CB5_";
+    newName += newId[0];
+    newName += newId[1];
 
     this->_preferences->putString(CONFIG_PREFERENCES_DEVICE_NAME_KEY, stdStringToArduinoString(newName));
 

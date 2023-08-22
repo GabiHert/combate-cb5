@@ -11,7 +11,7 @@ private:
     bool _rightApplicator;
     bool _centerApplicator;
     bool _leftApplicator;
-    char *_newId;
+    char _newId[2];
     char _dose;
 
 public:

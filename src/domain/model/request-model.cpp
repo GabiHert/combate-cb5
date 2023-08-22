@@ -8,7 +8,8 @@ RequestModel::RequestModel(RequestDto requestDto)
     this->_leftApplicator = requestDto.getLeftApplicator();
     this->_centerApplicator = requestDto.getCenterApplicator();
     this->_rightApplicator = requestDto.getRightApplicator();
-    this->_newId = requestDto.getNewId();
+    this->_newId[0] = requestDto.getNewId()[0];
+    this->_newId[1] = requestDto.getNewId()[1];
 };
 char RequestModel::getDose()
 {
