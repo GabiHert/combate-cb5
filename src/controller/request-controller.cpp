@@ -47,7 +47,7 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
         {
             loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
             ResponseDto responseDto(*cb, errorOrBool.second->errorCode);
-            return make_pair(responseDto, nullptr);
+            return make_pair(responseDto, errorOrBool.second);
         }
     }
 
@@ -62,7 +62,7 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
         {
             loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
             ResponseDto responseDto(*cb, errorOrBool.second->errorCode);
-            return make_pair(responseDto, nullptr);
+            return make_pair(responseDto, errorOrBool.second);
         }
     };
 
