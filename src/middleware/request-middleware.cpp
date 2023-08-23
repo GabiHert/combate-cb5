@@ -32,9 +32,7 @@ ResponseModel RequestMiddleware::execute(string request)
     else
     {
       loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
-      this->lcd->clear();
-      this->lcd->print(errorOrBool.second->errorCode, 0, 0);
-      this->lcd->print(errorOrBool.second->description, 0, 1);
+      this->lcd->print(errorOrBool.second);
       this->timer->setTimer(1500)->wait();
 
       ResponseModel responseModel(errorOrBool.second->errorCode);
@@ -50,9 +48,7 @@ ResponseModel RequestMiddleware::execute(string request)
   {
     loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
 
-    this->lcd->clear();
-    this->lcd->print(errorOrResponseDto.second->errorCode, 0, 0);
-    this->lcd->print(errorOrResponseDto.second->description, 0, 1);
+    this->lcd->print(errorOrBool.second);
     this->timer->setTimer(1500)->wait();
 
     ResponseModel responseModel(&errorOrResponseDto.first, errorOrResponseDto.second->errorCode);

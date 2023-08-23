@@ -36,6 +36,17 @@ void ILcd::print(string message)
     lcd.print(stdStringToArduinoString(message));
 }
 
+void ILcd::print(ERROR_TYPE *error)
+{
+    this->clear();
+    string errorCode = "";
+    errorCode += error->errorCode[0];
+    errorCode += error->errorCode[1];
+    errorCode += error->errorCode[2];
+    this->print(errorCode, 0, 0);
+    this->print(error->description, 0, 1);
+}
+
 void ILcd::clear()
 {
     this->_shouldClear = false;

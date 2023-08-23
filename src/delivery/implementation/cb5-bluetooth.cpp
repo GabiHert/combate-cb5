@@ -48,6 +48,7 @@ void CB5::_scanConnectedApplicators()
 {
     loggerInfo("CB5._scanConnectedApplicators", "Process started");
     unsigned char connectedApplicators = 0;
+    bool printOnce = false;
     do
     {
         for (unsigned char i = 0; i < this->_cb->getPoisonApplicators().size(); i++)
@@ -56,6 +57,11 @@ void CB5::_scanConnectedApplicators()
             {
                 connectedApplicators++;
             }
+        }
+        if (!connectedApplicators && !printOnce)
+        {
+            printOnce = true;
+            this->_lcd->print(ERROR_TYPES().VALIDATION_ERROR);
         }
 
     } while (!connectedApplicators);
@@ -92,9 +98,7 @@ void CB5::_initGps()
             pair<string, ERROR_TYPE *> errorOrString = this->_gps->getData();
             if (errorOrString.second != nullptr)
             {
-                this->_lcd->clear();
-                this->_lcd->print(errorOrString.second->description, 0, 0);
-                this->_lcd->print(errorOrString.second->errorCode, 0, 1);
+                this->_lcd->print(errorOrString.second);
             }
             else
             {
