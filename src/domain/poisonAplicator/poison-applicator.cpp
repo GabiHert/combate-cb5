@@ -49,7 +49,7 @@ void PoisonApplicator::stop()
 
 bool PoisonApplicator::isConnected()
 {
-    return this->_sys->readDigitalPort(this->_connectionSensorPort);
+    return !this->_sys->readDigitalPort(this->_connectionSensorPort);
 }
 
 unsigned char PoisonApplicator::getMotorPort() { return this->_motorPort; }
