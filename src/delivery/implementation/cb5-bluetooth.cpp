@@ -20,7 +20,7 @@ void CB5::execute()
     if (this->_app->available())
     {
         this->_cb->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
-        loggerInfo("CB5.execute", "Process started", "Serial info. available");
+        //loggerInfo("CB5.execute", "Process started", "Serial info. available");
 
         string request = this->_app->readString();
 
@@ -29,7 +29,7 @@ void CB5::execute()
         string responseString = responseModel.toString();
         this->_app->write(responseString);
 
-        loggerInfo("CB5.execute", "Process finished");
+        //loggerInfo("CB5.execute", "Process finished");
         this->_lcd->smartClear();
         this->_lcd->setGpsStatus(false);
         this->_lcd->setDoseStatus(0, 0);
@@ -40,7 +40,7 @@ void CB5::execute()
 
 void CB5::_scanConnectedApplicators()
 {
-    loggerInfo("CB5._scanConnectedApplicators", "Process started");
+    //loggerInfo("CB5._scanConnectedApplicators", "Process started");
     unsigned char connectedApplicators = 0;
     bool printOnce = false;
     do
@@ -118,7 +118,7 @@ void CB5::_initGps()
 void CB5::setup(Preferences *preferences)
 {
     this->_sys = new ISystem();
-    loggerInfo("CB5.setup", "Process started");
+    //loggerInfo("CB5.setup", "Process started");
 
     preferences->begin(CONFIG_PROJECT_NAME);
     if (preferences->getString(CONFIG_PREFERENCES_DEVICE_NAME_KEY).length() == 0)

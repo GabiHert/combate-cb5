@@ -31,7 +31,7 @@ pair<string, ERROR_TYPE *> IGps::_getData(Timer *timer)
 
         if (timer->timedOut())
         {
-            loggerError("IGps.getData", "Process error", "Gps timed out");
+            // loggerError("IGps.getData", "Process error", "Gps timed out");
             return make_pair("", ERROR_TYPES().GPS_TIME_OUT);
         }
 
@@ -78,7 +78,7 @@ pair<string, ERROR_TYPE *> IGps::_getData(Timer *timer)
 
 pair<string, ERROR_TYPE *> IGps::getData(int timeOut)
 {
-    loggerInfo("IGps.getData", "Process started");
+    // loggerInfo("IGps.getData", "Process started");
 
     this->timer->setTimer(timeOut);
 
@@ -88,7 +88,7 @@ pair<string, ERROR_TYPE *> IGps::getData(int timeOut)
         errorOrString = this->_getData(timer);
         if (errorOrString.second != nullptr)
         {
-            loggerError("IGps.getData", "Process error", errorOrString.second->description);
+            // loggerError("IGps.getData", "Process error", errorOrString.second->description);
 
             return errorOrString;
         }
@@ -100,18 +100,18 @@ pair<string, ERROR_TYPE *> IGps::getData(int timeOut)
 
 pair<bool, ERROR_TYPE *> IGps::setup()
 {
-    loggerInfo("IGps.setup", "Process started");
+    // loggerInfo("IGps.setup", "Process started");
 
     unsigned char i = 0;
 
-    loggerInfo("IGps.setup", "set baud 19200");
+    // loggerInfo("IGps.setup", "set baud 19200");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("BAUD 19200 I", 0, 1);
     gpsSerial.begin(CONFIG_GPS_SERIAL_BAUD_RATE, SERIAL_8N2, CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
     this->timer->setTimer(1000)->wait();
 
-    loggerInfo("IGps.setup", "set 10hz");
+    // loggerInfo("IGps.setup", "set 10hz");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("10Hz [1]", 0, 1);
@@ -119,7 +119,7 @@ pair<bool, ERROR_TYPE *> IGps::setup()
     for (i = 0; i < 14; i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_SET_10HZ_1[i]);
 
-    loggerInfo("IGps.setup", "set baud 9600");
+    // loggerInfo("IGps.setup", "set baud 9600");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("BAUD 9600 I", 0, 1);
@@ -130,7 +130,7 @@ pair<bool, ERROR_TYPE *> IGps::setup()
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("10Hz [2]", 0, 1);
-    loggerInfo("IGps.setup", "set 10hz");
+    // loggerInfo("IGps.setup", "set 10hz");
     for (i = 0; i < 14; i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_SET_10HZ_1[i]);
     this->timer->setTimer(3000)->wait();
@@ -138,7 +138,7 @@ pair<bool, ERROR_TYPE *> IGps::setup()
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("GLL OFF", 0, 1);
-    loggerInfo("IGps.setup", "disable GLL");
+    // loggerInfo("IGps.setup", "disable GLL");
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_GLL.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_GLL.at(i));
     this->timer->setTimer(1000)->wait();
@@ -146,7 +146,7 @@ pair<bool, ERROR_TYPE *> IGps::setup()
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("GSV OFF", 0, 1);
-    loggerInfo("IGps.setup", "disable GSV");
+    // loggerInfo("IGps.setup", "disable GSV");
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_GSV.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_GSV.at(i));
     this->timer->setTimer(1000)->wait();
@@ -154,12 +154,12 @@ pair<bool, ERROR_TYPE *> IGps::setup()
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("GSA OFF", 0, 1);
-    loggerInfo("IGps.setup", "disable GSA");
+    // loggerInfo("IGps.setup", "disable GSA");
     for (i = 0; i < CONFIG().UBLOX_SETUP_DISABLE_GSA.size(); i++)
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_GSA.at(i));
     this->timer->setTimer(1000)->wait();
 
-    loggerInfo("IGps.setup", "disable GGA");
+    // loggerInfo("IGps.setup", "disable GGA");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("GGA OFF", 0, 1);
@@ -167,7 +167,7 @@ pair<bool, ERROR_TYPE *> IGps::setup()
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_GGA.at(i));
     this->timer->setTimer(1000)->wait();
 
-    loggerInfo("IGps.setup", "disable VTG");
+    // loggerInfo("IGps.setup", "disable VTG");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("VGT OFF", 0, 1);
@@ -175,7 +175,7 @@ pair<bool, ERROR_TYPE *> IGps::setup()
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_VTG.at(i));
     this->timer->setTimer(1000)->wait();
 
-    loggerInfo("IGps.setup", "disable ZDA");
+    // loggerInfo("IGps.setup", "disable ZDA");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("ZDA OFF", 0, 1);
@@ -183,7 +183,7 @@ pair<bool, ERROR_TYPE *> IGps::setup()
         gpsSerial.write(CONFIG().UBLOX_SETUP_DISABLE_ZDA.at(i));
     this->timer->setTimer(1000)->wait();
 
-    loggerInfo("IGps.setup", "set baud 19200");
+    // loggerInfo("IGps.setup", "set baud 19200");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("BAUD 19200 E", 0, 1);
@@ -192,14 +192,14 @@ pair<bool, ERROR_TYPE *> IGps::setup()
         gpsSerial.write(CONFIG().UBLOX_SETUP_SET_SERIAL_BAUD_19200.at(i));
     this->timer->setTimer(4000)->wait();
 
-    loggerInfo("IGps.setup", "begin baud 19200");
+    // loggerInfo("IGps.setup", "begin baud 19200");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("BAUD 19200 I", 0, 1);
     gpsSerial.begin(CONFIG_GPS_SERIAL_BAUD_RATE, SERIAL_8N2, CONFIG_PORT_GPIO_GPS_RX, CONFIG_PORT_GPIO_GPS_TX);
     this->timer->setTimer(1000)->wait();
 
-    loggerInfo("IGps.setup", "set 10hz");
+    // loggerInfo("IGps.setup", "set 10hz");
     this->_lcd->clear();
     this->_lcd->printCentered("SET GPS", 0, 0);
     this->_lcd->printCentered("10Hz [3]", 0, 1);

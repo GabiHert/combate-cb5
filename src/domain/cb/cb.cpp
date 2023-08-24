@@ -8,7 +8,7 @@
 
 pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
 {
-    loggerInfo("Cb.dose", "Process started");
+    // loggerInfo("Cb.dose", "Process started");
     this->status = CONFIG_PROTOCOL_STATUS_BUSY;
 
     ResponseDto responseDto = ResponseDto(*this);
@@ -21,17 +21,17 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
 
     for (char dose = 0; dose < amount; dose++)
     {
-        loggerInfo("Cb.dose", "Starting dose: " + to_string(amount));
+        // loggerInfo("Cb.dose", "Starting dose: " + to_string(amount));
 
         this->_lcd->setDoseStatus(dose + 1, amount);
 
-        loggerInfo("Cb.dose", "Starting all applicators");
+        // loggerInfo("Cb.dose", "Starting all applicators");
 
         for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         {
             if (!applicatorsToDose[i])
             {
-                loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
+                // loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
                 continue;
             }
 
@@ -49,7 +49,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
         {
             if (timer.timedOut())
             {
-                loggerError("Cb.dose", "Process error", "Time out");
+                // loggerError("Cb.dose", "Process error", "Time out");
 
                 for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
                     this->_poisonApplicators.at(i)->stop();
@@ -65,19 +65,19 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
             {
                 if (!applicatorsToDose[i])
                 {
-                    loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
+                    // loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
                     continue;
                 }
 
                 if (!tasksDone[i])
                 {
-                    loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " in process");
+                    // loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " in process");
                     tasksDone[i] = this->_poisonApplicators[i]->readSensor();
                 }
 
                 if (tasksDone[i])
                 {
-                    loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " finished");
+                    // loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " finished");
                     this->_poisonApplicators[i]->stop();
                     count++;
                 }
@@ -116,9 +116,10 @@ Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
     this->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->id = app->getDeviceName();
 
-    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_1);
-    this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_2);
-    this->_poisonApplicators[2] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_3);
+    // todo: confirmar se a ordem esta correta
+    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_LEFT, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_LEFT, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_LEFT);       // esquerdo
+    this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_CENTER, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_CENTER, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_CENTER); // central
+    this->_poisonApplicators[2] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_RIGHT, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_RIGHT, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_RIGHT);    // direito
     this->_lcd = lcd;
 };
 
@@ -126,7 +127,7 @@ Cb::Cb()
 {
     this->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->_location = "NO_DATA";
-    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_1, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_1, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_1);
-    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_2, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_2, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_2);
-    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_3, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_3, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_3);
+    this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_LEFT, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_LEFT, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_LEFT);       // esquerdo
+    this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_CENTER, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_CENTER, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_CENTER); // central
+    this->_poisonApplicators[2] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_RIGHT, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_RIGHT, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_RIGHT);
 };

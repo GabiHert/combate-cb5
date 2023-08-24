@@ -3,8 +3,9 @@
 #include "infra/system/system-interface.h"
 #include "config/config.h"
 
-void loggerInfo(string event, string details, string message){
-    // Serial.println("INFO - :: -  event: " + stdStringToArduinoString(event) + " |  details: " + stdStringToArduinoString(details) + " | message: " + stdStringToArduinoString(message));
+void loggerInfo(string event, string details, string message)
+{
+    Serial.println("INFO - :: -  event: " + stdStringToArduinoString(event) + " |  details: " + stdStringToArduinoString(details) + " | message: " + stdStringToArduinoString(message));
 };
 
 void loggerError(string event, string details, string error)

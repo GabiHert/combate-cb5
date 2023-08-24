@@ -4,7 +4,7 @@ using namespace std;
 #ifndef UTILS_H
 #define UTILS_H
 
-// LOGGER
+// logger
 void loggerInfo(string event, string details, string message = " ");
 void loggerError(string event, string details, string message = " ");
 void logger(string message);

@@ -38,13 +38,21 @@ void ILcd::print(string message)
 
 void ILcd::print(ERROR_TYPE *error)
 {
-    this->clear();
-    string errorCode = "";
-    errorCode += error->errorCode[0];
-    errorCode += error->errorCode[1];
-    errorCode += error->errorCode[2];
-    this->print(errorCode, 0, 0);
-    this->print(error->description, 0, 1);
+    if (error != nullptr)
+    {
+        this->clear();
+        string errorCode = "";
+        errorCode += error->errorCode[0];
+        errorCode += error->errorCode[1];
+        errorCode += error->errorCode[2];
+        this->print(errorCode, 0, 0);
+        this->print(error->description, 0, 1);
+    }
+    else
+    {
+        this->clear();
+        this->print("ERROR NULL", 0, 0);
+    }
 }
 
 void ILcd::clear()
