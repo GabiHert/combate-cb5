@@ -29,7 +29,7 @@ public:
     Cb(App *app, ISystem *sys, ILcd *lcd);
     Cb();
 
-    pair<bool, ERROR_TYPE *> dose(char amount, vector<bool> applicatorsToDose);
+    pair<bool, ERROR_TYPE *> dose(char amount, bool *applicatorsToDose);
 
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();

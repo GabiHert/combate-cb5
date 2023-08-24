@@ -22,7 +22,7 @@ RequestController::RequestController(){};
 pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto)
 {
 
-    loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb->id);
+    // loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb->id);
 
     RequestModel requestModel(requestDto);
     this->cb->setRequestModel(requestModel);
@@ -34,18 +34,18 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
     pair<string, ERROR_TYPE *> errorOrString = this->getGpsLocationUseCase.execute();
     if (errorOrString.second != nullptr)
     {
-        loggerError("requestController.execute", "Process error", "error: " + errorOrString.second->description);
+        // loggerError("requestController.execute", "Process error", "error: " + errorOrString.second->description);
         return make_pair(ResponseDto(), errorOrString.second);
     }
     this->cb->setLocation(errorOrString.first);
 
     if (renameRequest)
     {
-        loggerInfo("RequestController.execute", "Rename request detected");
+        // loggerInfo("RequestController.execute", "Rename request detected");
         pair<bool, ERROR_TYPE *> errorOrBool = this->renameUseCase.execute(requestModel.getNewId());
         if (errorOrBool.second != nullptr)
         {
-            loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
+            // loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
             ResponseDto responseDto(*cb, errorOrBool.second->errorCode);
             return make_pair(responseDto, errorOrBool.second);
         }
@@ -53,14 +53,13 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
 
     if (doseRequest)
     {
-        loggerInfo("RequestController.execute", "Dose request detected");
+        // loggerInfo("RequestController.execute", "Dose request detected");
 
-        vector<bool> applicators = {requestModel.getLeftApplicator(), requestModel.getCenterApplicator(), requestModel.getLeftApplicator()};
-
+        bool applicators[3] = {requestModel.getLeftApplicator(), requestModel.getCenterApplicator(), requestModel.getRightApplicator()};
         pair<bool, ERROR_TYPE *> errorOrBool = this->doseUseCase.execute(requestModel.getDose(), applicators);
         if (errorOrBool.second != nullptr)
         {
-            loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
+            // loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
             ResponseDto responseDto(*cb, errorOrBool.second->errorCode);
             return make_pair(responseDto, errorOrBool.second);
         }

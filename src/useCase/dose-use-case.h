@@ -14,7 +14,7 @@ private:
 public:
     DoseUseCase(Cb *cb, ILcd *lcd);
     DoseUseCase(){};
-    pair<bool, ERROR_TYPE *> execute(char amount, vector<bool> applicatorsToDose);
+    pair<bool, ERROR_TYPE *> execute(char amount, bool *applicatorsToDose);
 };
 
 #endif
