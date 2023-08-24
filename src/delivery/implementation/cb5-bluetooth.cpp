@@ -29,12 +29,6 @@ void CB5::execute()
         string responseString = responseModel.toString();
         this->_app->write(responseString);
 
-        string separator;
-        for (char i = 0; i < CONFIG_GPS_MESSAGE_LENGTH - (responseString.length() - 12); i++)
-            separator += "-";
-
-        this->_app->write(separator);
-
         loggerInfo("CB5.execute", "Process finished");
         this->_lcd->smartClear();
         this->_lcd->setGpsStatus(false);
@@ -61,7 +55,7 @@ void CB5::_scanConnectedApplicators()
         if (!connectedApplicators && !printOnce)
         {
             printOnce = true;
-            this->_lcd->print(ERROR_TYPES().VALIDATION_ERROR);
+            this->_lcd->print(ERROR_TYPES().NO_APPLICATORS_FOUND_ERROR);
         }
 
     } while (!connectedApplicators);
