@@ -6,14 +6,13 @@
 #include "domain/dto/response-dto.h"
 #include "exceptions/error-type.h"
 
-pair<bool, ERROR_TYPE *> Cb::dose(char amount, vector<bool> applicatorsToDose)
+pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
 {
     loggerInfo("Cb.dose", "Process started");
     this->status = CONFIG_PROTOCOL_STATUS_BUSY;
 
     ResponseDto responseDto = ResponseDto(*this);
     ResponseModel responseModel = ResponseModel(&responseDto);
-    string responseString = responseModel.toString();
 
     unsigned char applicatorsToDoseAmount = 0;
     for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
