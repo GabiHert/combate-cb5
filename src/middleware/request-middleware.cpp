@@ -7,21 +7,21 @@ using namespace std;
 
 RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd, Timer *timer, Preferences *preferences)
 {
-  this->lcd = lcd;
-  this->cb = cb;
-  this->requestController = RequestController(cb, gps, lcd, preferences, timer);
-  this->timer = timer;
+  this->_lcd = lcd;
+  this->_cb = cb;
+  this->_requestController = RequestController(cb, gps, lcd, preferences, timer);
+  this->_timer = timer;
 };
 
 ResponseModel RequestMiddleware::execute(string request)
 {
-  //logger(request);
-  //loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->id);
+  // logger(request);
+  // loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->id);
 
-  pair<bool, ERROR_TYPE *> errorOrBool = requestValidationMiddleware.validate(request);
+  pair<bool, ERROR_TYPE *> errorOrBool = this->_requestValidationMiddleware.validate(request);
   if (errorOrBool.second != nullptr)
   {
-    if (requestValidationMiddleware.validateSimpleV4(request))
+    if (this->_requestValidationMiddleware.validateSimpleV4(request))
     {
       // Parse to simple V5 request
       char cs = 217;
@@ -31,9 +31,9 @@ ResponseModel RequestMiddleware::execute(string request)
     }
     else
     {
-      //loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
-      this->lcd->print(errorOrBool.second);
-      this->timer->setTimer(1500)->wait();
+      // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
+      this->_lcd->print(errorOrBool.second);
+      this->_timer->setTimer(1500)->wait();
 
       ResponseModel responseModel(errorOrBool.second->errorCode);
 
@@ -43,14 +43,14 @@ ResponseModel RequestMiddleware::execute(string request)
 
   RequestDto requestDto(request);
 
-  pair<ResponseDto, ERROR_TYPE *> errorOrResponseDto = requestController.execute(requestDto);
+  pair<ResponseDto, ERROR_TYPE *> errorOrResponseDto = this->_requestController.execute(requestDto);
   if (errorOrResponseDto.second != nullptr)
   {
 
-    //loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
+    // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
 
-    this->lcd->print(errorOrResponseDto.second);
-    this->timer->setTimer(1500)->wait();
+    this->_lcd->print(errorOrResponseDto.second);
+    this->_timer->setTimer(1500)->wait();
 
     ResponseModel responseModel(&errorOrResponseDto.first, errorOrResponseDto.second->errorCode);
 
@@ -60,4 +60,18 @@ ResponseModel RequestMiddleware::execute(string request)
   ResponseModel responseModel(&errorOrResponseDto.first);
 
   return responseModel;
+};
+
+void RequestMiddleware::systematic()
+{
+  // loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->id);
+
+  ERROR_TYPE *error = this->_requestController.systematic();
+  if (error != nullptr)
+  {
+    // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
+
+    this->_lcd->print(error);
+    this->_timer->setTimer(1500)->wait();
+  }
 }

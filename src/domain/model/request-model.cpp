@@ -10,6 +10,7 @@ RequestModel::RequestModel(RequestDto requestDto)
     this->_rightApplicator = requestDto.getRightApplicator() == '1';
     this->_newId[0] = requestDto.getNewId()[0];
     this->_newId[1] = requestDto.getNewId()[1];
+    this->_metersBetweenDose = requestDto.getMetersBetweenDose();
 };
 char RequestModel::getDose()
 {
@@ -30,4 +31,9 @@ bool RequestModel::getCenterApplicator()
 bool RequestModel::getLeftApplicator()
 {
     return this->_leftApplicator;
+}
+
+char RequestModel::getMetersBetweenDose()
+{
+    return this->_metersBetweenDose;
 }

@@ -23,7 +23,6 @@ private:
     string _location;
 
 public:
-    char status;
     string id;
 
     Cb(App *app, ISystem *sys, ILcd *lcd);
@@ -34,7 +33,5 @@ public:
     void setRequestModel(RequestModel requestModel);
     RequestModel getRequestModel();
     vector<PoisonApplicator *> getPoisonApplicators();
-    string getLocation() { return this->_location; };
-    void setLocation(string location) { this->_location = location; };
 };
 #endif // CB_H

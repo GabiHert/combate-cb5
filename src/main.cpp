@@ -1,7 +1,7 @@
 
 #include <Arduino.h>
 #include <iostream>
-#include "delivery/interfaces/cb5.h"
+#include "delivery/cb5.h"
 #include <Preferences.h>
 
 using namespace std;

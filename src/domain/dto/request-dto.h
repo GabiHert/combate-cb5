@@ -12,6 +12,7 @@ private:
     char _leftApplicator;
     char _newId[2];
     char _dose;
+    char _metersBetweenDose;
 
 public:
     RequestDto(string request);
@@ -20,6 +21,7 @@ public:
     char getDose();
     char getRightApplicator();
     char getCenterApplicator();
+    char getMetersBetweenDose();
     char getLeftApplicator();
 };
 

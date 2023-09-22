@@ -17,8 +17,8 @@ private:
     bool _rightApplicatorConnected;
 
 public:
-    ResponseDto(Cb cb);
-    ResponseDto(Cb cb, char *errorCode);
+    ResponseDto(Cb cb, string gpsData, char status);
+    ResponseDto(Cb cb, string gpsData, char *errorCode);
     ResponseDto(){};
     char *getErrorCode();
     string getGpsData();

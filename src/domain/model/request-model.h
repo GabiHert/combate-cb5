@@ -13,6 +13,7 @@ private:
     bool _leftApplicator;
     char _newId[2];
     char _dose;
+    char _metersBetweenDose;
 
 public:
     RequestModel(RequestDto requestDto);
@@ -23,6 +24,7 @@ public:
     bool getRightApplicator();
     bool getCenterApplicator();
     bool getLeftApplicator();
+    char getMetersBetweenDose();
 };
 
 #endif // REQUEST_MODEL_H

@@ -14,14 +14,20 @@ class RequestController
 private:
     Cb *cb;
     ILcd *lcd;
-    DoseUseCase doseUseCase;
-    GetGpsLocationUseCase getGpsLocationUseCase;
-    RenameUseCase renameUseCase;
+    DoseUseCase _doseUseCase;
+    GetGpsLocationUseCase _getGpsLocationUseCase;
+    RenameUseCase _renameUseCase;
+    char _systematicDosesApplied, _systematicMetersBetweenDose, _distanceRanMeters;
+    ERROR_TYPE *_systematicError;
+    unsigned long _lastRequestTimeMs;
+    string _gpsData;
 
 public:
     RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *preferences, Timer *timer);
     RequestController();
 
     pair<ResponseDto, ERROR_TYPE *> execute(RequestDto requestDto);
+    ERROR_TYPE *systematic();
 };
+
 #endif // REQUEST_CONTROLLER_H

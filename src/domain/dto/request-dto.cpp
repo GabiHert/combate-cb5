@@ -13,6 +13,7 @@ RequestDto::RequestDto(string request)
     this->_rightApplicator = request[7];
     this->_newId[0] = request[8];
     this->_newId[1] = request[9];
+    this->_metersBetweenDose = request[10];
 };
 char RequestDto::getDose()
 {
@@ -33,4 +34,8 @@ char RequestDto::getCenterApplicator()
 char RequestDto::getLeftApplicator()
 {
     return this->_leftApplicator;
+}
+char RequestDto::getMetersBetweenDose()
+{
+    return this->_metersBetweenDose;
 }

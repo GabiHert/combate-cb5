@@ -9,10 +9,6 @@
 pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
 {
     // loggerInfo("Cb.dose", "Process started");
-    this->status = CONFIG_PROTOCOL_STATUS_BUSY;
-
-    ResponseDto responseDto = ResponseDto(*this);
-    ResponseModel responseModel = ResponseModel(&responseDto);
 
     unsigned char applicatorsToDoseAmount = 0;
     for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
@@ -54,7 +50,6 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
                 for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
                     this->_poisonApplicators.at(i)->stop();
 
-                this->status = CONFIG_PROTOCOL_STATUS_ERROR;
                 return make_pair(false, ERROR_TYPES().DOSE_PROCESS_TIME_OUT);
             }
 
@@ -88,7 +83,6 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
         }
     }
 
-    this->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     return make_pair(true, nullptr);
 };
 
@@ -110,13 +104,10 @@ RequestModel Cb::getRequestModel()
 Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
 {
     this->_poisonApplicators = vector<PoisonApplicator *>(CONFIG_POISON_APPLICATORS);
-    this->_location = "NO_DATA";
     this->_sys = sys;
     this->_app = app;
-    this->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
     this->id = app->getDeviceName();
 
-    // todo: confirmar se a ordem esta correta
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_LEFT, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_LEFT, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_LEFT);       // esquerdo
     this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_CENTER, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_CENTER, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_CENTER); // central
     this->_poisonApplicators[2] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_RIGHT, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_RIGHT, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_RIGHT);    // direito
@@ -125,8 +116,6 @@ Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
 
 Cb::Cb()
 {
-    this->status = CONFIG_PROTOCOL_STATUS_STAND_BY;
-    this->_location = "NO_DATA";
     this->_poisonApplicators[0] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_LEFT, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_LEFT, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_LEFT);       // esquerdo
     this->_poisonApplicators[1] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_CENTER, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_CENTER, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_CENTER); // central
     this->_poisonApplicators[2] = new PoisonApplicator(this->_sys, CONFIG_PORT_GPIO_MOTOR_RIGHT, CONFIG_PORT_GPIO_SENSOR_APPLICATOR_RIGHT, CONFIG_PORT_GPIO_SENSOR_CONNECTED_APPLICATOR_RIGHT);

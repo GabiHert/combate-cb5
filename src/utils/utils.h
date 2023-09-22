@@ -1,5 +1,8 @@
 #include <Arduino.h>
-#include <string.h>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <vector>
 using namespace std;
 #ifndef UTILS_H
 #define UTILS_H
@@ -14,6 +17,7 @@ char asciiCharToNumber(char c);
 String stdStringToArduinoString(string str);
 string arduinoStringToStdString(String str);
 string centerString(string str, int length);
+vector<string> splitStringBy(const string str, char separator);
 
 // TIMER
 class Timer

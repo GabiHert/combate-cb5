@@ -4,23 +4,23 @@
 #include <string.h>
 using namespace std;
 
-ResponseDto::ResponseDto(Cb cb)
+ResponseDto::ResponseDto(Cb cb, string gpsData, char status)
 {
-    this->_status = cb.status;
+    this->_status = asciiCharToNumber(status);
     this->_errorCode[0] = '0';
     this->_errorCode[1] = '0';
     this->_errorCode[2] = '0';
-    this->_gpsData = cb.getLocation();
+    this->_gpsData = gpsData;
     this->_leftApplicatorConnected = cb.getPoisonApplicators().at(0)->isConnected();
     this->_centerApplicatorConnected = cb.getPoisonApplicators().at(1)->isConnected();
     this->_rightApplicatorConnected = cb.getPoisonApplicators().at(2)->isConnected();
 };
 
-ResponseDto::ResponseDto(Cb cb, char *errorCode)
+ResponseDto::ResponseDto(Cb cb, string gpsData, char *errorCode)
 {
-    this->_status = cb.status;
+    this->_status = CONFIG_PROTOCOL_STATUS_ERROR;
     strncpy(this->_errorCode, errorCode, 3);
-    this->_gpsData = cb.getLocation();
+    this->_gpsData = gpsData;
     this->_leftApplicatorConnected = cb.getPoisonApplicators().at(0)->isConnected();
     this->_centerApplicatorConnected = cb.getPoisonApplicators().at(1)->isConnected();
     this->_rightApplicatorConnected = cb.getPoisonApplicators().at(2)->isConnected();

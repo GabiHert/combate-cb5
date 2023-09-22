@@ -12,16 +12,17 @@
 class RequestMiddleware
 {
 private:
-    ILcd *lcd;
-    Cb *cb;
-    Timer *timer;
-    RequestController requestController;
-    RequestValidationMiddleware requestValidationMiddleware;
+    ILcd *_lcd;
+    Cb *_cb;
+    Timer *_timer;
+    RequestController _requestController;
+    RequestValidationMiddleware _requestValidationMiddleware;
 
 public:
     RequestMiddleware(){};
     RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd, Timer *timer, Preferences *preferences);
     ResponseModel execute(string request);
+    void systematic();
 };
 
 #endif // REQUEST_MIDDLEWARE
