@@ -13,7 +13,7 @@ void loggerError(string event, string details, string error)
     Serial.println("ERROR - :: -  event: " + stdStringToArduinoString(event) + " |  details: " + stdStringToArduinoString(event) + " | error: " + stdStringToArduinoString(error));
 };
 
-void logger(string message)
+void  logger(string message)
 {
 
     // String _message = stdStringToArduinoString(message);

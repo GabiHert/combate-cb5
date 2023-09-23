@@ -16,12 +16,23 @@ RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *
 
     this->_renameUseCase = RenameUseCase(lcd, cb, preferences, timer);
 
+    this->_systematicError = nullptr;
+
+    this->_lastDoseTimeMs = 0;
+    this->_lastCommunicationTimeMs = 0;
+
     this->_systematicDosesApplied = 0;
+
+    this->_systematicMetersBetweenDose = CONFIG_PROTOCOL_DO_NOT_DOSE;
 };
 
 RequestController::RequestController()
 {
+    this->_lastDoseTimeMs = 0;
+    this->_lastCommunicationTimeMs = 0;
+    this->_systematicMetersBetweenDose = CONFIG_PROTOCOL_DO_NOT_DOSE;
     this->_systematicDosesApplied = 0;
+    this->_systematicError = nullptr;
 };
 
 pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto)
@@ -29,12 +40,18 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
 
     // loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb->id);
 
+    this->_lastCommunicationTimeMs = millis();
+
     if (this->_systematicError != nullptr)
     {
+        // loggerInfo("RequestController.execute", "systematicError");
+
         ResponseDto responseDto(*cb, this->_gpsData, this->_systematicError->errorCode);
         this->_systematicError = nullptr;
         return make_pair(responseDto, this->_systematicError);
     }
+
+    // loggerInfo("RequestController.execute", "no error");
 
     RequestModel requestModel(requestDto);
     this->cb->setRequestModel(requestModel);
@@ -48,7 +65,7 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
     pair<string, ERROR_TYPE *> errorOrString = this->_getGpsLocationUseCase.execute();
     if (errorOrString.second != nullptr)
     {
-        // loggerError("requestController.execute", "Process error", "error: " + errorOrString.second->description);
+        //  loggerError("requestController.execute", "Process error", "error: " + errorOrString.second->description);
         ResponseDto responseDto(*cb, this->_gpsData, errorOrString.second->errorCode);
         return make_pair(responseDto, errorOrString.second);
     }
@@ -82,49 +99,81 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
         this->_distanceRanMeters = 0;
     };
 
-    ResponseDto responseDto(*this->cb, this->_gpsData, asciiCharToNumber(this->_systematicDosesApplied));
+    ResponseDto responseDto(*this->cb, this->_gpsData, numberToProtocolNumber(this->_systematicDosesApplied));
+    this->_systematicDosesApplied = 0;
     return make_pair(responseDto, nullptr);
 };
 
 ERROR_TYPE *RequestController::systematic()
 {
-    // loggerInfo("RequestController.execute", "Process started", "cbId: " + this->cb->id);
+    // loggerInfo("RequestController.systematic", "Process started");
 
-    if (this->_systematicMetersBetweenDose == CONFIG_PROTOCOL_DO_NOT_DOSE ||
-        this->_systematicError != nullptr)
+    unsigned long currentTime = millis();
+
+    this->lcd->setSystematicMetersBetweenDose(this->_systematicMetersBetweenDose);
+
+    if (millis() - this->_lastCommunicationTimeMs > CONFIG_COMMUNICATION_WAIT_ACCEPTANCE_MS)
     {
+        this->_systematicMetersBetweenDose = CONFIG_PROTOCOL_DO_NOT_DOSE;
+    }
+
+    if (this->_systematicMetersBetweenDose == CONFIG_PROTOCOL_DO_NOT_DOSE)
+    {
+        // loggerInfo("RequestController.systematic", "CONFIG_PROTOCOL_DO_NOT_DOSE");
+
+        return nullptr;
+    }
+
+    if (this->_systematicError != nullptr)
+    {
+        // loggerInfo("RequestController.systematic", "ERROR");
         return this->_systematicError;
+    }
+
+    char metersBetweenDose = asciiCharToNumber(this->_systematicMetersBetweenDose);
+    if (metersBetweenDose == 0)
+    {
+        metersBetweenDose = 10;
     }
 
     pair<string, ERROR_TYPE *> errorOrString = this->_getGpsLocationUseCase.execute();
     if (errorOrString.second != nullptr)
     {
-        // loggerError("requestController.execute", "Process error", "error: " + errorOrString.second->description);
+        //  loggerError("requestController.systematic", "Process error", "error: " + errorOrString.second->description);
         return errorOrString.second;
     }
 
-    float velocityMetersPerSecond = atof(splitStringBy(errorOrString.first, ',').at(7).c_str()) * 1.94384;
+    float velocityMetersPerSecond = atof(splitStringBy(errorOrString.first, ',').at(6).c_str()) * 1.94384;
 
-    this->_lastRequestTimeMs = this->_lastRequestTimeMs - millis();
-    this->_distanceRanMeters = (this->_lastRequestTimeMs / 1000) * velocityMetersPerSecond;
+    //  loggerInfo("requestController.systematic", "Velocity", to_string(velocityMetersPerSecond));
+    // loggerInfo("requestController.systematic", "GPS", errorOrString.first);
 
-    if (this->_distanceRanMeters >= this->_systematicMetersBetweenDose)
+    unsigned long elapsedTimeMs = currentTime - this->_lastDoseTimeMs;
+
+    // loggerInfo("RequestController.systematic", "_lastDoseTimeMs: " + to_string(this->_lastDoseTimeMs));
+    // loggerInfo("RequestController.systematic", "elapsedTimeMs: " + to_string(elapsedTimeMs));
+
+    this->_distanceRanMeters = (elapsedTimeMs / 1000) * velocityMetersPerSecond;
+
+    if (this->_distanceRanMeters >= metersBetweenDose)
     {
+        // loggerInfo("RequestController.systematic", "_distanceRanMeters: " + to_string(this->_distanceRanMeters) + " metersBetweenDose: " + to_string(metersBetweenDose));
+
         bool applicators[3] = {
             this->cb->getPoisonApplicators().at(0)->isConnected(),
             this->cb->getPoisonApplicators().at(1)->isConnected(),
             this->cb->getPoisonApplicators().at(2)->isConnected(),
         };
 
-        pair<bool, ERROR_TYPE *> errorOrBool = this->_doseUseCase.execute(1, applicators);
+        pair<bool, ERROR_TYPE *> errorOrBool = this->_doseUseCase.execute('1', applicators);
         if (errorOrBool.second != nullptr)
         {
-            // loggerError("requestController.execute", "Process error", "error: " + errorOrBool.second->description);
+            // loggerError("requestController.systematic", "Process error", "error: " + errorOrBool.second->description);
             ResponseDto responseDto(*cb, this->_gpsData, errorOrBool.second->errorCode);
             this->_systematicError = errorOrBool.second;
             return errorOrBool.second;
         }
-
+        this->_lastDoseTimeMs = millis();
         this->_systematicDosesApplied++;
         this->_distanceRanMeters = 0;
     }

@@ -58,6 +58,7 @@ void ILcd::print(ERROR_TYPE *error)
 void ILcd::clear()
 {
     this->_shouldClear = false;
+    this->_systematicMetersBetweenDoseCache = ' ';
     lcd.clear();
 }
 
@@ -91,7 +92,7 @@ void ILcd::setDoseStatus(unsigned char done, unsigned char target)
 
 void ILcd::setCBName(string name)
 {
-    _print(centerString(name, CONFIG_lcd_COLUMNS_LENGTH), 0, 1);
+    _print(name, 5, 1);
 };
 
 void ILcd::smartClear()
@@ -103,4 +104,24 @@ void ILcd::smartClear()
 void ILcd::setVersion(string version)
 {
     _print(centerString(version, 5), 5, 0);
+}
+
+void ILcd::setSystematicMetersBetweenDose(char systematicMetersBetweenDose)
+{
+    if (systematicMetersBetweenDose == this->_systematicMetersBetweenDoseCache)
+    {
+        return;
+    }
+    this->_systematicMetersBetweenDoseCache = systematicMetersBetweenDose;
+    string aux = "";
+    if (systematicMetersBetweenDose == 'N')
+    {
+        aux += "N ";
+    }
+    else
+    {
+        aux += systematicMetersBetweenDose;
+        aux += "m";
+    }
+    _print(aux, 0, 1);
 }

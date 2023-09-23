@@ -15,8 +15,8 @@ RequestMiddleware::RequestMiddleware(Cb *cb, IGps *gps, ILcd *lcd, Timer *timer,
 
 ResponseModel RequestMiddleware::execute(string request)
 {
-  // logger(request);
-  // loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->id);
+  // // logger(request);
+  // // loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->_cb->id);
 
   pair<bool, ERROR_TYPE *> errorOrBool = this->_requestValidationMiddleware.validate(request);
   if (errorOrBool.second != nullptr)
@@ -31,7 +31,7 @@ ResponseModel RequestMiddleware::execute(string request)
     }
     else
     {
-      // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
+      // // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
       this->_lcd->print(errorOrBool.second);
       this->_timer->setTimer(1500)->wait();
 
@@ -47,7 +47,7 @@ ResponseModel RequestMiddleware::execute(string request)
   if (errorOrResponseDto.second != nullptr)
   {
 
-    // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
+    // // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
 
     this->_lcd->print(errorOrResponseDto.second);
     this->_timer->setTimer(1500)->wait();
@@ -64,14 +64,15 @@ ResponseModel RequestMiddleware::execute(string request)
 
 void RequestMiddleware::systematic()
 {
-  // loggerInfo("RequestMiddleware.execute", "Process started", "Serial info. available, cbId: " + this->cb->id);
+  // // loggerInfo("RequestMiddleware.systematic", "Process started");
 
   ERROR_TYPE *error = this->_requestController.systematic();
   if (error != nullptr)
   {
-    // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
+    // // loggerError("RequestMiddleware.systematic", "Process error", "error: " + error->description);
 
     this->_lcd->print(error);
     this->_timer->setTimer(1500)->wait();
   }
+  // // loggerInfo("RequestMiddleware.systematic", "Process finished");
 }

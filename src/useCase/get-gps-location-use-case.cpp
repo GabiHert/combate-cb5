@@ -11,7 +11,7 @@ GetGpsLocationUseCase::GetGpsLocationUseCase(IGps *gps, Cb *cb, ILcd *lcd)
 pair<string, ERROR_TYPE *> GetGpsLocationUseCase::execute()
 {
 
-    //loggerInfo("GetGpsUseCase.execute", "Process started");
+    //// // loggerInfo("GetGpsUseCase.execute", "Process started");
 
     this->lcd->setGpsStatus(true);
 
@@ -19,7 +19,7 @@ pair<string, ERROR_TYPE *> GetGpsLocationUseCase::execute()
 
     if (errorOrString.second != nullptr)
     {
-        //loggerError("GetGpsUseCase.execute", "Process error", errorOrString.second->description);
+        //// // loggerError("GetGpsUseCase.execute", "Process error", errorOrString.second->description);
 
         return errorOrString;
     }

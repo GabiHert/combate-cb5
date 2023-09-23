@@ -11,6 +11,7 @@ class ILcd
 private:
     bool _shouldClear;
     void _print(string message, uint8_t column, uint8_t line);
+    char _systematicMetersBetweenDoseCache;
 
 public:
     ILcd();
@@ -25,6 +26,7 @@ public:
     void setDoseStatus(unsigned char done, unsigned char target);
     void setCBName(string name);
     void setVersion(string version);
+    void setSystematicMetersBetweenDose(char systematicMetersBetweenDose);
 
     void smartClear();
 };

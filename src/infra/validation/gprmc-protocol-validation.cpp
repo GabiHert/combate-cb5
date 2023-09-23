@@ -71,7 +71,7 @@ bool GprmcProtocolValidation::validate(string data)
 
 bool GprmcProtocolValidation::isDataReliable(string data)
 {
-    //loggerInfo("GprmcProtocolValidation.isDataReliable", "Process started");
+    //// // loggerInfo("GprmcProtocolValidation.isDataReliable", "Process started");
 
     unsigned char field = 1;
     for (unsigned char i = 0; i < data.length(); i++)

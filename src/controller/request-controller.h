@@ -19,7 +19,7 @@ private:
     RenameUseCase _renameUseCase;
     char _systematicDosesApplied, _systematicMetersBetweenDose, _distanceRanMeters;
     ERROR_TYPE *_systematicError;
-    unsigned long _lastRequestTimeMs;
+    unsigned long _lastDoseTimeMs, _lastCommunicationTimeMs;
     string _gpsData;
 
 public:

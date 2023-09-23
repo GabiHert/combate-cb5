@@ -13,7 +13,7 @@ RenameUseCase::RenameUseCase(ILcd *lcd, Cb *cb, Preferences *preferences, Timer 
 
 pair<bool, ERROR_TYPE *> RenameUseCase::execute(char *newId)
 {
-    // loggerInfo("RenameUsCase", "Process started", "newId: " + newId[0] + newId[1]);
+    // // loggerInfo("RenameUsCase", "Process started", "newId: " + newId[0] + newId[1]);
 
     string newName = "CB5_";
     newName += newId[0];

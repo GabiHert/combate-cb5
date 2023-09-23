@@ -34,7 +34,8 @@ ResponseModel::ResponseModel()
 
 string ResponseModel::toString()
 {
-    //loggerInfo("ResponseModel.tostring", "Process started");
+    // loggerInfo("ResponseModel.tostring", "Process started");
+
     string response = "";
     response += this->_status;
     response += this->_errorCode[0];
@@ -51,7 +52,7 @@ string ResponseModel::toString()
 
     response = CONFIG_PROTOCOL_RESPONSE_HEADER + response;
 
-    //loggerInfo("ResponseModel.tostring", "Process finished", response);
+    // loggerInfo("ResponseModel.tostring", "Process finished", response);
     return response;
 }
 

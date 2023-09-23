@@ -6,7 +6,7 @@ using namespace std;
 
 ResponseDto::ResponseDto(Cb cb, string gpsData, char status)
 {
-    this->_status = asciiCharToNumber(status);
+    this->_status = status;
     this->_errorCode[0] = '0';
     this->_errorCode[1] = '0';
     this->_errorCode[2] = '0';

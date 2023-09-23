@@ -28,7 +28,6 @@ void CB5::execute()
         string responseString = responseModel.toString();
         this->_app->write(responseString);
 
-        // loggerInfo("CB5.execute", "Process finished");
         this->_lcd->smartClear();
         this->_lcd->setGpsStatus(false);
         this->_lcd->setDoseStatus(0, 0);
@@ -37,8 +36,10 @@ void CB5::execute()
     }
     else
     {
+        // loggerInfo("CB5.execute", "Process started", "Systematic");
 
         this->_requestMiddleware->systematic();
+        // loggerInfo("CB5.execute", "test");
 
         this->_lcd->smartClear();
         this->_lcd->setGpsStatus(false);
@@ -46,6 +47,7 @@ void CB5::execute()
         this->_lcd->setCBName(this->_cb->id);
         this->_lcd->setVersion(CONFIG_CB5_SOFTWARE_VERSION);
     }
+    // loggerInfo("CB5.execute", "Process finished");
 };
 
 void CB5::_scanConnectedApplicators()

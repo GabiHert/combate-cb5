@@ -18,6 +18,7 @@ String stdStringToArduinoString(string str);
 string arduinoStringToStdString(String str);
 string centerString(string str, int length);
 vector<string> splitStringBy(const string str, char separator);
+char numberToProtocolNumber(char number);
 
 // TIMER
 class Timer
