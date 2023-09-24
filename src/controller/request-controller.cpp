@@ -97,6 +97,7 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
             return make_pair(responseDto, errorOrBool.second);
         }
         this->_distanceRanMeters = 0;
+        this->_lastDoseTimeMs = this->_lastCommunicationTimeMs;
     };
 
     ResponseDto responseDto(*this->cb, this->_gpsData, numberToProtocolNumber(this->_systematicDosesApplied));
@@ -112,7 +113,7 @@ ERROR_TYPE *RequestController::systematic()
 
     this->lcd->setSystematicMetersBetweenDose(this->_systematicMetersBetweenDose);
 
-    if (millis() - this->_lastCommunicationTimeMs > CONFIG_COMMUNICATION_WAIT_ACCEPTANCE_MS)
+    if (currentTime - this->_lastCommunicationTimeMs > CONFIG_COMMUNICATION_WAIT_ACCEPTANCE_MS)
     {
         this->_systematicMetersBetweenDose = CONFIG_PROTOCOL_DO_NOT_DOSE;
     }
