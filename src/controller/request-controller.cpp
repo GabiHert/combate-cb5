@@ -19,7 +19,10 @@ RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *
     this->_systematicError = nullptr;
 
     this->_lastDoseTimeMs = 0;
+
     this->_lastCommunicationTimeMs = 0;
+
+    this->_systematicMetersBetweenDoseParsed = 0;
 
     this->_systematicDosesApplied = 0;
 
@@ -31,6 +34,7 @@ RequestController::RequestController()
     this->_lastDoseTimeMs = 0;
     this->_lastCommunicationTimeMs = 0;
     this->_systematicMetersBetweenDose = CONFIG_PROTOCOL_DO_NOT_DOSE;
+    this->_systematicMetersBetweenDoseParsed = 0;
     this->_systematicDosesApplied = 0;
     this->_systematicError = nullptr;
 };
@@ -61,6 +65,11 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
                          requestModel.getNewId()[1] != CONFIG_PROTOCOL_DO_NOT_RENAME;
 
     this->_systematicMetersBetweenDose = requestModel.getMetersBetweenDose();
+
+    if (this->_systematicMetersBetweenDoseParsed != CONFIG_PROTOCOL_DO_NOT_DOSE)
+    {
+        this->_systematicMetersBetweenDoseParsed = asciiCharToNumber(this->_systematicMetersBetweenDose);
+    }
 
     pair<string, ERROR_TYPE *> errorOrString = this->_getGpsLocationUseCase.execute();
     if (errorOrString.second != nullptr)
@@ -121,7 +130,6 @@ ERROR_TYPE *RequestController::systematic()
     if (this->_systematicMetersBetweenDose == CONFIG_PROTOCOL_DO_NOT_DOSE)
     {
         // loggerInfo("RequestController.systematic", "CONFIG_PROTOCOL_DO_NOT_DOSE");
-
         return nullptr;
     }
 
@@ -129,12 +137,6 @@ ERROR_TYPE *RequestController::systematic()
     {
         // loggerInfo("RequestController.systematic", "ERROR");
         return this->_systematicError;
-    }
-
-    char metersBetweenDose = asciiCharToNumber(this->_systematicMetersBetweenDose);
-    if (metersBetweenDose == 0)
-    {
-        metersBetweenDose = 10;
     }
 
     pair<string, ERROR_TYPE *> errorOrString = this->_getGpsLocationUseCase.execute();
@@ -146,7 +148,7 @@ ERROR_TYPE *RequestController::systematic()
 
     float velocityMetersPerSecond = atof(splitStringBy(errorOrString.first, ',').at(6).c_str()) * 1.94384;
 
-    //  loggerInfo("requestController.systematic", "Velocity", to_string(velocityMetersPerSecond));
+    // loggerInfo("requestController.systematic", "Velocity", to_string(velocityMetersPerSecond));
     // loggerInfo("requestController.systematic", "GPS", errorOrString.first);
 
     unsigned long elapsedTimeMs = currentTime - this->_lastDoseTimeMs;
@@ -156,9 +158,9 @@ ERROR_TYPE *RequestController::systematic()
 
     this->_distanceRanMeters = (elapsedTimeMs / 1000) * velocityMetersPerSecond;
 
-    if (this->_distanceRanMeters >= metersBetweenDose)
+    if (this->_distanceRanMeters >= this->_systematicMetersBetweenDoseParsed)
     {
-        // loggerInfo("RequestController.systematic", "_distanceRanMeters: " + to_string(this->_distanceRanMeters) + " metersBetweenDose: " + to_string(metersBetweenDose));
+        // loggerInfo("RequestController.systematic", "_distanceRanMeters: " + to_string(this->_distanceRanMeters) + " this->_systematicMetersBetweenDoseParsed: " + to_string(this->_systematicMetersBetweenDoseParsed));
 
         bool applicators[3] = {
             this->cb->getPoisonApplicators().at(0)->isConnected(),
