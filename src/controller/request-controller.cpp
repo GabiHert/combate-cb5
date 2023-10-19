@@ -18,7 +18,7 @@ RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *
 
     this->_systematicError = nullptr;
 
-    this->_lastDoseTimeMs = 0;
+    this->_endTime = 0;
 
     this->_lastCommunicationTimeMs = 0;
 
@@ -31,7 +31,7 @@ RequestController::RequestController(Cb *cb, IGps *gps, ILcd *lcd, Preferences *
 
 RequestController::RequestController()
 {
-    this->_lastDoseTimeMs = 0;
+    this->_endTime = 0;
     this->_lastCommunicationTimeMs = 0;
     this->_systematicMetersBetweenDose = CONFIG_PROTOCOL_DO_NOT_DOSE;
     this->_systematicMetersBetweenDoseParsed = 0;
@@ -106,7 +106,7 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
             return make_pair(responseDto, errorOrBool.second);
         }
         this->_distanceRanMeters = 0;
-        this->_lastDoseTimeMs = this->_lastCommunicationTimeMs;
+        this->_endTime = this->_lastCommunicationTimeMs;
     };
 
     ResponseDto responseDto(*this->cb, this->_gpsData, numberToProtocolNumber(this->_systematicDosesApplied));
@@ -118,11 +118,11 @@ ERROR_TYPE *RequestController::systematic()
 {
     // loggerInfo("RequestController.systematic", "Process started");
 
-    unsigned long currentTime = millis();
+    unsigned long startTime = millis();
 
     this->lcd->setSystematicMetersBetweenDose(this->_systematicMetersBetweenDose);
 
-    if (currentTime - this->_lastCommunicationTimeMs > CONFIG_COMMUNICATION_WAIT_ACCEPTANCE_MS)
+    if (startTime - this->_lastCommunicationTimeMs > CONFIG_COMMUNICATION_WAIT_ACCEPTANCE_MS)
     {
         this->_systematicMetersBetweenDose = CONFIG_PROTOCOL_DO_NOT_DOSE;
     }
@@ -151,7 +151,7 @@ ERROR_TYPE *RequestController::systematic()
     // loggerInfo("requestController.systematic", "Velocity", to_string(velocityMetersPerSecond));
     // loggerInfo("requestController.systematic", "GPS", errorOrString.first);
 
-    unsigned long elapsedTimeMs = currentTime - this->_lastDoseTimeMs;
+    unsigned long elapsedTimeMs = startTime - this->_endTime;
 
     // loggerInfo("RequestController.systematic", "_lastDoseTimeMs: " + to_string(this->_lastDoseTimeMs));
     // loggerInfo("RequestController.systematic", "elapsedTimeMs: " + to_string(elapsedTimeMs));
@@ -176,10 +176,11 @@ ERROR_TYPE *RequestController::systematic()
             this->_systematicError = errorOrBool.second;
             return errorOrBool.second;
         }
-        this->_lastDoseTimeMs = millis();
         this->_systematicDosesApplied++;
         this->_distanceRanMeters = 0;
     }
+
+    this->_endTime = millis();
 
     return nullptr;
 };
