@@ -156,7 +156,7 @@ ERROR_TYPE *RequestController::systematic()
     // loggerInfo("RequestController.systematic", "_lastDoseTimeMs: " + to_string(this->_lastDoseTimeMs));
     // loggerInfo("RequestController.systematic", "elapsedTimeMs: " + to_string(elapsedTimeMs));
 
-    this->_distanceRanMeters = (elapsedTimeMs / 1000) * velocityMetersPerSecond;
+    this->_distanceRanMeters += (elapsedTimeMs / 1000) * velocityMetersPerSecond;
 
     if (this->_distanceRanMeters >= this->_systematicMetersBetweenDoseParsed)
     {
