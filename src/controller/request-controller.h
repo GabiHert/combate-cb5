@@ -17,9 +17,10 @@ private:
     DoseUseCase _doseUseCase;
     GetGpsLocationUseCase _getGpsLocationUseCase;
     RenameUseCase _renameUseCase;
-    char _systematicDosesApplied, _systematicMetersBetweenDose, _systematicMetersBetweenDoseParsed, _distanceRanMeters;
+    char _systematicDosesApplied, _systematicMetersBetweenDose, _systematicMetersBetweenDoseParsed;
     ERROR_TYPE *_systematicError;
     unsigned long _endTime, _lastCommunicationTimeMs;
+    float _distanceRanMeters;
     string _gpsData;
 
 public:

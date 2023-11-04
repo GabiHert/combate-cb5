@@ -95,7 +95,7 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
 
     if (doseRequest)
     {
-        // loggerInfo("RequestController.execute", "Dose request detected");
+        loggerInfo("RequestController.execute", "DOSE REQUEST");
 
         bool applicators[3] = {requestModel.getLeftApplicator(), requestModel.getCenterApplicator(), requestModel.getRightApplicator()};
         pair<bool, ERROR_TYPE *> errorOrBool = this->_doseUseCase.execute(requestModel.getDose(), applicators);
@@ -118,11 +118,15 @@ ERROR_TYPE *RequestController::systematic()
 {
     // loggerInfo("RequestController.systematic", "Process started");
 
-    unsigned long startTime = millis();
+    unsigned long currentTime = millis();
+    if (this->_endTime == 0)
+    {
+        this->_endTime = currentTime;
+    }
 
     this->lcd->setSystematicMetersBetweenDose(this->_systematicMetersBetweenDose);
 
-    if (startTime - this->_lastCommunicationTimeMs > CONFIG_COMMUNICATION_WAIT_ACCEPTANCE_MS)
+    if (currentTime - this->_lastCommunicationTimeMs > CONFIG_COMMUNICATION_WAIT_ACCEPTANCE_MS)
     {
         this->_systematicMetersBetweenDose = CONFIG_PROTOCOL_DO_NOT_DOSE;
     }
@@ -146,17 +150,25 @@ ERROR_TYPE *RequestController::systematic()
         return errorOrString.second;
     }
 
-    float velocityMetersPerSecond = atof(splitStringBy(errorOrString.first, ',').at(6).c_str()) * 1.94384;
+    float velocityKmH = atof(splitStringBy(errorOrString.first, ',').at(6).c_str()) * 1.94384;
+    float velocityMetersPerSecond = velocityKmH / 3.6;
 
-    // loggerInfo("requestController.systematic", "Velocity", to_string(velocityMetersPerSecond));
+    loggerInfo("requestController.systematic", "Velocity", to_string(velocityMetersPerSecond));
     // loggerInfo("requestController.systematic", "GPS", errorOrString.first);
 
-    unsigned long elapsedTimeMs = startTime - this->_endTime;
+    double elapsedTimeMs = currentTime - this->_endTime;
+    double elapsedTimeS = elapsedTimeMs / 1000;
+    elapsedTimeS += 0.5;
 
-    // loggerInfo("RequestController.systematic", "_lastDoseTimeMs: " + to_string(this->_lastDoseTimeMs));
-    // loggerInfo("RequestController.systematic", "elapsedTimeMs: " + to_string(elapsedTimeMs));
+    loggerInfo("RequestController.systematic", "seconds", to_string(elapsedTimeS));
+    loggerInfo("RequestController.systematic", "ms", to_string(elapsedTimeMs));
 
-    this->_distanceRanMeters += (elapsedTimeMs / 1000) * velocityMetersPerSecond;
+    loggerInfo("RequestController.systematic", "currentTime", to_string(currentTime));
+    loggerInfo("RequestController.systematic", "_endTime", to_string(this->_endTime));
+
+    this->_distanceRanMeters = (elapsedTimeS * velocityMetersPerSecond);
+
+    loggerInfo("RequestController.systematic", "distanceRanMeters: " + to_string(this->_distanceRanMeters));
 
     if (this->_distanceRanMeters >= this->_systematicMetersBetweenDoseParsed)
     {
@@ -178,9 +190,9 @@ ERROR_TYPE *RequestController::systematic()
         }
         this->_systematicDosesApplied++;
         this->_distanceRanMeters = 0;
-    }
 
-    this->_endTime = millis();
+        this->_endTime = millis();
+    }
 
     return nullptr;
 };

@@ -5,7 +5,7 @@
 #include <preferences.h>
 
 using namespace std;
-#define CONFIG_CB5_SOFTWARE_VERSION "2.1.2"
+#define CONFIG_CB5_SOFTWARE_VERSION "2.1.3"
 
 #define CONFIG_SERIAL_BAUD_RATE 115200
 #define CONFIG_GPS_MAX_SETUP_VALID_DATA_RETRIES 60
