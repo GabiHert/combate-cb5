@@ -75,7 +75,8 @@ void CB5::_scanConnectedApplicators()
     this->_lcd->clear();
     this->_lcd->print("   DOSADORES    ", 0, 0);
     this->_lcd->print("CONECTADOS -> " + to_string(connectedApplicators), 0, 1);
-    this->_timer->setTimer(2000)->wait();
+    this->_timer->setTimer(2000);
+    this->_timer->wait();
 
     string applicator1Connected = this->_cb->getPoisonApplicators()[0]->isConnected() ? " 1 " : "";
     string applicator2Connected = this->_cb->getPoisonApplicators()[1]->isConnected() ? " 2 " : "";
@@ -84,7 +85,8 @@ void CB5::_scanConnectedApplicators()
     this->_lcd->clear();
     this->_lcd->printCentered("DOSADOR(ES)", 0, 0);
     this->_lcd->printCentered(applicator1Connected + applicator2Connected + applicator3Connected, 0, 1);
-    this->_timer->setTimer(2000)->wait();
+    this->_timer->setTimer(2000);
+    this->_timer->wait();
 }
 
 void CB5::_initGps()
@@ -113,7 +115,8 @@ void CB5::_initGps()
                     this->_lcd->clear();
                     this->_lcd->printCentered("SINAL GPS", 0, 0);
                     this->_lcd->printCentered("OK", 0, 1);
-                    this->_timer->setTimer(1000)->wait();
+                    this->_timer->setTimer(1000);
+                    this->_timer->wait();
                     valid = true;
                     break;
                 }
@@ -121,9 +124,10 @@ void CB5::_initGps()
                 this->_lcd->clear();
                 this->_lcd->printCentered("SEM SINAL GPS", 0, 0);
                 this->_lcd->printCentered("[" + to_string(retries) + "]", 0, 1);
-                this->_timer->setTimer(CONFIG_GPS_SETUP_RETRY_INTERVAL)->wait();
+                this->_timer->setTimer(CONFIG_GPS_SETUP_RETRY_INTERVAL);
+                this->_timer->wait();
             }
-        }
+        } 
     } while (!valid);
 }
 
@@ -142,7 +146,7 @@ void CB5::setup(Preferences *preferences)
     this->_lcd = new ILcd();
     this->_timer = new Timer();
     this->_gps = new IGps(this->_lcd, this->_timer);
-    this->_cb = new Cb(this->_app, this->_sys, this->_lcd);
+    this->_cb = new Cb(this->_app, this->_sys, this->_lcd,this->_timer);
     this->_requestMiddleware = new RequestMiddleware(this->_cb, this->_gps, this->_lcd, this->_timer, preferences);
 
     this->_initGps();

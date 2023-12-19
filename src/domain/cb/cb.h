@@ -12,6 +12,8 @@
 #include <iostream>
 #include "exceptions/error-type.h"
 #include <vector>
+#include "utils/utils.h"
+
 class Cb
 {
 private:
@@ -21,11 +23,12 @@ private:
     vector<PoisonApplicator *> _poisonApplicators;
     ILcd *_lcd;
     string _location;
+    Timer* _timer;
 
 public:
     string id;
 
-    Cb(App *app, ISystem *sys, ILcd *lcd);
+    Cb(App *app, ISystem *sys, ILcd *lcd,Timer *timer);
     Cb();
 
     pair<bool, ERROR_TYPE *> dose(char amount, bool *applicatorsToDose);

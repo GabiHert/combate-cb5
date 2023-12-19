@@ -13,8 +13,8 @@ class IGps
 {
 private:
     ILcd *_lcd;
-    Timer *timer;
-    pair<string, ERROR_TYPE *> _getData(Timer *timer);
+    Timer *_timer;
+    pair<string, ERROR_TYPE *> _getData();
 
 public:
     IGps(){};

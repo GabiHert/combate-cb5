@@ -33,7 +33,8 @@ ResponseModel RequestMiddleware::execute(string request)
     {
       // // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrBool.second->description);
       this->_lcd->print(errorOrBool.second);
-      this->_timer->setTimer(1500)->wait();
+      this->_timer->setTimer(1500);
+      this->_timer->wait();
 
       ResponseModel responseModel(errorOrBool.second->errorCode);
 
@@ -50,7 +51,8 @@ ResponseModel RequestMiddleware::execute(string request)
     // // loggerError("RequestMiddleware.execute", "Process error", "error: " + errorOrResponseDto.second->description);
 
     this->_lcd->print(errorOrResponseDto.second);
-    this->_timer->setTimer(1500)->wait();
+    this->_timer->setTimer(1500);
+    this->_timer->wait();
 
     ResponseModel responseModel(&errorOrResponseDto.first, errorOrResponseDto.second->errorCode);
 
@@ -72,7 +74,8 @@ void RequestMiddleware::systematic()
     // // loggerError("RequestMiddleware.systematic", "Process error", "error: " + error->description);
 
     this->_lcd->print(error);
-    this->_timer->setTimer(1500)->wait();
+    this->_timer->setTimer(1500);
+    this->_timer->wait();
   }
   // // loggerInfo("RequestMiddleware.systematic", "Process finished");
 }

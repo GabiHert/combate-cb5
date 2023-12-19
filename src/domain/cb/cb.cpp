@@ -35,15 +35,14 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
         }
 
         bool result = false;
-        Timer timer;
-        timer.setTimer(200);
-        timer.wait();
 
-        timer.setTimer(CONFIG_DOSE_APPLICATION_TIMEOUT);
+        this->_timer->setTimer(200);
+        this->_timer->wait();
+        this->_timer->setTimer(CONFIG_DOSE_APPLICATION_TIMEOUT);
 
         while (!result)
         {
-            if (timer.timedOut())
+            if (this->_timer->timedOut())
             {
                 // loggerError("Cb.dose", "Process error", "Time out");
 
@@ -101,8 +100,9 @@ RequestModel Cb::getRequestModel()
     return this->requestModel;
 };
 
-Cb::Cb(App *app, ISystem *sys, ILcd *lcd)
+Cb::Cb(App *app, ISystem *sys, ILcd *lcd,Timer *timer)
 {
+    this->_timer=timer;
     this->_poisonApplicators = vector<PoisonApplicator *>(CONFIG_POISON_APPLICATORS);
     this->_sys = sys;
     this->_app = app;

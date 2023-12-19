@@ -31,7 +31,8 @@ pair<bool, ERROR_TYPE *> RenameUseCase::execute(char *newId)
     this->_lcd->clear();
     this->_lcd->printCentered("CB RENOMEADO", 0, 0);
     this->_lcd->printCentered(newName, 0, 1);
-    this->_timer->setTimer(2000)->wait();
+    this->_timer->setTimer(2000);
+    this->_timer->wait();
 
     this->_cb->id = newName;
 

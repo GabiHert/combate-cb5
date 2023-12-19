@@ -1,9 +1,8 @@
 #include "utils/utils.h"
 
-Timer *Timer::setTimer(unsigned long ms)
+void Timer::setTimer(unsigned long ms)
 {
     this->end = millis() + ms;
-    return this;
 };
 
 void Timer::wait()
@@ -14,11 +13,18 @@ void Timer::wait()
     while (!this->timedOut())
     {
     }
+
 }
 
 bool Timer::timedOut()
 {
-    return millis() >= this->end ? true : false;
+    if (millis() >= this->end ){
+        this->end=1;
+        return  true;
+    }else{
+        return false;
+    }
+    
 };
 
 Timer::Timer()

@@ -28,7 +28,7 @@ private:
 
 public:
     Timer();
-    Timer *setTimer(unsigned long ms);
+    void setTimer(unsigned long ms);
     void wait();
     bool timedOut();
 };
