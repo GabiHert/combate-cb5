@@ -22,15 +22,6 @@ PoisonApplicator::PoisonApplicator()
     this->stop();
 }
 
-void PoisonApplicator::calibrate()
-{
-    while (this->readSensor())
-    {
-        this->spin();
-    }
-    this->stop();
-}
-
 void PoisonApplicator::spin()
 {
     this->_sys->setPort(this->_motorPort, HIGH);

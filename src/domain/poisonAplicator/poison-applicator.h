@@ -16,7 +16,6 @@ public:
     unsigned char getMotorPort();
     unsigned char getSensorPort();
 
-    void calibrate();
     void spin();
     void stop();
     bool readSensor();

@@ -95,7 +95,7 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
 
     if (doseRequest)
     {
-        loggerInfo("RequestController.execute", "DOSE REQUEST");
+        // loggerInfo("RequestController.execute", "DOSE REQUEST");
 
         bool applicators[3] = {requestModel.getLeftApplicator(), requestModel.getCenterApplicator(), requestModel.getRightApplicator()};
         pair<bool, ERROR_TYPE *> errorOrBool = this->_doseUseCase.execute(requestModel.getDose(), applicators);
@@ -135,7 +135,7 @@ ERROR_TYPE *RequestController::systematic()
     {
         // loggerInfo("RequestController.systematic", "CONFIG_PROTOCOL_DO_NOT_DOSE");
         return nullptr;
-    }
+    }          
 
     if (this->_systematicError != nullptr)
     {
@@ -153,22 +153,22 @@ ERROR_TYPE *RequestController::systematic()
     float velocityKmH = atof(splitStringBy(errorOrString.first, ',').at(6).c_str()) * 1.94384;
     float velocityMetersPerSecond = velocityKmH / 3.6;
 
-    loggerInfo("requestController.systematic", "Velocity", to_string(velocityMetersPerSecond));
+    // loggerInfo("requestController.systematic", "Velocity", to_string(velocityMetersPerSecond));
     // loggerInfo("requestController.systematic", "GPS", errorOrString.first);
 
     double elapsedTimeMs = currentTime - this->_endTime;
     double elapsedTimeS = elapsedTimeMs / 1000;
     elapsedTimeS += 0.5;
 
-    loggerInfo("RequestController.systematic", "seconds", to_string(elapsedTimeS));
-    loggerInfo("RequestController.systematic", "ms", to_string(elapsedTimeMs));
+    // loggerInfo("RequestController.systematic", "seconds", to_string(elapsedTimeS));
+    // loggerInfo("RequestController.systematic", "ms", to_string(elapsedTimeMs));
 
-    loggerInfo("RequestController.systematic", "currentTime", to_string(currentTime));
-    loggerInfo("RequestController.systematic", "_endTime", to_string(this->_endTime));
+    // loggerInfo("RequestController.systematic", "currentTime", to_string(currentTime));
+    // loggerInfo("RequestController.systematic", "_endTime", to_string(this->_endTime));
 
     this->_distanceRanMeters = (elapsedTimeS * velocityMetersPerSecond);
 
-    loggerInfo("RequestController.systematic", "distanceRanMeters: " + to_string(this->_distanceRanMeters));
+    // loggerInfo("RequestController.systematic", "distanceRanMeters: " + to_string(this->_distanceRanMeters));
 
     if (this->_distanceRanMeters >= this->_systematicMetersBetweenDoseParsed)
     {
