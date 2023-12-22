@@ -12,8 +12,13 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
 
     unsigned char applicatorsToDoseAmount = 0;
     for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+    {
         if (applicatorsToDose[i])
+        {
+            // loggerInfo("Cb.dose", "Applicator " + to_string(i) + " should dose");
             applicatorsToDoseAmount++;
+        }
+    }
 
     for (char dose = 0; dose < amount; dose++)
     {
@@ -32,16 +37,24 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
             }
 
             this->_poisonApplicators[i]->spin();
+
+            this->_timer->setTimer(100);
+            this->_timer->wait();
         }
 
-        bool result = false;
-
-        this->_timer->setTimer(200);
-        this->_timer->wait();
         this->_timer->setTimer(CONFIG_DOSE_APPLICATION_TIMEOUT);
 
-        while (!result)
+        unsigned char count = 0;
+
+        bool applicatorsToDoseAux[CONFIG_POISON_APPLICATORS] = {
+            applicatorsToDose[0],
+            applicatorsToDose[1],
+            applicatorsToDose[2],
+        };
+
+        while (count < applicatorsToDoseAmount)
         {
+
             if (this->_timer->timedOut())
             {
                 // loggerError("Cb.dose", "Process error", "Time out");
@@ -54,12 +67,11 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
 
             vector<bool> tasksDone = vector<bool>(CONFIG_POISON_APPLICATORS);
 
-            unsigned char count = 0;
             for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
             {
-                if (!applicatorsToDose[i])
+                if (!applicatorsToDoseAux[i])
                 {
-                    // loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
+                    // loggerInfo("Cb.dose", "Skipping off or finished applicator: " + to_string(i));
                     continue;
                 }
 
@@ -72,14 +84,15 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
                 if (tasksDone[i])
                 {
                     // loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " finished");
+                    applicatorsToDoseAux[i] = false;
                     this->_poisonApplicators[i]->stop();
                     count++;
                 }
             }
 
-            if (count == applicatorsToDoseAmount)
-                result = true;
+            // loggerInfo("Cb.dose", "count: " + to_string(count) + " totalToDose: " + to_string(applicatorsToDoseAmount));
         }
+        // loggerInfo("Cb.dose", "dosesApplied: " + to_string(dose) + " target: " + to_string(amount));
     }
 
     return make_pair(true, nullptr);
@@ -100,9 +113,9 @@ RequestModel Cb::getRequestModel()
     return this->requestModel;
 };
 
-Cb::Cb(App *app, ISystem *sys, ILcd *lcd,Timer *timer)
+Cb::Cb(App *app, ISystem *sys, ILcd *lcd, Timer *timer)
 {
-    this->_timer=timer;
+    this->_timer = timer;
     this->_poisonApplicators = vector<PoisonApplicator *>(CONFIG_POISON_APPLICATORS);
     this->_sys = sys;
     this->_app = app;

@@ -135,7 +135,7 @@ ERROR_TYPE *RequestController::systematic()
     {
         // loggerInfo("RequestController.systematic", "CONFIG_PROTOCOL_DO_NOT_DOSE");
         return nullptr;
-    }          
+    }
 
     if (this->_systematicError != nullptr)
     {
