@@ -27,6 +27,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
         this->_lcd->setDoseStatus(dose + 1, amount);
 
         // loggerInfo("Cb.dose", "Starting all applicators");
+        unsigned long startTime = millis();
 
         for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
         {
@@ -84,6 +85,12 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
                 if (tasksDone[i])
                 {
                     // loggerInfo("Cb.dose", "Dose from applicator " + to_string(i) + " finished");
+                    if (millis() - startTime < CONFIG_DOSE_MIN_DURATION_MILLISECONDS)
+                    {
+                        // loggerError("Cb.dose", "Process error", "Time out (too fast)");
+                        return make_pair(false, ERROR_TYPES().DOSE_PROCESS_TIME_OUT);
+                    }
+
                     applicatorsToDoseAux[i] = false;
                     this->_poisonApplicators[i]->stop();
                     count++;
