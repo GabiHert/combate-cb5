@@ -39,7 +39,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
 
             this->_poisonApplicators[i]->spin();
 
-            this->_timer->setTimer(100);
+            this->_timer->setTimer(50);
             this->_timer->wait();
         }
 
@@ -60,8 +60,9 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
             {
                 // loggerError("Cb.dose", "Process error", "Time out");
 
-                for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
-                    this->_poisonApplicators.at(i)->stop();
+                this->_poisonApplicators.at(0)->stop();
+                this->_poisonApplicators.at(1)->stop();
+                this->_poisonApplicators.at(2)->stop();
 
                 return make_pair(false, ERROR_TYPES().DOSE_PROCESS_TIME_OUT);
             }
@@ -88,6 +89,9 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
                     if (millis() - startTime < CONFIG_DOSE_MIN_DURATION_MILLISECONDS)
                     {
                         // loggerError("Cb.dose", "Process error", "Time out (too fast)");
+                        this->_poisonApplicators.at(0)->stop();
+                        this->_poisonApplicators.at(1)->stop();
+                        this->_poisonApplicators.at(2)->stop();
                         return make_pair(false, ERROR_TYPES().DOSE_PROCESS_TIME_OUT);
                     }
 
