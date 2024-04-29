@@ -22,7 +22,7 @@ pair<bool, ERROR_TYPE *> DoseUseCase::execute(char amount, bool *applicatorsToDo
         return make_pair(false, ERROR_TYPES().PARSE_ERROR);
     }
 
-    // // loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
+    // loggerInfo("DoseUseCase", "Process started", "amount: " + to_string(amount));
 
     for (int i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {

@@ -120,7 +120,14 @@ void ILcd::setSystematicMetersBetweenDose(char systematicMetersBetweenDose)
     }
     else
     {
-        aux += systematicMetersBetweenDose;
+        if (systematicMetersBetweenDose == '0')
+        {
+            aux += "10";
+        }
+        else
+        {
+            aux += systematicMetersBetweenDose;
+        }
         aux += "m";
     }
     _print(aux, 0, 1);

@@ -6,20 +6,21 @@
 #include "domain/dto/response-dto.h"
 #include "exceptions/error-type.h"
 
-void Cb::_startApplicatorsSpin(bool *applicatorsToDose){
-            for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+void Cb::_startApplicatorsSpin(bool *applicatorsToDose)
+{
+    for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+    {
+        if (!applicatorsToDose[i])
         {
-            if (!applicatorsToDose[i])
-            {
-                // loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
-                continue;
-            }
-
-            this->_poisonApplicators[i]->spin();
-
-            this->_timer->setTimer(50);
-            this->_timer->wait();
+            // loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
+            continue;
         }
+
+        this->_poisonApplicators[i]->spin();
+
+        this->_timer->setTimer(CONFIG_DOSE_MISALIGN_SENSOR_DELAY_MILLISECONDS);
+        this->_timer->wait();
+    }
 }
 
 pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
@@ -44,7 +45,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
         // loggerInfo("Cb.dose", "Starting all applicators");
         unsigned long startTime = millis();
 
-        this->_startApplicatorsSpin();
+        this->_startApplicatorsSpin(applicatorsToDose);
 
         this->_timer->setTimer(CONFIG_DOSE_APPLICATION_TIMEOUT);
 
@@ -99,6 +100,9 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
                     }
 
                     applicatorsToDoseAux[i] = false;
+                    Timer timer;
+                    timer.setTimer(CONFIG_DOSE_MISALIGN_SENSOR_DELAY_MILLISECONDS);
+                    timer.wait();
                     this->_poisonApplicators[i]->stop();
                     count++;
                 }

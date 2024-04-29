@@ -68,7 +68,12 @@ pair<ResponseDto, ERROR_TYPE *> RequestController::execute(RequestDto requestDto
 
     if (this->_systematicMetersBetweenDoseParsed != CONFIG_PROTOCOL_DO_NOT_DOSE)
     {
-        this->_systematicMetersBetweenDoseParsed = asciiCharToNumber(this->_systematicMetersBetweenDose);
+        char parsed = asciiCharToNumber(this->_systematicMetersBetweenDose);
+        if (!parsed)
+        {
+            parsed = 10;
+        }
+        this->_systematicMetersBetweenDoseParsed = parsed;
     }
 
     pair<string, ERROR_TYPE *> errorOrString = this->_getGpsLocationUseCase.execute();
