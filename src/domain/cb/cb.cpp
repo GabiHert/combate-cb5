@@ -6,10 +6,25 @@
 #include "domain/dto/response-dto.h"
 #include "exceptions/error-type.h"
 
+void Cb::_startApplicatorsSpin(bool *applicatorsToDose){
+            for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
+        {
+            if (!applicatorsToDose[i])
+            {
+                // loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
+                continue;
+            }
+
+            this->_poisonApplicators[i]->spin();
+
+            this->_timer->setTimer(50);
+            this->_timer->wait();
+        }
+}
+
 pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
 {
     // loggerInfo("Cb.dose", "Process started");
-
     unsigned char applicatorsToDoseAmount = 0;
     for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
     {
@@ -29,19 +44,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
         // loggerInfo("Cb.dose", "Starting all applicators");
         unsigned long startTime = millis();
 
-        for (unsigned char i = 0; i < CONFIG_POISON_APPLICATORS; i++)
-        {
-            if (!applicatorsToDose[i])
-            {
-                // loggerInfo("Cb.dose", "Skipping off applicator: " + to_string(i));
-                continue;
-            }
-
-            this->_poisonApplicators[i]->spin();
-
-            this->_timer->setTimer(50);
-            this->_timer->wait();
-        }
+        this->_startApplicatorsSpin();
 
         this->_timer->setTimer(CONFIG_DOSE_APPLICATION_TIMEOUT);
 
@@ -92,7 +95,7 @@ pair<bool, ERROR_TYPE *> Cb::dose(char amount, bool *applicatorsToDose)
                         this->_poisonApplicators.at(0)->stop();
                         this->_poisonApplicators.at(1)->stop();
                         this->_poisonApplicators.at(2)->stop();
-                        return make_pair(false, ERROR_TYPES().DOSE_PROCESS_TIME_OUT);
+                        return make_pair(false, ERROR_TYPES().DOSE_PROCESS_TOO_FAST);
                     }
 
                     applicatorsToDoseAux[i] = false;

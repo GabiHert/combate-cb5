@@ -25,6 +25,8 @@ private:
     string _location;
     Timer* _timer;
 
+    void _startApplicatorsSpin(bool * applicatorsToDose);
+
 public:
     string id;
 
