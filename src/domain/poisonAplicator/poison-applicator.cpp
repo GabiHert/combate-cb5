@@ -24,23 +24,23 @@ PoisonApplicator::PoisonApplicator()
 
 void PoisonApplicator::spin()
 {
-    this->_sys->setPort(this->_motorPort, LOW);
+    this->_sys->setPort(this->_motorPort, HIGH);
 };
 
 bool PoisonApplicator::readSensor()
 {
     bool result = this->_sys->readDigitalPort(this->_sensorPort) ? true : false;
-    return !result;
+    return result;
 };
 
 void PoisonApplicator::stop()
 {
-    this->_sys->setPort(this->_motorPort, HIGH);
+    this->_sys->setPort(this->_motorPort, LOW);
 }
 
 bool PoisonApplicator::isConnected()
 {
-    return this->_sys->readDigitalPort(this->_connectionSensorPort);
+    return !this->_sys->readDigitalPort(this->_connectionSensorPort);
 }
 
 unsigned char PoisonApplicator::getMotorPort() { return this->_motorPort; }
